@@ -150,7 +150,7 @@ void vcom_Send_Lp( const char *format, ... );
 void vcom_Dma_IRQHandler( void );
 
 /* Exported macros -----------------------------------------------------------*/
-#if 0
+#if 1
 #define PRINTF(...)     vcom_Send(__VA_ARGS__)
 #define AT_PRINTF(...)     vcom_Send(__VA_ARGS__)
 #else

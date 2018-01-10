@@ -385,6 +385,7 @@ void RxChainCalibration( void )
     SX_CHANNEL_TO_FREQ(channel, initialFreq);
 
     // Cut the PA just in case, RFO output, power = -1 dBm
+	
     SX1276Write( REG_PACONFIG, 0x00 );
 
     // Launch Rx chain calibration for LF band
