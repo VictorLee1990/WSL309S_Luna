@@ -87,6 +87,7 @@
   #include "stm32l0xx_nucleo.h"
   #include "stm32l0xx_hal_conf.h"
   #include "stm32l0xx_hw_conf.h"
+	#if 0
 #include "stm32l0xx_ll_adc.h"
 #include "stm32l0xx_ll_bus.h"
 #include "stm32l0xx_ll_cortex.h"
@@ -98,6 +99,7 @@
 #include "stm32l0xx_ll_spi.h"
 #include "stm32l0xx_ll_system.h"
 #include "stm32l0xx_ll_lpuart.h"  
+#endif
 #endif
 
 #ifdef USE_STM32L1XX_NUCLEO

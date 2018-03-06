@@ -14,16 +14,16 @@
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
-          <Device>STM32L053R8Tx</Device>
+          <Device>STM32L051K8Ux</Device>
           <Vendor>STMicroelectronics</Vendor>
           <PackID>Keil.STM32L0xx_DFP.1.6.1</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000,0x00002000) IROM(0x08000000,0x00010000) CPUTYPE("Cortex-M0+") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
-          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32L0xx_64 -FS08000000 -FL010000 -FP0($$Device:STM32L053R8Tx$Flash\STM32L0xx_64.FLM))</FlashDriverDll>
+          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32L0xx_64 -FS08000000 -FL010000 -FP0($$Device:STM32L051K8Ux$Flash\STM32L0xx_64.FLM))</FlashDriverDll>
           <DeviceId>0</DeviceId>
-          <RegisterFile>$$Device:STM32L053R8Tx$Device\Include\stm32l0xx.h</RegisterFile>
+          <RegisterFile>$$Device:STM32L051K8Ux$Device\Include\stm32l0xx.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -33,7 +33,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>$$Device:STM32L053R8Tx$SVD\STM32L053x.svd</SFDFile>
+          <SFDFile>$$Device:STM32L051K8Ux$SVD\STM32L051x.svd</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -311,7 +311,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>2</Optim>
+            <Optim>4</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -334,7 +334,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls>--C99</MiscControls>
-              <Define>STM32L053xx, USE_STM32L0XX_NUCLEO, USE_FULL_LL_DRIVER, REGION_EU868</Define>
+              <Define>STM32L051xx, USE_STM32L0XX_NUCLEO, USE_FULL_LL_DRIVER, REGION_CN470</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\inc;..\..\Drivers\BSP\STM32L0xx_Nucleo;..\..\Drivers\STM32L0xx_HAL_Driver\Inc;..\..\Drivers\CMSIS\Device\ST\STM32L0xx\Include;..\..\Drivers\CMSIS\Include;..\..\Middlewares\Third_Party\Lora\Crypto;..\..\Middlewares\Third_Party\Lora\Mac;..\..\Middlewares\Third_Party\Lora\Phy;..\..\Middlewares\Third_Party\Lora\Utilities;..\..\Drivers\BSP\X_NUCLEO_IKS01A1;..\..\Middlewares\Third_Party\Lora\Core;..\..\Drivers\BSP\Components\Common;..\..\Drivers\BSP\Components\hts221;..\..\Drivers\BSP\Components\lps22hb;..\..\Drivers\BSP\Components\lps25hb;..\..\Drivers\BSP\Components\sx1276;..\..\Drivers\BSP\sx1276mb1las</IncludePath>
             </VariousControls>
@@ -411,36 +411,6 @@
           <GroupName>Drivers/STM32L0xx_HAL_Driver</GroupName>
           <Files>
             <File>
-              <FileName>stm32l0xx_ll_adc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Drivers\STM32L0xx_HAL_Driver\Src\stm32l0xx_ll_adc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32l0xx_ll_gpio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Drivers\STM32L0xx_HAL_Driver\Src\stm32l0xx_ll_gpio.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32l0xx_ll_lpuart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Drivers\STM32L0xx_HAL_Driver\Src\stm32l0xx_ll_lpuart.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32l0xx_ll_rcc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Drivers\STM32L0xx_HAL_Driver\Src\stm32l0xx_ll_rcc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32l0xx_ll_rtc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Drivers\STM32L0xx_HAL_Driver\Src\stm32l0xx_ll_rtc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32l0xx_ll_spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Drivers\STM32L0xx_HAL_Driver\Src\stm32l0xx_ll_spi.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32l0xx_hal.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Drivers\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal.c</FilePath>
@@ -449,11 +419,6 @@
               <FileName>stm32l0xx_hal_cortex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Drivers\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_cortex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32l0xx_ll_dma.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Drivers\STM32L0xx_HAL_Driver\Src\stm32l0xx_ll_dma.c</FilePath>
             </File>
             <File>
               <FileName>stm32l0xx_hal_rtc.c</FileName>
@@ -576,11 +541,6 @@
               <FilePath>..\..\Drivers\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_lptim.c</FilePath>
             </File>
             <File>
-              <FileName>stm32l0xx_hal_msp_template.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Drivers\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_msp_template.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32l0xx_hal_pcd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Drivers\STM32L0xx_HAL_Driver\Src\stm32l0xx_hal_pcd.c</FilePath>
@@ -681,9 +641,9 @@
           <GroupName>Projects/MDK-ARM</GroupName>
           <Files>
             <File>
-              <FileName>startup_stm32l053xx.s</FileName>
+              <FileName>startup_stm32l051xx.s</FileName>
               <FileType>2</FileType>
-              <FilePath>.\startup_stm32l053xx.s</FilePath>
+              <FilePath>.\startup_stm32l051xx.s</FilePath>
             </File>
           </Files>
         </Group>
@@ -759,6 +719,11 @@
               <FileName>stm32l0xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\src\stm32l0xx_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32l0xx_hal_msp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\stm32l0xx_hal_msp.c</FilePath>
             </File>
           </Files>
         </Group>

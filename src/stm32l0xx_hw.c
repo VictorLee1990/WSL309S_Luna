@@ -279,10 +279,11 @@ void HW_GetUniqueId( uint8_t *id )
 
 uint16_t HW_GetTemperatureLevel( void ) 
 {
+	  
   uint16_t measuredLevel =0; 
   uint32_t batteryLevelmV;
   uint16_t temperatureDegreeC;
-
+#if 0
   measuredLevel = HW_AdcReadChannel( ADC_CHANNEL_VREFINT ); 
 
   if (measuredLevel ==0)
@@ -293,15 +294,15 @@ uint16_t HW_GetTemperatureLevel( void )
   {
     batteryLevelmV= (( (uint32_t) VDDA_VREFINT_CAL * (*VREFINT_CAL ) )/ measuredLevel);
   }
-#if 0  
+
   PRINTF("VDDA= %d\n\r", batteryLevelmV);
-#endif
+
   
   measuredLevel = HW_AdcReadChannel( ADC_CHANNEL_TEMPSENSOR ); 
   
   temperatureDegreeC = COMPUTE_TEMPERATURE( measuredLevel, batteryLevelmV);
 
-#if 0 
+
   {
     uint16_t temperatureDegreeC_Int= (temperatureDegreeC)>>8;
     uint16_t temperatureDegreeC_Frac= ((temperatureDegreeC-(temperatureDegreeC_Int<<8))*100)>>8;  
@@ -318,10 +319,11 @@ uint16_t HW_GetTemperatureLevel( void )
   */
 uint8_t HW_GetBatteryLevel( void ) 
 {
+	
   uint8_t batteryLevel = 0;
   uint16_t measuredLevel = 0;
   uint32_t batteryLevelmV;
-
+#if 0
   measuredLevel = HW_AdcReadChannel( ADC_CHANNEL_VREFINT ); 
 
   if (measuredLevel == 0)
@@ -345,6 +347,7 @@ uint8_t HW_GetBatteryLevel( void )
   {
     batteryLevel = (( (uint32_t) (batteryLevelmV - VDD_MIN)*LORAWAN_MAX_BAT) /(VDD_BAT-VDD_MIN) ); 
   }
+  #endif
   return batteryLevel;
 }
 
@@ -355,12 +358,13 @@ uint8_t HW_GetBatteryLevel( void )
   */
 void HW_AdcInit( void )
 {
+	#if 0
   if( AdcInitialized == false )
   {
     AdcInitialized = true;
-#if 0
+
     GPIO_InitTypeDef initStruct;
-#endif
+
     
     hadc.Instance  = ADC1;
     
@@ -385,14 +389,15 @@ void HW_AdcInit( void )
     
 
     HAL_ADC_Init( &hadc );
-#if 0
+
     initStruct.Mode =GPIO_MODE_ANALOG;
     initStruct.Pull = GPIO_NOPULL;
     initStruct.Speed = GPIO_SPEED_HIGH;
 
     HW_GPIO_Init( BAT_LEVEL_PORT, BAT_LEVEL_PIN, &initStruct );
-#endif
+
   }
+  #endif
 }
 /**
   * @brief This function De-initializes the ADC
@@ -414,7 +419,7 @@ uint16_t HW_AdcReadChannel( uint32_t Channel )
 
   ADC_ChannelConfTypeDef adcConf;
   uint16_t adcData = 0;
-  
+ #if 0 
   if( AdcInitialized == true )
   {
     /* wait the the Vrefint used by adc is set */
@@ -448,6 +453,7 @@ uint16_t HW_AdcReadChannel( uint32_t Channel )
 
     ADCCLK_DISABLE();
   }
+  #endif
   return adcData;
 }
 

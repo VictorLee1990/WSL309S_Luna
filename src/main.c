@@ -129,6 +129,7 @@ static LoRaParam_t LoRaParamInit = {LORAWAN_ADR_ON,
  */
 
 /* Implementation of the HAL_Init() using LL functions */
+																		#if 0
 void HW_Main_Init()
 {
   /* Configure Buffer cache, Flash prefetch,  Flash preread */
@@ -173,12 +174,12 @@ void HW_Main_Init()
 
   HW_GpioInit();
 }
-
+#endif
 int main(void)
 {
   /* STM32 HAL library initialization*/
-  HW_Main_Init();
-
+  //HW_Main_Init();
+	HAL_Init( );
   /* Configure the system clock*/
   SystemClock_Config();
 
@@ -198,7 +199,7 @@ int main(void)
 
   /* Configure the Lora Stack*/
   LORA_Init(&LoRaMainCallbacks, &LoRaParamInit);
-
+	LORA_Join();
   /* main loop*/
   while (1)
   {
@@ -213,7 +214,7 @@ int main(void)
      * and cortex will not enter low power anyway
      * don't go in low power mode if we just received a char
      */
-    if ( (IsNewCharReceived() == RESET))
+  //  if ( (IsNewCharReceived() == RESET))
     {
 #ifndef LOW_POWER_DISABLE
       LPM_EnterLowPower();

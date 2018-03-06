@@ -77,7 +77,8 @@ Maintainer: Miguel Luis and Gregory Cristian
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
-
+//extern DMA_HandleTypeDef hdma_usart2_tx;
+//extern UART_HandleTypeDef huart2;
 /******************************************************************************/
 /*            Cortex-M3 Processor Exceptions Handlers                         */
 /******************************************************************************/
@@ -202,14 +203,16 @@ void SysTick_Handler(void)
 {
 }*/
 
-void UARTX_IRQHandler(void)
+void USART2_IRQHandler(void)
 {
-  vcom_IRQHandler();
+//	vcom_Print( );
+//	HAL_UART_IRQHandler(&huart2);
+  //vcom_IRQHandler();
 }
 
 void DMA1_Channel4_5_6_7_IRQHandler(void)
 {
-  vcom_Dma_IRQHandler();
+//  vcom_Dma_IRQHandler();
 
 }
 void RTC_IRQHandler( void )
@@ -219,44 +222,44 @@ void RTC_IRQHandler( void )
 
 void EXTI0_1_IRQHandler( void )
 {
-  HW_GPIO_EXTI_IRQHandler( GPIO_PIN_0 );
+  HAL_GPIO_EXTI_IRQHandler( GPIO_PIN_0 );
 
-  HW_GPIO_EXTI_IRQHandler( GPIO_PIN_1 );
+  HAL_GPIO_EXTI_IRQHandler( GPIO_PIN_1 );
 }
 
 void EXTI2_3_IRQHandler( void )
 {
-  HW_GPIO_EXTI_IRQHandler( GPIO_PIN_2 );
+  HAL_GPIO_EXTI_IRQHandler( GPIO_PIN_2 );
 
-  HW_GPIO_EXTI_IRQHandler( GPIO_PIN_3 );
+  HAL_GPIO_EXTI_IRQHandler( GPIO_PIN_3 );
 }
 
 
 void EXTI4_15_IRQHandler( void )
 {
-  HW_GPIO_EXTI_IRQHandler( GPIO_PIN_4 );
+  HAL_GPIO_EXTI_IRQHandler( GPIO_PIN_4 );
   
-  HW_GPIO_EXTI_IRQHandler( GPIO_PIN_5 );
+  HAL_GPIO_EXTI_IRQHandler( GPIO_PIN_5 );
 
-  HW_GPIO_EXTI_IRQHandler( GPIO_PIN_6 );
+  HAL_GPIO_EXTI_IRQHandler( GPIO_PIN_6 );
   
-  HW_GPIO_EXTI_IRQHandler( GPIO_PIN_7 );
+  HAL_GPIO_EXTI_IRQHandler( GPIO_PIN_7 );
 
-  HW_GPIO_EXTI_IRQHandler( GPIO_PIN_8 );
+  HAL_GPIO_EXTI_IRQHandler( GPIO_PIN_8 );
 
-  HW_GPIO_EXTI_IRQHandler( GPIO_PIN_9 );
+  HAL_GPIO_EXTI_IRQHandler( GPIO_PIN_9 );
   
-  HW_GPIO_EXTI_IRQHandler( GPIO_PIN_10 );
+  HAL_GPIO_EXTI_IRQHandler( GPIO_PIN_10 );
   
-  HW_GPIO_EXTI_IRQHandler( GPIO_PIN_11 );
+  HAL_GPIO_EXTI_IRQHandler( GPIO_PIN_11 );
 
-  HW_GPIO_EXTI_IRQHandler( GPIO_PIN_12 );
+  HAL_GPIO_EXTI_IRQHandler( GPIO_PIN_12 );
 
-  HW_GPIO_EXTI_IRQHandler( GPIO_PIN_13 );
+  HAL_GPIO_EXTI_IRQHandler( GPIO_PIN_13 );
 
-  HW_GPIO_EXTI_IRQHandler( GPIO_PIN_14 );
+  HAL_GPIO_EXTI_IRQHandler( GPIO_PIN_14 );
 
-  HW_GPIO_EXTI_IRQHandler( GPIO_PIN_15 );
+  HAL_GPIO_EXTI_IRQHandler( GPIO_PIN_15 );
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

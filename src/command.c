@@ -589,22 +589,22 @@ static void parse_cmd(const char *cmd);
 void CMD_Init(void)
 {
   vcom_Init();
-  vcom_ReceiveInit();
+//  vcom_ReceiveInit();
 }
 
 void CMD_Process(void)
 {
   static char command[CMD_SIZE];
   static unsigned i = 0;
-
+#if 0
   /* Process all commands */
   while (IsNewCharReceived() == SET)
   {
     command[i] = GetNewChar();
 
-#if 0 /* echo On    */
+
     PRINTF("%c", command[i]);
-#endif
+
 
     if (command[i] == AT_ERROR_RX_CHAR)
     {
@@ -633,6 +633,7 @@ void CMD_Process(void)
       i++;
     }
   }
+  #endif
 }
 
 /* Private functions ---------------------------------------------------------*/

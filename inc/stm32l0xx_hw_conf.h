@@ -142,24 +142,28 @@ Maintainer: Miguel Luis and Gregory Cristian
 
 
 /* Definition for UARTx clock resources */
-#define UARTX                           LPUART1
-#define UARTX_CLK_ENABLE()              LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_LPUART1)
-#define UARTX_RX_GPIO_CLK_ENABLE()      LL_IOP_GRP1_EnableClock(RCC_IOPENR_GPIOBEN)
-#define UARTX_TX_GPIO_CLK_ENABLE()      LL_IOP_GRP1_EnableClock(RCC_IOPENR_GPIOBEN)
+/* --------------------------- USART HW definition -------------------------------*/
 
-#define UARTX_FORCE_RESET()             LL_APB1_GRP1_ForceReset(LL_APB1_GRP1_PERIPH_LPUART1)
-#define UARTX_RELEASE_RESET()           LL_APB1_GRP1_ReleaseReset(LL_APB1_GRP1_PERIPH_LPUART1)
 
-#define UARTX_TX_PIN                    GPIO_PIN_10
-#define UARTX_TX_GPIO_PORT              GPIOC
-#define UARTX_TX_AF                     GPIO_AF0_LPUART1
-#define UARTX_RX_PIN                    GPIO_PIN_11
-#define UARTX_RX_GPIO_PORT              GPIOC
-#define UARTX_RX_AF                     GPIO_AF0_LPUART1
+#define USARTX                           USART2
+#define USARTX_CLK_ENABLE()              __USART2_CLK_ENABLE();
+#define USARTX_RX_GPIO_CLK_ENABLE()      __GPIOA_CLK_ENABLE()
+#define USARTX_TX_GPIO_CLK_ENABLE()      __GPIOA_CLK_ENABLE() 
+
+#define USARTX_FORCE_RESET()             __USART2_FORCE_RESET()
+#define USARTX_RELEASE_RESET()           __USART2_RELEASE_RESET()
+
+
+#define USARTX_TX_PIN                  GPIO_PIN_2
+#define USARTX_TX_GPIO_PORT            GPIOA  
+#define USARTX_TX_AF                   GPIO_AF4_USART2
+#define USARTX_RX_PIN                  GPIO_PIN_3
+#define USARTX_RX_GPIO_PORT            GPIOA 
+#define USARTX_RX_AF                   GPIO_AF4_USART2
 
 /* Definition for USARTx's NVIC */
-#define UARTX_IRQn                      LPUART1_IRQn
-#define UARTX_IRQHandler                LPUART1_IRQHandler
+#define USARTX_IRQn                      USART2_IRQn
+#define USARTX_IRQHandler                USART2_IRQHandler
 
 
 #define LED_Toggle( x )
