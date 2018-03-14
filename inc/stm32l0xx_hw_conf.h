@@ -113,11 +113,11 @@ Maintainer: Miguel Luis and Gregory Cristian
 #define RADIO_DIO_5_PIN                           GPIO_PIN_7
 #endif
 
-#define RADIO_ANT_SWITCH_PORT                     GPIOC
+#define RADIO_ANT_SWITCH_PORT                     GPIOA
 #define RADIO_ANT_SWITCH_PIN                      GPIO_PIN_1
 
-#define BAT_LEVEL_PORT                            GPIOA
-#define BAT_LEVEL_PIN                             GPIO_PIN_4
+//#define BAT_LEVEL_PORT                            GPIOA
+//#define BAT_LEVEL_PIN                             GPIO_PIN_4
 /*  SPI MACRO redefinition */
 
 #define SPI_CLK_ENABLE()                __HAL_RCC_SPI1_CLK_ENABLE()

@@ -195,6 +195,15 @@ int main(void)
   LPM_SetOffMode(LPM_APPLI_Id, LPM_Disable);
   
   PRINTF("ATtention command interface\n\r");
+	volatile uint8_t readdata;
+	PRINTF("Version: F-ICM-02-1802261\n\r");
+	readdata = 0;
+	readdata = SX1276Read( 0x42 );
+	PRINTF("spi test1: %X\n\r",readdata);
+	readdata = 0;
+	readdata = SX1276Read( 0x4d );
+	PRINTF("spi test2: %X\n\r",readdata);
+	PRINTF("ATtention command interface\n\r");	
   /* USER CODE END 1 */
 
   /* Configure the Lora Stack*/
@@ -214,7 +223,7 @@ int main(void)
      * and cortex will not enter low power anyway
      * don't go in low power mode if we just received a char
      */
-  //  if ( (IsNewCharReceived() == RESET))
+   // if ( (IsNewCharReceived() == RESET))
     {
 #ifndef LOW_POWER_DISABLE
       LPM_EnterLowPower();

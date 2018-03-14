@@ -205,7 +205,7 @@ void SysTick_Handler(void)
 
 void USART2_IRQHandler(void)
 {
-//	vcom_Print( );
+	vcom_Print( );
 //	HAL_UART_IRQHandler(&huart2);
   //vcom_IRQHandler();
 }

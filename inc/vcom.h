@@ -126,7 +126,7 @@ void vcom_Print( void);
 void vcom_Send_Lp( char *format, ... );
 
 /* Exported macros -----------------------------------------------------------*/
-#if 1
+#ifdef LOW_POWER_DISABLE
 #define PRINTF(...)            vcom_Send(__VA_ARGS__)
 #else
 #define PRINTF(...)
