@@ -1886,7 +1886,7 @@ LoRaMacStatus_t Send( LoRaMacHeader_t *macHdr, uint8_t fPort, void *fBuffer, uin
     fCtrl.Bits.Ack           = false;
     fCtrl.Bits.AdrAckReq     = false;
     fCtrl.Bits.Adr           = AdrCtrlOn;
-	PRINTF("Send: %d\n\r", fBufferSize);
+//	PRINTF("Send: %d\n\r", fBufferSize);
     // Prepare the frame
     status = PrepareFrame( macHdr, &fCtrl, fPort, fBuffer, fBufferSize );
 

@@ -125,7 +125,7 @@ void HW_Init( void )
   {
 #if defined( USE_BOOTLOADER )
     /* Set the Vector Table base location at 0x3000 */
-    NVIC_SetVectorTable( NVIC_VectTab_FLASH, 0x3000 );
+    SCB->VTOR = FLASH_BASE | 0x3000;
 #endif
 
     HW_AdcInit( );
@@ -170,7 +170,8 @@ static void HW_IoInit( void )
   HW_SPI_IoInit( );
   
   Radio.IoInit( );
-  
+ // CMD_Init();
+	vcom_Init();
   vcom_IoInit( );
 }
 
@@ -186,6 +187,7 @@ static void HW_IoDeInit( void )
   Radio.IoDeInit( );
   
   vcom_IoDeInit( );
+//	vcom_DeInit( );
 }
 
 

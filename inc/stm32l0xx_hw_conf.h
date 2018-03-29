@@ -88,14 +88,14 @@ Maintainer: Miguel Luis and Gregory Cristian
 #define RADIO_SCLK_PORT                           GPIOA
 #define RADIO_SCLK_PIN                            GPIO_PIN_5
 
-#define RADIO_NSS_PORT                            GPIOB
-#define RADIO_NSS_PIN                             GPIO_PIN_6
+#define RADIO_NSS_PORT                            GPIOA
+#define RADIO_NSS_PIN                             GPIO_PIN_4
 
 #define RADIO_DIO_0_PORT                          GPIOA
-#define RADIO_DIO_0_PIN                           GPIO_PIN_10
+#define RADIO_DIO_0_PIN                           GPIO_PIN_15
 
-#define RADIO_DIO_1_PORT                          GPIOB
-#define RADIO_DIO_1_PIN                           GPIO_PIN_3
+//#define RADIO_DIO_1_PORT                          GPIOB
+//#define RADIO_DIO_1_PIN                           GPIO_PIN_3
 
 #define RADIO_DIO_2_PORT                          GPIOB
 #define RADIO_DIO_2_PIN                           GPIO_PIN_5
@@ -113,8 +113,10 @@ Maintainer: Miguel Luis and Gregory Cristian
 #define RADIO_DIO_5_PIN                           GPIO_PIN_7
 #endif
 
-#define RADIO_ANT_SWITCH_PORT                     GPIOA
-#define RADIO_ANT_SWITCH_PIN                      GPIO_PIN_1
+#define RADIO_ANT_SWITCH1_PORT                     GPIOA
+#define RADIO_ANT_SWITCH1_PIN                      GPIO_PIN_11
+#define RADIO_ANT_SWITCH2_PORT                     GPIOA
+#define RADIO_ANT_SWITCH2_PIN                      GPIO_PIN_8
 
 //#define BAT_LEVEL_PORT                            GPIOA
 //#define BAT_LEVEL_PIN                             GPIO_PIN_4

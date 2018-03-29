@@ -67,13 +67,13 @@ Maintainer: Miguel Luis, Gregory Cristian and Wael Guibene
 #include "command.h"
 #include "at.h"
 #include "lora.h"
-
+#include "app_scheduler.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-/**
- * @brief LoRaWAN Adaptive Data Rate
- * @note Please note that when ADR is enabled the end-device should be static
- */
+
+#define SCHED_MAX_EVENT_DATA_SIZE      20 //sizeof(TimerEvent_t) /**< Maximum size of scheduler events. */
+#define SCHED_QUEUE_SIZE                10
+
 #define LORAWAN_ADR_ON                              1
 
 /**
@@ -90,8 +90,8 @@ Maintainer: Miguel Luis, Gregory Cristian and Wael Guibene
 
 /* Private macro -------------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
-
-
+//extern uint8_t isTxBusy;
+extern uint8_t SX1276Read( uint8_t addr );
 
 /* call back when LoRa has received a frame*/
 static void LoraRxData(lora_AppData_t *AppData);
@@ -128,57 +128,34 @@ static LoRaParam_t LoRaParamInit = {LORAWAN_ADR_ON,
  * @retval None
  */
 
-/* Implementation of the HAL_Init() using LL functions */
-																		#if 0
-void HW_Main_Init()
+
+TimerEvent_t SensorTimer;
+TimerEvent_t RxWaitTimer;
+									
+									
+void OnSensorTimerEvent( void )
 {
-  /* Configure Buffer cache, Flash prefetch,  Flash preread */
-#if (BUFFER_CACHE_DISABLE != 0)
-  LL_FLASH_EnableBuffers();
-#endif /* BUFFER_CACHE_DISABLE */
-
-#if (PREREAD_ENABLE != 0)
-  LL_FLASH_EnablePreRead();
-#endif /* PREREAD_ENABLE */
-
-#if (PREFETCH_ENABLE != 0)
-  LL_FLASH_EnablePrefetch();
-#endif /* PREFETCH_ENABLE */
-
-  /*
-   * Init the low level hardware
-   * - Power clock enable
-   * - Disable PVD
-   * - Enable the Ultra Low Power mode
-   * - Support DBG mode
-   * - Take into account Fast Wakeup Mode
-   * - Initialize GPIO
-   */
-  LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
-  LL_PWR_DisablePVD();      /* Disable the Power Voltage Detector */
-  LL_PWR_EnableUltraLowPower();   /* Enables the Ultra Low Power mode */
-  LL_FLASH_EnableSleepPowerDown();
-
-  /*
-   * In debug mode, e.g. when DBGMCU is activated, Arm core has always clocks
-   * And will not wait that the FLACH is ready to be read. It can miss in this
-   * case the first instruction. To overcome this issue, the flash remain clcoked during sleep mode
-   */
-  DBG(LL_FLASH_DisableSleepPowerDown(); );
-
-#ifdef ENABLE_FAST_WAKEUP
-  LL_PWR_EnableFastWakeUp();
-#else
-  LL_PWR_DisableFastWakeUp();
-#endif
-
-  HW_GpioInit();
+	char SendData[64]={0};
+	sprintf(SendData,"AT+SEND=2:1234\r\n");
+	PRINTF(SendData);
+	//parse_cmd(SendData);
+	//TimerSetValue( &SensorTimer,  600000);
+	TimerStart(&SensorTimer);	
 }
-#endif
+
+void OnRxWaitTimerEvent( void )
+{
+	LPM_SetStopMode(LPM_UART_RX_Id , LPM_Enable );
+}
+
 int main(void)
 {
   /* STM32 HAL library initialization*/
-  //HW_Main_Init();
+  APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
+	TimerInit( &SensorTimer, OnSensorTimerEvent );
+	TimerSetValue( &SensorTimer,  1000); 
+	TimerInit( &RxWaitTimer, OnRxWaitTimerEvent );
+	TimerSetValue( &RxWaitTimer,  50); 	
 	HAL_Init( );
   /* Configure the system clock*/
   SystemClock_Config();
@@ -189,29 +166,37 @@ int main(void)
   /* Configure Debug mode */
   DBG_Init();
   
+
   /* USER CODE BEGIN 1 */
   CMD_Init();
+
   /*Disable standby mode*/
   LPM_SetOffMode(LPM_APPLI_Id, LPM_Disable);
-  
+
   PRINTF("ATtention command interface\n\r");
 	volatile uint8_t readdata;
-	PRINTF("Version: F-ICM-02-1802261\n\r");
+	PRINTF("Version: ");
+	PRINTF(AT_VERSION_STRING);
+	PRINTF("\n\r");
 	readdata = 0;
 	readdata = SX1276Read( 0x42 );
-	PRINTF("spi test1: %X\n\r",readdata);
+	PRINTF("lora test1: %X\n\r",readdata);
 	readdata = 0;
 	readdata = SX1276Read( 0x4d );
-	PRINTF("spi test2: %X\n\r",readdata);
+	PRINTF("lora test2: %X\n\r",readdata);
 	PRINTF("ATtention command interface\n\r");	
   /* USER CODE END 1 */
 
   /* Configure the Lora Stack*/
-  LORA_Init(&LoRaMainCallbacks, &LoRaParamInit);
-	LORA_Join();
+	LORA_Init(&LoRaMainCallbacks, &LoRaParamInit);
+
+	//LORA_Join();
+	
+	//TimerStart(&SensorTimer);
   /* main loop*/
-  while (1)
-  {
+	while (1)
+	{
+		app_sched_execute();
     /* Handle UART commands */
     CMD_Process();
     /*
@@ -223,12 +208,14 @@ int main(void)
      * and cortex will not enter low power anyway
      * don't go in low power mode if we just received a char
      */
-   // if ( (IsNewCharReceived() == RESET))
+	//if(!isTxBusy)
+	//if ( (IsNewCharReceived() == RESET))
     {
 #ifndef LOW_POWER_DISABLE
       LPM_EnterLowPower();
 #endif
     }
+
     ENABLE_IRQ();
 
     /* USER CODE BEGIN 2 */

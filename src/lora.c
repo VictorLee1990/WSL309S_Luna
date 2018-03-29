@@ -407,6 +407,16 @@ void LORA_Join( void)
   }
   else
   {
+	MlmeReq_t mlmeReq;
+  
+    mlmeReq.Type = MLME_JOIN;
+    mlmeReq.Req.Join.DevEui = lora_config.DevEui;
+    mlmeReq.Req.Join.AppEui = lora_config.AppEui;
+    mlmeReq.Req.Join.AppKey = lora_config.AppKey;
+    mlmeReq.Req.Join.NbTrials = LoRaParamInit->NbTrials;
+  
+    JoinParameters = mlmeReq.Req.Join;  
+	  
     mibReq.Type = MIB_NET_ID;
     mibReq.Param.NetID = LORAWAN_NETWORK_ID;
     LoRaMacMibSetRequestConfirm( &mibReq );

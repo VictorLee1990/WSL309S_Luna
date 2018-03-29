@@ -76,7 +76,7 @@ typedef enum eATEerror
 /* External variables --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/
 /* AT printf */
-#define AT_PRINTF(...)    // vcom_Send(__VA_ARGS__)
+#define AT_PRINTF(...)    (vcom_Send(__VA_ARGS__))
 
 /* AT Command strings. Commands start with AT */
 #define AT_RESET      "Z"

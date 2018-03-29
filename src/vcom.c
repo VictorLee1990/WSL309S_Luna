@@ -47,24 +47,29 @@
 #include "hw.h"
 #include "vcom.h"
 #include <stdarg.h>
-
+#include "app_fifo.h"
+#include "tiny_vsnprintf.h"
+#include "low_power_manager.h"
+#include "timeServer.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 #define BUFSIZE 256
+#define TX_BUFFER 512
 #define USARTX_IRQn USART2_IRQn
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-
-/* buffer */
-static char buff[BUFSIZE];
-/* buffer write index*/
-__IO uint16_t iw=0;
-/* buffer read index*/
-static uint16_t ir=0;
+uint8_t uart_rx_fifo_buff[BUFSIZE];
+app_fifo_t uart_rxFifo;
+uint8_t uart_tx_fifo_buff[TX_BUFFER];
+app_fifo_t uart_txFifo;
+static uint8_t isTxBusy = false;
+static uint8_t isWake = false;
+uint8_t TxBuffer[BUFSIZE];
+uint8_t RxBuffer[BUFSIZE];
 /* Uart Handle */
 static UART_HandleTypeDef UartHandle;
-
+extern TimerEvent_t RxWaitTimer;
 /* Private function prototypes -----------------------------------------------*/
 /* Functions Definition ------------------------------------------------------*/
 
@@ -95,100 +100,78 @@ void vcom_Init(void)
   
   HAL_NVIC_SetPriority(USARTX_IRQn, 0x1, 0);
   HAL_NVIC_EnableIRQ(USARTX_IRQn);
+  
 }
 
+void MOLTRES_UART_IRQHandler(UART_HandleTypeDef *huart)
+{
+	if((__HAL_UART_GET_FLAG(huart,UART_FLAG_IDLE) != RESET))
+	{
+		__HAL_UART_CLEAR_IDLEFLAG(huart);
+	
+		  HAL_UART_RxCpltCallback(huart);
+		
+	}
+}
+
+void vcom_IRQHandler(void)
+{
+	HAL_UART_IRQHandler(&UartHandle);
+	MOLTRES_UART_IRQHandler(&UartHandle);
+}
 
 void vcom_DeInit(void)
 {
-#if 1
   HAL_UART_DeInit(&UartHandle);
-#endif
+}
+
+void OnUartTxStartEvent( void *p_event_data, uint16_t event_size )
+{
+	if(isTxBusy == 0)
+    {
+        uint32_t tx_size;
+        tx_size = BUFSIZE;
+        app_fifo_read(&uart_txFifo,TxBuffer,&tx_size);
+        if(tx_size)
+        {
+			LPM_SetStopMode(LPM_UART_TX_Id , LPM_Disable );
+			isTxBusy = 1;			
+             HAL_UART_Transmit_IT(&UartHandle, (uint8_t *)TxBuffer, tx_size);
+        }
+    }
+}
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+   isTxBusy = 0;
+	LPM_SetStopMode(LPM_UART_TX_Id , LPM_Enable );
+    app_sched_event_put(NULL, NULL, OnUartTxStartEvent);
 }
 
 void vcom_Send( char *format, ... )
 {
+	
   va_list args;
   va_start(args, format);
-  uint8_t len;
-  uint8_t lenTop;
-  char tempBuff[128];
+  uint32_t len= 0;
+
+  char tempBuff[BUFSIZE];
   
   BACKUP_PRIMASK();
   DISABLE_IRQ();
   
   /*convert into string at buff[0] of length iw*/
-  len = vsprintf(&tempBuff[0], format, args);
-  
-  if (iw+len<BUFSIZE)
-  {
-    memcpy( &buff[iw], &tempBuff[0], len);
-    iw+=len;
-  }
-  else
-  {
-    lenTop=BUFSIZE-iw;
-    memcpy( &buff[iw], &tempBuff[0], lenTop);
-    len-=lenTop;
-    memcpy( &buff[0], &tempBuff[lenTop], len);
-    iw = len;
-  }
+	len = tiny_vsnprintf_like(&tempBuff[0], sizeof(tempBuff), format, args); 
+
+  app_fifo_write(&uart_txFifo,(uint8_t*)tempBuff,&len);
   RESTORE_PRIMASK();
-  
-  HAL_NVIC_SetPendingIRQ(USARTX_IRQn);
-    
+
   va_end(args);
+	app_sched_event_put(NULL, NULL, OnUartTxStartEvent);
 }
 
-/* modifes only ir*/
-void vcom_Print( void)
-{
-  char* CurChar;
-  while( ( (iw+BUFSIZE-ir)%BUFSIZE) >0 )
-  {
-    BACKUP_PRIMASK();
-    DISABLE_IRQ();
-    
-    CurChar = &buff[ir];
-    ir= (ir+1) %BUFSIZE;
-    
-    RESTORE_PRIMASK();
-    
-    HAL_UART_Transmit(&UartHandle,(uint8_t *) CurChar, 1, 300);    
-  }
-  HAL_NVIC_ClearPendingIRQ(USARTX_IRQn);
-}
 
-void vcom_Send_Lp( char *format, ... )
-{
-  va_list args;
-  va_start(args, format);
-  uint8_t len;
-  uint8_t lenTop;
-  char tempBuff[128];
-  
-  BACKUP_PRIMASK();
-  DISABLE_IRQ();
-  
-  /*convert into string at buff[0] of length iw*/
-  len = vsprintf(&tempBuff[0], format, args);
-  
-  if (iw+len<BUFSIZE)
-  {
-    memcpy( &buff[iw], &tempBuff[0], len);
-    iw+=len;
-  }
-  else
-  {
-    lenTop=BUFSIZE-iw;
-    memcpy( &buff[iw], &tempBuff[0], lenTop);
-    len-=lenTop;
-    memcpy( &buff[0], &tempBuff[lenTop], len);
-    iw = len;
-  }
-  RESTORE_PRIMASK();  
-  
-  va_end(args);
-}
+
 /**
   * @brief UART MSP Initialization 
   *        This function configures the hardware resources used in this example: 
@@ -210,10 +193,13 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
   vcom_IoInit( );
 }
 
+extern TimerEvent_t SensorTimer;
 void vcom_IoInit(void)
 {
+	
   GPIO_InitTypeDef  GPIO_InitStruct={0};
     /* Enable GPIO TX/RX clock */
+
   USARTX_TX_GPIO_CLK_ENABLE();
   USARTX_RX_GPIO_CLK_ENABLE();
     /* UART TX GPIO pin configuration  */
@@ -229,24 +215,43 @@ void vcom_IoInit(void)
   GPIO_InitStruct.Pin = USARTX_RX_PIN;
   GPIO_InitStruct.Alternate = USARTX_RX_AF;
 
-  HAL_GPIO_Init(USARTX_RX_GPIO_PORT, &GPIO_InitStruct);
+	HAL_GPIO_Init(USARTX_RX_GPIO_PORT, &GPIO_InitStruct);
+HAL_UART_RxCpltCallback(&UartHandle);
+}
+
+void vcom_RxInt( void )
+{
+	TimerStop(&RxWaitTimer);
+	TimerStart(&RxWaitTimer);  
 }
 
 void vcom_IoDeInit(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure={0};
-  
+
+ // HAL_NVIC_DisableIRQ(USARTX_IRQn);
   USARTX_TX_GPIO_CLK_ENABLE();
   USARTX_RX_GPIO_CLK_ENABLE();
 
   GPIO_InitStructure.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStructure.Pull = GPIO_NOPULL;
+  GPIO_InitStructure.Pull = GPIO_PULLDOWN;
   
   GPIO_InitStructure.Pin =  USARTX_TX_PIN ;
   HAL_GPIO_Init(  USARTX_TX_GPIO_PORT, &GPIO_InitStructure );
   
+	GPIO_InitStructure.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStructure.Pull = GPIO_PULLUP;
   GPIO_InitStructure.Pin =  USARTX_RX_PIN ;
   HAL_GPIO_Init(  USARTX_RX_GPIO_PORT, &GPIO_InitStructure ); 
+
+  GPIO_InitTypeDef GPIO_InitStructure2={0};
+	GPIO_InitStructure2.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStructure2.Pull = GPIO_PULLUP;
+  GPIO_InitStructure2.Pin =  USARTX_RX_PIN ;
+  HAL_GPIO_Init(  USARTX_RX_GPIO_PORT, &GPIO_InitStructure2 );
+	HW_GPIO_SetIrq( USARTX_RX_GPIO_PORT, USARTX_RX_PIN, 0, &vcom_RxInt );  
+  	LPM_SetStopMode(LPM_UART_RX_Id , LPM_Disable );
+
 }
 
 /**
@@ -259,4 +264,49 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef *huart)
   vcom_IoDeInit( );
 }
 
+void uart2_event_handle_schedule(void *p_event_data, uint16_t event_size)
+{
+	uint32_t psu_event_rx_rec_size;
+	uint8_t psu_event_rx_buff[BUFSIZE];	
+
+	//RTT_printf(0,(char*)"getPSU = true\r\n");	
+	psu_event_rx_rec_size = BUFSIZE;
+	app_fifo_read(&uart_rxFifo,psu_event_rx_buff,&psu_event_rx_rec_size);
+	
+	if(psu_event_rx_rec_size )
+	{
+		psu_event_rx_buff[psu_event_rx_rec_size] = 0;
+		PRINTF((char*)psu_event_rx_buff);
+	}
+
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	if(huart == &UartHandle)
+	{
+		uint32_t uart2_rx_rec_size;
+
+		uart2_rx_rec_size = huart->RxXferSize - huart->RxXferCount;
+		if(uart2_rx_rec_size > 1)
+		{
+			TimerStop(&RxWaitTimer);
+			TimerStart(&RxWaitTimer);
+			app_fifo_write(&uart_rxFifo,RxBuffer,&uart2_rx_rec_size);
+			app_sched_event_put(NULL, NULL, uart2_event_handle_schedule);				
+		}
+		
+		HAL_UART_AbortReceive(huart);
+		HAL_UART_Receive_IT(huart,RxBuffer,BUFSIZE);
+		__HAL_UART_ENABLE_IT(huart, UART_IT_IDLE);
+		
+	}		
+}
+
+void start_uart2_uart(void)
+{
+	app_fifo_init(&uart_rxFifo,uart_rx_fifo_buff,BUFSIZE);
+	app_fifo_init(&uart_txFifo,uart_tx_fifo_buff,TX_BUFFER);
+	HAL_UART_RxCpltCallback(&UartHandle);
+}
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

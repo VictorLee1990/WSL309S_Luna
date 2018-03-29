@@ -136,10 +136,10 @@
 /* --------Preprocessor compile swicth------------ */
 /* debug swicthes in debug.h */
 #define DEBUG
-#define TRACE
+//#define TRACE
    
 /* uncomment below line to never enter lowpower modes in main.c*/
-#define LOW_POWER_DISABLE
+//#define LOW_POWER_DISABLE
 
 /* debug swicthes in bsp.c */
 //#define SENSOR_ENABLED

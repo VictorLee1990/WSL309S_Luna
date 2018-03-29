@@ -205,9 +205,8 @@ void SysTick_Handler(void)
 
 void USART2_IRQHandler(void)
 {
-	vcom_Print( );
-//	HAL_UART_IRQHandler(&huart2);
-  //vcom_IRQHandler();
+//	vcom_Print();
+	vcom_IRQHandler();
 }
 
 void DMA1_Channel4_5_6_7_IRQHandler(void)

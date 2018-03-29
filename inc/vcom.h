@@ -100,6 +100,13 @@ void vcom_IoInit(void);
 */
 void vcom_IoDeInit(void);
   
+  /**
+ * @brief  vcom IRQ Handler
+ * @param  None
+ * @retval None
+ */
+void vcom_IRQHandler(void);
+
 /** 
 * @brief  Records string on circular Buffer and set SW interrupt
 * @note   Set NVIC to call vcom_Send
@@ -107,14 +114,6 @@ void vcom_IoDeInit(void);
 * @return None
 */
 void vcom_Send( char *format, ... );
-
-/** 
-* @brief  Sends circular Buffer on com port in IT mode
-* @note   called from low Priority interrupt
-* @param  None
-* @return None
-*/
-void vcom_Print( void);
 
 /** 
 * @brief  Records string on circular Buffer
@@ -125,11 +124,12 @@ void vcom_Print( void);
 */
 void vcom_Send_Lp( char *format, ... );
 
+void start_uart2_uart(void);
 /* Exported macros -----------------------------------------------------------*/
 #ifdef LOW_POWER_DISABLE
 #define PRINTF(...)            vcom_Send(__VA_ARGS__)
 #else
-#define PRINTF(...)
+#define PRINTF(...) 			vcom_Send(__VA_ARGS__)
 #endif
 
 

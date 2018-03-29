@@ -87,7 +87,7 @@ void Error_Handler( void );
 
 #define DBG_PRINTF(...)    vcom_Send(__VA_ARGS__)
 
-#define DBG_PRINTF_CRITICAL(...)   vcom_Send_Lp(__VA_ARGS__)
+#define DBG_PRINTF_CRITICAL(...)   vcom_Send(__VA_ARGS__)
 
 #else /*TRACE*/
 
@@ -108,7 +108,7 @@ void Error_Handler( void );
 
 #define DBG( x ) do{  } while(0)
 
-#define DBG_PRINTF(...) vcom_Send(__VA_ARGS__)
+#define DBG_PRINTF(...) //vcom_Send(__VA_ARGS__)
 
 #define DBG_PRINTF_CRITICAL(...) 
                       

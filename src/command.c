@@ -582,14 +582,14 @@ static void com_error(ATEerror_t error_type);
  * @param  The command
  * @retval None
  */
-static void parse_cmd(const char *cmd);
+void parse_cmd(const char *cmd);
 
 /* Exported functions ---------------------------------------------------------*/
 
 void CMD_Init(void)
 {
-  vcom_Init();
-//  vcom_ReceiveInit();
+	vcom_Init();
+	start_uart2_uart();
 }
 
 void CMD_Process(void)
@@ -644,11 +644,11 @@ static void com_error(ATEerror_t error_type)
   {
     error_type = AT_MAX;
   }
-  AT_PRINTF(ATError_description[error_type]);
+  AT_PRINTF((char*)ATError_description[error_type]);
 }
 
 
-static void parse_cmd(const char *cmd)
+void parse_cmd(const char *cmd)
 {
   ATEerror_t status = AT_OK;
   const struct ATCommand_s *Current_ATCommand;
@@ -674,7 +674,7 @@ static void parse_cmd(const char *cmd)
               "AT+<CMD>=?       : Get the value\r\n");
     for (i = 0; i < (sizeof(ATCommand) / sizeof(struct ATCommand_s)); i++)
     {
-      AT_PRINTF(ATCommand[i].help_string);
+      AT_PRINTF((char*)ATCommand[i].help_string);
     }
 #endif
   }
@@ -709,7 +709,7 @@ static void parse_cmd(const char *cmd)
             break;
           case '?':
 #ifndef NO_HELP
-            AT_PRINTF(Current_ATCommand->help_string);
+            AT_PRINTF((char*)Current_ATCommand->help_string);
 #endif
             status = AT_OK;
             break;
