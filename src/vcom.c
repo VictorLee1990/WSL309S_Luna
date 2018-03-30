@@ -51,6 +51,7 @@
 #include "tiny_vsnprintf.h"
 #include "low_power_manager.h"
 #include "timeServer.h"
+#include "command.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -196,7 +197,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 extern TimerEvent_t SensorTimer;
 void vcom_IoInit(void)
 {
-	
+//	uint32_t i=1000;
   GPIO_InitTypeDef  GPIO_InitStruct={0};
     /* Enable GPIO TX/RX clock */
 
@@ -216,11 +217,14 @@ void vcom_IoInit(void)
   GPIO_InitStruct.Alternate = USARTX_RX_AF;
 
 	HAL_GPIO_Init(USARTX_RX_GPIO_PORT, &GPIO_InitStruct);
+ // while(i--);
 HAL_UART_RxCpltCallback(&UartHandle);
 }
 
 void vcom_RxInt( void )
 {
+	HAL_NVIC_DisableIRQ(EXTI2_3_IRQn);
+	LPM_SetStopMode(LPM_UART_RX_Id , LPM_Disable );
 	TimerStop(&RxWaitTimer);
 	TimerStart(&RxWaitTimer);  
 }
@@ -238,20 +242,16 @@ void vcom_IoDeInit(void)
   
   GPIO_InitStructure.Pin =  USARTX_TX_PIN ;
   HAL_GPIO_Init(  USARTX_TX_GPIO_PORT, &GPIO_InitStructure );
-  
-	GPIO_InitStructure.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStructure.Pull = GPIO_PULLUP;
-  GPIO_InitStructure.Pin =  USARTX_RX_PIN ;
-  HAL_GPIO_Init(  USARTX_RX_GPIO_PORT, &GPIO_InitStructure ); 
+
+  //GPIO_InitStructure.Pin =  USARTX_RX_PIN ;
+ // HAL_GPIO_Init(  USARTX_RX_GPIO_PORT, &GPIO_InitStructure ); 
 
   GPIO_InitTypeDef GPIO_InitStructure2={0};
-	GPIO_InitStructure2.Mode = GPIO_MODE_IT_FALLING;
+	GPIO_InitStructure2.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStructure2.Pull = GPIO_PULLUP;
   GPIO_InitStructure2.Pin =  USARTX_RX_PIN ;
   HAL_GPIO_Init(  USARTX_RX_GPIO_PORT, &GPIO_InitStructure2 );
 	HW_GPIO_SetIrq( USARTX_RX_GPIO_PORT, USARTX_RX_PIN, 0, &vcom_RxInt );  
-  	LPM_SetStopMode(LPM_UART_RX_Id , LPM_Disable );
-
 }
 
 /**
@@ -264,12 +264,32 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef *huart)
   vcom_IoDeInit( );
 }
 
+uint8_t IsNewCharReceived(void)
+{
+	if(fifo_length(&uart_rxFifo))
+		return SET;
+	else
+		return RESET;
+}
+
+char GetNewChar(void)
+{
+	char tempdata;
+	if(app_fifo_get(&uart_rxFifo, &tempdata) == NRF_SUCCESS)
+	{
+		return tempdata;
+	}
+	else
+		return 0;
+}
+
 void uart2_event_handle_schedule(void *p_event_data, uint16_t event_size)
 {
+	CMD_Process();
+	/*
 	uint32_t psu_event_rx_rec_size;
 	uint8_t psu_event_rx_buff[BUFSIZE];	
 
-	//RTT_printf(0,(char*)"getPSU = true\r\n");	
 	psu_event_rx_rec_size = BUFSIZE;
 	app_fifo_read(&uart_rxFifo,psu_event_rx_buff,&psu_event_rx_rec_size);
 	
@@ -278,7 +298,7 @@ void uart2_event_handle_schedule(void *p_event_data, uint16_t event_size)
 		psu_event_rx_buff[psu_event_rx_rec_size] = 0;
 		PRINTF((char*)psu_event_rx_buff);
 	}
-
+*/
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
@@ -288,7 +308,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		uint32_t uart2_rx_rec_size;
 
 		uart2_rx_rec_size = huart->RxXferSize - huart->RxXferCount;
-		if(uart2_rx_rec_size > 1)
+		if(uart2_rx_rec_size &&(RxBuffer[0] != 0xff))
 		{
 			TimerStop(&RxWaitTimer);
 			TimerStart(&RxWaitTimer);

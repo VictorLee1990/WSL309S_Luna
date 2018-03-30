@@ -114,7 +114,7 @@ void vcom_IRQHandler(void);
 * @return None
 */
 void vcom_Send( char *format, ... );
-
+void vcom_rxcheck(void);
 /** 
 * @brief  Records string on circular Buffer
 * @note   To be called only from critical section from low power section

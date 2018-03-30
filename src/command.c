@@ -596,16 +596,19 @@ void CMD_Process(void)
 {
   static char command[CMD_SIZE];
   static unsigned i = 0;
-#if 0
+	static uint8_t isHead = 0;
   /* Process all commands */
   while (IsNewCharReceived() == SET)
   {
     command[i] = GetNewChar();
 
+   // PRINTF("%c", command[i]);
 
-    PRINTF("%c", command[i]);
-
-
+	if(!isHead) 
+		if(command[i] == 'A')
+			isHead = 1;
+	if(isHead)
+	{
     if (command[i] == AT_ERROR_RX_CHAR)
     {
       i = 0;
@@ -620,6 +623,7 @@ void CMD_Process(void)
         command[i] = '\0';
         parse_cmd(command);
         i = 0;
+		  isHead = 0;
       }
     }
     else
@@ -633,7 +637,7 @@ void CMD_Process(void)
       i++;
     }
   }
-  #endif
+}
 }
 
 /* Private functions ---------------------------------------------------------*/

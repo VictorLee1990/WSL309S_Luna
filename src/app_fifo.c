@@ -12,7 +12,7 @@
 #include "app_fifo.h"
 
 
-static uint32_t fifo_length(app_fifo_t * p_fifo)
+uint32_t fifo_length(app_fifo_t * p_fifo)
 {
     uint32_t tmp = p_fifo->read_pos;
     return p_fifo->write_pos - tmp;

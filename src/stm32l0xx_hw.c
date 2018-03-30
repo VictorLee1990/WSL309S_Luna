@@ -135,10 +135,6 @@ void HW_Init( void )
     HW_SPI_Init( );
 
     HW_RTC_Init( );
-    
-//    vcom_Init( );
-    
- //   BSP_sensor_Init( );
 
     McuInitialized = true;
   }

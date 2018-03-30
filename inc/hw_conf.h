@@ -135,7 +135,7 @@
 
 /* --------Preprocessor compile swicth------------ */
 /* debug swicthes in debug.h */
-#define DEBUG
+//#define DEBUG
 //#define TRACE
    
 /* uncomment below line to never enter lowpower modes in main.c*/

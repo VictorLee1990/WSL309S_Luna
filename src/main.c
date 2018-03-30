@@ -145,6 +145,7 @@ void OnSensorTimerEvent( void )
 
 void OnRxWaitTimerEvent( void )
 {
+	//vcom_rxcheck();
 	LPM_SetStopMode(LPM_UART_RX_Id , LPM_Enable );
 }
 
@@ -165,7 +166,6 @@ int main(void)
 
   /* Configure Debug mode */
   DBG_Init();
-  
 
   /* USER CODE BEGIN 1 */
   CMD_Init();
@@ -198,7 +198,7 @@ int main(void)
 	{
 		app_sched_execute();
     /* Handle UART commands */
-    CMD_Process();
+   // CMD_Process();
     /*
      * low power section
      */
