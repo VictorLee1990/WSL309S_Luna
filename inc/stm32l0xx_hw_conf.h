@@ -94,8 +94,8 @@ Maintainer: Miguel Luis and Gregory Cristian
 #define RADIO_DIO_0_PORT                          GPIOA
 #define RADIO_DIO_0_PIN                           GPIO_PIN_15
 
-//#define RADIO_DIO_1_PORT                          GPIOB
-//#define RADIO_DIO_1_PIN                           GPIO_PIN_3
+#define RADIO_DIO_1_PORT                          GPIOA //GPIOB
+#define RADIO_DIO_1_PIN                           GPIO_PIN_12//GPIO_PIN_3
 
 #define RADIO_DIO_2_PORT                          GPIOB
 #define RADIO_DIO_2_PIN                           GPIO_PIN_5
