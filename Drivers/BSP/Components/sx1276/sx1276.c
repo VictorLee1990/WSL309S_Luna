@@ -1466,7 +1466,7 @@ void SX1276OnTimeoutIrq( void )
 
 void SX1276OnDio0Irq( void )
 {
-//	PRINTF("SX1276OnDio0Irq\n\r");
+	PRINTF("SX1276OnDio0Irq\n\r");
     volatile uint8_t irqFlags = 0;
 
     switch( SX1276.Settings.State )
@@ -1670,7 +1670,7 @@ void SX1276OnDio0Irq( void )
 
 void SX1276OnDio1Irq( void )
 {
-//	PRINTF("SX1276OnDio1Irq\n\r");
+	PRINTF("SX1276OnDio1Irq\n\r");
     switch( SX1276.Settings.State )
     {
         case RF_RX_RUNNING:

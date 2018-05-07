@@ -10,12 +10,13 @@
       <TargetName>mlm32l07x01</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060183::V5.06 update 2 (build 183)::ARMCC</pCCUsed>
+      <pCCUsed>5060528::V5.06 update 5 (build 528)::ARMCC</pCCUsed>
+      <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32L051K8Ux</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32L0xx_DFP.2.0.0</PackID>
+          <PackID>Keil.STM32L0xx_DFP.1.6.1</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000,0x00002000) IROM(0x08000000,0x00010000) CPUTYPE("Cortex-M0+") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -272,7 +273,7 @@
               </OCR_RVCT3>
               <OCR_RVCT4>
                 <Type>1</Type>
-                <StartAddress>0x8003000</StartAddress>
+                <StartAddress>0x8000000</StartAddress>
                 <Size>0x10000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
@@ -330,9 +331,10 @@
             <vShortWch>0</vShortWch>
             <v6Lto>0</v6Lto>
             <v6WtE>0</v6WtE>
+            <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls>--C99</MiscControls>
-              <Define>STM32L051xx, USE_STM32L0XX_NUCLEO, USE_FULL_LL_DRIVER, REGION_CN470, USE_BOOTLOADER</Define>
+              <Define>STM32L051xx, USE_STM32L0XX_NUCLEO, USE_FULL_LL_DRIVER, REGION_CN470, xUSE_BOOTLOADER</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\inc;..\..\Drivers\BSP\STM32L0xx_Nucleo;..\..\Drivers\STM32L0xx_HAL_Driver\Inc;..\..\Drivers\CMSIS\Device\ST\STM32L0xx\Include;..\..\Drivers\CMSIS\Include;..\..\Middlewares\Third_Party\Lora\Crypto;..\..\Middlewares\Third_Party\Lora\Mac;..\..\Middlewares\Third_Party\Lora\Phy;..\..\Middlewares\Third_Party\Lora\Utilities;..\..\Drivers\BSP\X_NUCLEO_IKS01A1;..\..\Middlewares\Third_Party\Lora\Core;..\..\Drivers\BSP\Components\Common;..\..\Drivers\BSP\Components\hts221;..\..\Drivers\BSP\Components\lps22hb;..\..\Drivers\BSP\Components\lps25hb;..\..\Drivers\BSP\Components\sx1276;..\..\Drivers\BSP\sx1276mb1las</IncludePath>
             </VariousControls>
@@ -347,6 +349,7 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
+            <uClangAs>0</uClangAs>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -867,5 +870,11 @@
       </Groups>
     </Target>
   </Targets>
+
+  <RTE>
+    <apis/>
+    <components/>
+    <files/>
+  </RTE>
 
 </Project>

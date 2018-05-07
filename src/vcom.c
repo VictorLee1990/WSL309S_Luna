@@ -218,7 +218,7 @@ void vcom_IoInit(void)
 
 	HAL_GPIO_Init(USARTX_RX_GPIO_PORT, &GPIO_InitStruct);
  // while(i--);
-HAL_UART_RxCpltCallback(&UartHandle);
+	HAL_UART_RxCpltCallback(&UartHandle);
 }
 
 void vcom_RxInt( void )
