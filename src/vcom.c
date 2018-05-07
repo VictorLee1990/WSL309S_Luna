@@ -86,7 +86,7 @@ void vcom_Init(void)
       - Hardware flow control disabled (RTS and CTS signals) */
   UartHandle.Instance        = USARTX;
   
-  UartHandle.Init.BaudRate   = 57600;
+  UartHandle.Init.BaudRate   = 9600;
   UartHandle.Init.WordLength = UART_WORDLENGTH_8B;
   UartHandle.Init.StopBits   = UART_STOPBITS_1;
   UartHandle.Init.Parity     = UART_PARITY_NONE;
@@ -135,8 +135,8 @@ void OnUartTxStartEvent( void *p_event_data, uint16_t event_size )
         app_fifo_read(&uart_txFifo,TxBuffer,&tx_size);
         if(tx_size)
         {
-			LPM_SetStopMode(LPM_UART_TX_Id , LPM_Disable );
-			isTxBusy = 1;			
+					LPM_SetStopMode(LPM_UART_TX_Id , LPM_Disable );
+					isTxBusy = 1;			
              HAL_UART_Transmit_IT(&UartHandle, (uint8_t *)TxBuffer, tx_size);
         }
     }
@@ -199,6 +199,7 @@ void vcom_IoInit(void)
 {
 //	uint32_t i=1000;
   GPIO_InitTypeDef  GPIO_InitStruct={0};
+ 
     /* Enable GPIO TX/RX clock */
 
   USARTX_TX_GPIO_CLK_ENABLE();
@@ -283,8 +284,16 @@ char GetNewChar(void)
 		return 0;
 }
 
+
+
 void uart2_event_handle_schedule(void *p_event_data, uint16_t event_size)
 {
+	uint8_t temp_buff[8];	
+	uint32_t temp_buff_rec_size;
+	temp_buff_rec_size = 2;
+	temp_buff[0]=0x0d;
+	temp_buff[1]=0x0a;
+	app_fifo_write(&uart_rxFifo,temp_buff,&temp_buff_rec_size);
 	CMD_Process();
 	/*
 	uint32_t psu_event_rx_rec_size;
@@ -299,6 +308,11 @@ void uart2_event_handle_schedule(void *p_event_data, uint16_t event_size)
 		PRINTF((char*)psu_event_rx_buff);
 	}
 */
+}
+
+void vcom_rxcheck(void)
+{
+	app_sched_event_put(NULL, NULL, uart2_event_handle_schedule);				
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)

@@ -145,7 +145,7 @@ void OnSensorTimerEvent( void )
 
 void OnRxWaitTimerEvent( void )
 {
-	//vcom_rxcheck();
+	vcom_rxcheck();
 	LPM_SetStopMode(LPM_UART_RX_Id , LPM_Enable );
 }
 
@@ -156,7 +156,7 @@ int main(void)
 	TimerInit( &SensorTimer, OnSensorTimerEvent );
 	TimerSetValue( &SensorTimer,  1000); 
 	TimerInit( &RxWaitTimer, OnRxWaitTimerEvent );
-	TimerSetValue( &RxWaitTimer,  50); 	
+	TimerSetValue( &RxWaitTimer,  250); 	
 	HAL_Init( );
   /* Configure the system clock*/
   SystemClock_Config();
@@ -184,7 +184,7 @@ int main(void)
 	readdata = 0;
 	readdata = SX1276Read( 0x4d );
 	PRINTF("lora test2: %X\n\r",readdata);
-	PRINTF("ATtention command interface\n\r");	
+	//PRINTF("ATtention command interface\n\r");	
   /* USER CODE END 1 */
 
   /* Configure the Lora Stack*/
