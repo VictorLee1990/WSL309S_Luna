@@ -390,6 +390,57 @@ void lora_config_tx_datarate_set(int8_t TxDataRate);
  */ 
 int8_t lora_config_tx_datarate_get(void );
   
+void lora_config_trx_set(uint8_t enable);
+uint8_t  lora_config_trx_get(void);
+
+void lora_config_rx1_set(uint32_t rxfreq);
+uint32_t lora_config_rx1_get(void);
+
+void lora_config_rx2_set(uint32_t rxfreq);
+uint32_t lora_config_rx2_get(void);
+
+void lora_config_tx1_set(uint32_t txfreq);
+uint32_t lora_config_tx1_get(void);
+
+void lora_config_tx2_set(uint32_t txfreq);
+uint32_t lora_config_tx2_get(void);
+
+void lora_config_tx3_set(uint32_t txfreq);
+uint32_t lora_config_tx3_get(void);
+
+void lora_config_tx4_set(uint32_t txfreq);
+uint32_t lora_config_tx4_get(void);
+
+void lora_config_tx5_set(uint32_t txfreq);
+uint32_t lora_config_tx5_get(void);
+
+void lora_config_tx6_set(uint32_t txfreq);
+uint32_t lora_config_tx6_get(void);
+
+void lora_config_tx7_set(uint32_t txfreq);
+uint32_t lora_config_tx7_get(void);
+
+void lora_config_tx8_set(uint32_t txfreq);
+uint32_t lora_config_tx8_get(void);
+
+uint8_t *lora_config_appskey_get(void);
+void lora_config_appskey_set(uint8_t appskey[16]);
+uint8_t *lora_config_nwkskey_get(void);
+void lora_config_nwkskey_set(uint8_t nwkskey[16]);
+void lora_config_adr_set(uint8_t value);
+void lora_config_txp_set(uint8_t value);
+void lora_config_public_network_set(uint8_t value);
+void lora_config_class_set(uint8_t value);
+void lora_config_join_delay1_set(uint32_t value);
+void lora_config_join_delay2_set(uint32_t value);
+void lora_config_rx1_delay_set(uint32_t value);
+void lora_config_rx2_delay_set(uint32_t value);
+void lora_config_rx2_dr(uint8_t value);
+uint8_t lora_config_adr_get(void);
+void lora_config_save(void);
+void lora_config_load(void);
+uint8_t getFlashData(uint8_t *data, uint32_t data_size);
+void setFlashData(uint8_t *data, uint32_t data_size);
 #ifdef __cplusplus
 }
 #endif

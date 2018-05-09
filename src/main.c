@@ -163,7 +163,11 @@ int main(void)
 
   /* Configure the hardware*/
   HW_Init();
-
+	
+#ifndef USE_BOOTLOADER
+	HAL_Delay(3000);
+#endif
+	
   /* Configure Debug mode */
   DBG_Init();
 
@@ -190,7 +194,7 @@ int main(void)
   /* Configure the Lora Stack*/
 	LORA_Init(&LoRaMainCallbacks, &LoRaParamInit);
 
-	//LORA_Join();
+//	LORA_Join();
 	
 	//TimerStart(&SensorTimer);
   /* main loop*/
@@ -238,9 +242,9 @@ void assert_failed(uint8_t *file, uint32_t line)
 
 static void LORA_HasJoined( void )
 {
-#if( OVER_THE_AIR_ACTIVATION != 0 )
+//#if( OVER_THE_AIR_ACTIVATION != 0 )
   PRINTF("JOINED\n\r");
-#endif
+//#endif
 }
 
 static void LORA_ConfirmClass ( DeviceClass_t Class )

@@ -142,7 +142,7 @@ static int sscanf_uint32_as_hhx(const char *from, uint32_t *value);
  * @param  the value containing the 4 bytes to print
  * @retval None
  */
-static void print_uint32_as_02x(uint32_t value);
+void print_uint32_as_02x(uint32_t value);
 
 /**
  * @brief  Print 8 bytes as %02x
@@ -292,7 +292,7 @@ ATEerror_t at_NwkSKey_set(const char *param)
   mib.Param.NwkSKey = NwkSKey;
   status = LoRaMacMibSetRequestConfirm(&mib);
   CHECK_STATUS(status);
-
+	lora_config_nwkskey_set(mib.Param.NwkSKey);
   return AT_OK;
 }
 
@@ -323,7 +323,7 @@ ATEerror_t at_AppSKey_set(const char *param)
   mib.Param.AppSKey = AppSKey;
   status = LoRaMacMibSetRequestConfirm(&mib);
   CHECK_STATUS(status);
-
+	lora_config_appskey_set(mib.Param.AppSKey);
   return AT_OK;
 }
 
@@ -360,6 +360,7 @@ ATEerror_t at_ADR_set(const char *param)
       mib.Param.AdrEnable = param[0] - '0';
       status = LoRaMacMibSetRequestConfirm(&mib);
       CHECK_STATUS(status);
+		lora_config_adr_set(mib.Param.AdrEnable);
       break;
     default:
       return AT_PARAM_ERROR;
@@ -393,7 +394,7 @@ ATEerror_t at_TransmitPower_set(const char *param)
   }
   status = LoRaMacMibSetRequestConfirm(&mib);
   CHECK_STATUS(status);
-
+	lora_config_txp_set(mib.Param.ChannelsTxPower);
   return AT_OK;
 }
 
@@ -473,6 +474,7 @@ ATEerror_t at_PublicNetwork_set(const char *param)
       mib.Param.EnablePublicNetwork = param[0] - '0';
       status = LoRaMacMibSetRequestConfirm(&mib);
       CHECK_STATUS(status);
+			lora_config_public_network_set(mib.Param.EnablePublicNetwork);
       break;
     default:
       return AT_PARAM_ERROR;
@@ -483,34 +485,181 @@ ATEerror_t at_PublicNetwork_set(const char *param)
 
 ATEerror_t at_Rx2Frequency_get(const char *param)
 {
-  MibRequestConfirm_t mib;
-  LoRaMacStatus_t status;
-
-  mib.Type = MIB_RX2_CHANNEL;
-  status = LoRaMacMibGetRequestConfirm(&mib);
-  CHECK_STATUS(status);
-  print_d(mib.Param.Rx2Channel.Frequency);
-
+	print_d(lora_config_rx2_get());	
   return AT_OK;
 }
 
 ATEerror_t at_Rx2Frequency_set(const char *param)
 {
-  MibRequestConfirm_t mib;
-  LoRaMacStatus_t status;
-
-  mib.Type = MIB_RX2_CHANNEL;
-  status = LoRaMacMibGetRequestConfirm(&mib);
-  CHECK_STATUS(status);
-
-  if (tiny_sscanf(param, "%lu", &mib.Param.Rx2Channel.Frequency) != 1)
+	uint32_t Frequency;
+  if (tiny_sscanf(param, "%lu", &Frequency) != 1)
   {
     return AT_PARAM_ERROR;
-  }
+  }	
+	lora_config_rx2_set(Frequency);
 
-  status = LoRaMacMibSetRequestConfirm(&mib);
-  CHECK_STATUS(status);
+  return AT_OK;
+}
 
+ATEerror_t at_Rx1Frequency_get(const char *param)
+{
+	print_d(lora_config_rx1_get());
+  return AT_OK;
+}
+
+ATEerror_t at_Rx1Frequency_set(const char *param)
+{
+	uint32_t Frequency;
+  if (tiny_sscanf(param, "%lu", &Frequency) != 1)
+  {
+    return AT_PARAM_ERROR;
+  }	
+	lora_config_rx1_set(Frequency);
+
+  return AT_OK;
+}
+
+
+ATEerror_t at_Tx1Frequency_set(const char *param)
+{
+	uint32_t Frequency;
+  if (tiny_sscanf(param, "%lu", &Frequency) != 1)
+  {
+    return AT_PARAM_ERROR;
+  }	
+	lora_config_tx1_set(Frequency);
+
+  return AT_OK;
+}
+
+ATEerror_t at_Tx1Frequency_get(const char *param)
+{
+	print_d(lora_config_tx1_get());
+  return AT_OK;
+}
+
+ATEerror_t at_Tx2Frequency_set(const char *param)
+{
+	uint32_t Frequency;
+  if (tiny_sscanf(param, "%lu", &Frequency) != 1)
+  {
+    return AT_PARAM_ERROR;
+  }	
+	lora_config_tx2_set(Frequency);
+  return AT_OK;
+}
+
+ATEerror_t at_Tx2Frequency_get(const char *param)
+{
+	print_d(lora_config_tx2_get());
+  return AT_OK;
+}
+
+ATEerror_t at_Tx3Frequency_set(const char *param)
+{
+	uint32_t Frequency;
+  if (tiny_sscanf(param, "%lu", &Frequency) != 1)
+  {
+    return AT_PARAM_ERROR;
+  }	
+	lora_config_tx3_set(Frequency);
+
+  return AT_OK;
+}
+
+ATEerror_t at_Tx3Frequency_get(const char *param)
+{
+	print_d(lora_config_tx3_get());
+  return AT_OK;
+}
+
+ATEerror_t at_Tx4Frequency_set(const char *param)
+{
+	uint32_t Frequency;
+  if (tiny_sscanf(param, "%lu", &Frequency) != 1)
+  {
+    return AT_PARAM_ERROR;
+  }	
+	lora_config_tx4_set(Frequency);
+
+  return AT_OK;
+}
+
+ATEerror_t at_Tx4Frequency_get(const char *param)
+{
+	print_d(lora_config_tx4_get());
+  return AT_OK;
+}
+
+ATEerror_t at_Tx5Frequency_set(const char *param)
+{
+	uint32_t Frequency;
+  if (tiny_sscanf(param, "%lu", &Frequency) != 1)
+  {
+    return AT_PARAM_ERROR;
+  }	
+	lora_config_tx5_set(Frequency);
+
+  return AT_OK;
+}
+
+ATEerror_t at_Tx5Frequency_get(const char *param)
+{
+	print_d(lora_config_tx5_get());
+  return AT_OK;
+}
+
+ATEerror_t at_Tx6Frequency_set(const char *param)
+{
+	uint32_t Frequency;
+  if (tiny_sscanf(param, "%lu", &Frequency) != 1)
+  {
+    return AT_PARAM_ERROR;
+  }	
+	lora_config_tx6_set(Frequency);
+
+  return AT_OK;
+}
+
+ATEerror_t at_Tx6Frequency_get(const char *param)
+{
+	print_d(lora_config_tx6_get());
+  return AT_OK;
+}
+
+ATEerror_t at_Tx7Frequency_set(const char *param)
+{
+	uint32_t Frequency;
+  if (tiny_sscanf(param, "%lu", &Frequency) != 1)
+  {
+    return AT_PARAM_ERROR;
+  }	
+	lora_config_tx7_set(Frequency);
+
+  return AT_OK;
+}
+
+ATEerror_t at_Tx7Frequency_get(const char *param)
+{
+	print_d(lora_config_tx7_get());
+  return AT_OK;
+}
+
+ATEerror_t at_Tx8Frequency_set(const char *param)
+{
+	uint32_t Frequency;
+  if (tiny_sscanf(param, "%lu", &Frequency) != 1)
+  {
+    return AT_PARAM_ERROR;
+  }	
+	lora_config_tx8_set(Frequency);
+
+  return AT_OK;
+}
+
+ATEerror_t at_Tx8Frequency_get(const char *param)
+{
+	print_d(lora_config_tx8_get());
   return AT_OK;
 }
 
@@ -544,7 +693,7 @@ ATEerror_t at_Rx2DataRate_set(const char *param)
 
   status = LoRaMacMibSetRequestConfirm(&mib);
   CHECK_STATUS(status);
-
+	lora_config_rx2_dr(mib.Param.Rx2Channel.Datarate);
   return AT_OK;
 }
 
@@ -573,7 +722,7 @@ ATEerror_t at_Rx1Delay_set(const char *param)
   }
   status = LoRaMacMibSetRequestConfirm(&mib);
   CHECK_STATUS(status);
-
+	lora_config_rx1_delay_set(mib.Param.ReceiveDelay1);
   return AT_OK;
 }
 
@@ -602,7 +751,7 @@ ATEerror_t at_Rx2Delay_set(const char *param)
   }
   status = LoRaMacMibSetRequestConfirm(&mib);
   CHECK_STATUS(status);
-
+	lora_config_rx2_delay_set(mib.Param.ReceiveDelay2);
   return AT_OK;
 }
 
@@ -631,7 +780,7 @@ ATEerror_t at_JoinAcceptDelay1_set(const char *param)
   }
   status = LoRaMacMibSetRequestConfirm(&mib);
   CHECK_STATUS(status);
-
+	lora_config_join_delay1_set(mib.Param.JoinAcceptDelay1);
   return AT_OK;
 }
 
@@ -660,7 +809,7 @@ ATEerror_t at_JoinAcceptDelay2_set(const char *param)
   }
   status = LoRaMacMibSetRequestConfirm(&mib);
   CHECK_STATUS(status);
-
+	lora_config_join_delay2_set(mib.Param.JoinAcceptDelay2);
   return AT_OK;
 }
 
@@ -805,6 +954,7 @@ ATEerror_t at_DeviceClass_set(const char *param)
       mib.Param.Class = (DeviceClass_t)(param[0] - 'A');
       status = LoRaMacMibSetRequestConfirm(&mib);
       CHECK_STATUS(status);
+			lora_config_class_set(mib.Param.Class);
       break;
     default:
       return AT_PARAM_ERROR;
@@ -1073,6 +1223,40 @@ ATEerror_t at_test_stop(const char *param)
 {
   return TST_stop( );
 }
+
+ATEerror_t at_TRX_set(const char *param)
+{
+  switch (param[0])
+  {
+    case '0':
+      lora_config_trx_set(LORA_DISABLE);
+      break;
+    case '1':
+      lora_config_trx_set(LORA_ENABLE);
+      break;
+    default:
+      return AT_PARAM_ERROR;
+  }
+
+  return AT_OK;
+}
+
+ATEerror_t at_TRX_get(const char *param)
+{
+  if (lora_config_trx_get() == LORA_ENABLE)
+    AT_PRINTF("1\r\n");
+  else
+    AT_PRINTF("0\r\n");
+
+  return AT_OK;
+}
+
+ATEerror_t at_Save(const char *param)
+{
+	lora_config_save();
+  return AT_OK;
+}
+
 /* Private functions ---------------------------------------------------------*/
 
 static ATEerror_t translate_status(LoRaMacStatus_t status)
@@ -1122,7 +1306,7 @@ static int sscanf_uint32_as_hhx(const char *from, uint32_t *value)
                      &((unsigned char *)(value))[3]);
 }
 
-static void print_uint32_as_02x(uint32_t value)
+void print_uint32_as_02x(uint32_t value)
 {
   AT_PRINTF("%02x:%02x:%02x:%02x\r\n",
             (unsigned)((unsigned char *)(&value))[0],

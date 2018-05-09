@@ -565,6 +565,116 @@ static const struct ATCommand_s ATCommand[] =
     .set = at_return_error,
     .run = at_Certif,
   },
+  {
+    .string = AT_TRX,
+    .size_string = sizeof(AT_TRX) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_TRX ": Set the same RX TX frequency\r\n",
+#endif
+    .get = at_TRX_get,
+    .set = at_TRX_set,
+    .run = at_return_error,
+  },	
+	{
+    .string = AT_RX1FQ,
+    .size_string = sizeof(AT_RX1FQ) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_RX1FQ ": Get or Set the Rx1 window frequency\r\n",
+#endif
+    .get = at_Rx1Frequency_get,
+    .set = at_Rx1Frequency_set,
+    .run = at_return_error,
+  },	
+	{
+    .string = AT_TX1FQ,
+    .size_string = sizeof(AT_TX1FQ) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_TX1FQ ": Get or Set the Tx1 frequency\r\n",
+#endif
+    .get = at_Tx1Frequency_get,
+    .set = at_Tx1Frequency_set,
+    .run = at_return_error,
+  },		
+	{
+    .string = AT_TX2FQ,
+    .size_string = sizeof(AT_TX2FQ) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_TX2FQ ": Get or Set the Tx2 frequency\r\n",
+#endif
+    .get = at_Tx2Frequency_get,
+    .set = at_Tx2Frequency_set,
+    .run = at_return_error,
+  },		
+	{
+    .string = AT_TX3FQ,
+    .size_string = sizeof(AT_TX3FQ) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_TX3FQ ": Get or Set the Tx31 frequency\r\n",
+#endif
+    .get = at_Tx3Frequency_get,
+    .set = at_Tx3Frequency_set,
+    .run = at_return_error,
+  },		
+	{
+    .string = AT_TX4FQ,
+    .size_string = sizeof(AT_TX4FQ) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_TX4FQ ": Get or Set the Tx4 frequency\r\n",
+#endif
+    .get = at_Tx4Frequency_get,
+    .set = at_Tx4Frequency_set,
+    .run = at_return_error,
+  },		
+	{
+    .string = AT_TX5FQ,
+    .size_string = sizeof(AT_TX5FQ) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_TX5FQ ": Get or Set the Tx5 frequency\r\n",
+#endif
+    .get = at_Tx5Frequency_get,
+    .set = at_Tx5Frequency_set,
+    .run = at_return_error,
+  },		
+	{
+    .string = AT_TX6FQ,
+    .size_string = sizeof(AT_TX6FQ) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_TX6FQ ": Get or Set the Tx6 frequency\r\n",
+#endif
+    .get = at_Tx6Frequency_get,
+    .set = at_Tx6Frequency_set,
+    .run = at_return_error,
+  },		
+	{
+    .string = AT_TX7FQ,
+    .size_string = sizeof(AT_TX7FQ) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_TX7FQ ": Get or Set the Tx71 frequency\r\n",
+#endif
+    .get = at_Tx7Frequency_get,
+    .set = at_Tx7Frequency_set,
+    .run = at_return_error,
+  },		
+	{
+    .string = AT_TX8FQ,
+    .size_string = sizeof(AT_TX1FQ) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_TX8FQ ": Get or Set the Tx8 frequency\r\n",
+#endif
+    .get = at_Tx8Frequency_get,
+    .set = at_Tx8Frequency_set,
+    .run = at_return_error,
+  },		
+	{
+    .string = AT_SAVE,
+    .size_string = sizeof(AT_SAVE) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_SAVE ": Save config to flash\r\n",
+#endif
+    .get = at_return_error,
+    .set = at_return_error,
+    .run = at_Save,
+  },	
 };
 
 
@@ -676,7 +786,8 @@ void parse_cmd(const char *cmd)
               "AT+<CMD>         : Run <CMD>\r\n"
               "AT+<CMD>=<value> : Set the value\r\n"
               "AT+<CMD>=?       : Get the value\r\n");
-    for (i = 0; i < (sizeof(ATCommand) / sizeof(struct ATCommand_s)); i++)
+     for (i = 0; i < 7; i++)
+//   for (i = 0; i < (sizeof(ATCommand) / sizeof(struct ATCommand_s)); i++)
     {
       AT_PRINTF((char*)ATCommand[i].help_string);
     }

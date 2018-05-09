@@ -121,7 +121,17 @@ typedef enum eATEerror
 #define AT_TCONF      "+TCONF"
 #define AT_TOFF       "+TOFF"
 #define AT_CERTIF     "+CERTIF"
-
+#define AT_TRX     		"+TRX"
+#define AT_RX1FQ      "+RX1FQ"
+#define AT_TX1FQ      "+TX1FQ"
+#define AT_TX2FQ      "+TX2FQ"
+#define AT_TX3FQ      "+TX3FQ"
+#define AT_TX4FQ      "+TX4FQ"
+#define AT_TX5FQ      "+TX5FQ"
+#define AT_TX6FQ      "+TX6FQ"
+#define AT_TX7FQ      "+TX7FQ"
+#define AT_TX8FQ      "+TX8FQ"
+#define AT_SAVE      	"+SAVE"
 /* Exported functions ------------------------------------------------------- */
 
 /**
@@ -300,6 +310,20 @@ ATEerror_t at_PublicNetwork_get(const char *param);
  * @retval AT_OK if OK, or an appropriate AT_xxx error code
  */
 ATEerror_t at_PublicNetwork_set(const char *param);
+
+/**
+ * @brief  Print Rx1 window frequency
+ * @param  String pointing to parameter
+ * @retval AT_OK if OK, or an appropriate AT_xxx error code
+ */
+ATEerror_t at_Rx1Frequency_get(const char *param);
+
+/**
+ * @brief  Set Rx1 window frequency
+ * @param  String pointing to parameter
+ * @retval AT_OK if OK, or an appropriate AT_xxx error code
+ */
+ATEerror_t at_Rx1Frequency_set(const char *param);
 
 /**
  * @brief  Print Rx2 window frequency
@@ -603,6 +627,27 @@ ATEerror_t at_test_get_lora_config(const char *param);
  */
 ATEerror_t at_Certif( const char *param );
   
+ATEerror_t at_TRX_get( const char *param );
+ATEerror_t at_TRX_set( const char *param );	
+
+ATEerror_t at_Tx1Frequency_get(const char *param);
+ATEerror_t at_Tx1Frequency_set(const char *param);
+ATEerror_t at_Tx2Frequency_get(const char *param);
+ATEerror_t at_Tx2Frequency_set(const char *param);
+ATEerror_t at_Tx3Frequency_get(const char *param);
+ATEerror_t at_Tx3Frequency_set(const char *param);
+ATEerror_t at_Tx4Frequency_get(const char *param);
+ATEerror_t at_Tx4Frequency_set(const char *param);
+ATEerror_t at_Tx5Frequency_get(const char *param);
+ATEerror_t at_Tx5Frequency_set(const char *param);
+ATEerror_t at_Tx6Frequency_get(const char *param);
+ATEerror_t at_Tx6Frequency_set(const char *param);
+ATEerror_t at_Tx7Frequency_get(const char *param);
+ATEerror_t at_Tx7Frequency_set(const char *param);
+ATEerror_t at_Tx8Frequency_get(const char *param);
+ATEerror_t at_Tx8Frequency_set(const char *param);
+
+ATEerror_t at_Save(const char *param);
 #ifdef __cplusplus
 }
 #endif

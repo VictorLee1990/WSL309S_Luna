@@ -32,7 +32,7 @@ Maintainer: Miguel Luis ( Semtech ), Gregory Cristian ( Semtech ) and Daniel Jae
 #include "RegionCommon.h"
 #include "RegionCN470.h"
 #include "debug.h"
-
+#include "lora.h"
 // Definitions
 #define CHANNELS_MASK_SIZE              6
 
@@ -105,9 +105,9 @@ static uint8_t CountNbOfEnabledChannels( uint8_t datarate, uint16_t* channelsMas
     uint8_t nbEnabledChannels = 0;
     uint8_t delayTransmission = 0;
 
-    for( uint8_t i = 0, k = 0; i < CN470_MAX_NB_CHANNELS; i += 16, k++ )
+    for( uint8_t i = 0, k = 0; i < CN470_MAX_NB_CHANNELS; i += 8, k++ )
     {
-        for( uint8_t j = 0; j < 16; j++ )
+        for( uint8_t j = 0; j < 8; j++ )
         {
             if( ( channelsMask[k] & ( 1 << j ) ) != 0 )
             {
@@ -296,7 +296,37 @@ void RegionCN470InitDefaults( InitType_t type )
             // 125 kHz channels
             for( uint8_t i = 0; i < CN470_MAX_NB_CHANNELS; i++ )
             {
-                Channels[i].Frequency = 470300000 + i * 200000;
+							switch(i)
+									{
+										case 0:
+											Channels[i].Frequency = lora_config_tx1_get();
+											break;
+										case 1:
+											Channels[i].Frequency = lora_config_tx2_get();
+											break;
+										case 2:
+											Channels[i].Frequency = lora_config_tx3_get();
+											break;
+										case 3:
+											Channels[i].Frequency = lora_config_tx4_get();
+											break;
+										case 4:
+											Channels[i].Frequency = lora_config_tx5_get();
+											break;
+										case 5:
+											Channels[i].Frequency = lora_config_tx6_get();
+											break;
+										case 6:
+											Channels[i].Frequency = lora_config_tx7_get();
+											break;
+										case 7:
+											Channels[i].Frequency = lora_config_tx8_get();
+											break;
+										default:
+											Channels[i].Frequency = lora_config_tx1_get();
+											break;
+									}							
+             //   Channels[i].Frequency = 470300000 + i * 200000;
                 Channels[i].DrRange.Value = ( DR_5 << 4 ) | DR_0;
                 Channels[i].Band = 0;
             }
@@ -483,9 +513,18 @@ bool RegionCN470RxConfig( RxConfigParams_t* rxConfig, int8_t* datarate )
     if( rxConfig->Window == 0 )
     {
         // Apply window 1 frequency
-        frequency = CN470_FIRST_RX1_CHANNEL + ( rxConfig->Channel % 48 ) * CN470_STEPWIDTH_RX1_CHANNEL;
+//        frequency = CN470_FIRST_RX1_CHANNEL + ( rxConfig->Channel % 48 ) * CN470_STEPWIDTH_RX1_CHANNEL;
+				frequency = Channels[rxConfig->Channel].Frequency + 30000000;
+				if(lora_config_trx_get())
+					frequency -= 30000000;	
+				if(lora_config_rx1_get()!=0)	
+					frequency = lora_config_rx1_get();						
     }
-
+    else if( rxConfig->Window == 1 )
+    {
+        // Apply window 2 frequency
+				frequency = lora_config_rx2_get();						
+    }
     // Read the physical datarate from the datarates table
     phyDr = DataratesCN470[dr];
 
@@ -511,6 +550,7 @@ bool RegionCN470RxConfig( RxConfigParams_t* rxConfig, int8_t* datarate )
 
 bool RegionCN470TxConfig( TxConfigParams_t* txConfig, int8_t* txPower, TimerTime_t* txTimeOnAir )
 {
+//	uint32_t real_freq = 0;
     int8_t phyDr = DataratesCN470[txConfig->Datarate];
     int8_t txPowerLimited = LimitTxPower( txConfig->TxPower, Bands[Channels[txConfig->Channel].Band].TxMaxPower, txConfig->Datarate, ChannelsMask );
     int8_t phyTxPower = 0;
@@ -519,10 +559,44 @@ bool RegionCN470TxConfig( TxConfigParams_t* txConfig, int8_t* txPower, TimerTime
     phyTxPower = RegionCommonComputeTxPower( txPowerLimited, txConfig->MaxEirp, txConfig->AntennaGain );
 
     // Setup the radio frequency
-    Radio.SetChannel( Channels[txConfig->Channel].Frequency );
+	/*	switch(txConfig->Channel)
+		{
+			case 0:
+				real_freq = lora_config_tx1_get();
+				break;
+			case 1:
+				real_freq = lora_config_tx2_get();
+				break;
+			case 2:
+				real_freq = lora_config_tx3_get();
+				break;
+			case 3:
+				real_freq = lora_config_tx4_get();
+				break;
+			case 4:
+				real_freq = lora_config_tx5_get();
+				break;
+			case 5:
+				real_freq = lora_config_tx6_get();
+				break;
+			case 6:
+				real_freq = lora_config_tx7_get();
+				break;
+			case 7:
+				real_freq = lora_config_tx8_get();
+				break;
+			default:
+				real_freq = lora_config_tx1_get();
+				break;
+		}
+		Radio.SetChannel( real_freq );
+		*/
+	Radio.SetChannel( Channels[txConfig->Channel].Frequency );
+		
 
     Radio.SetTxConfig( MODEM_LORA, phyTxPower, 0, 0, phyDr, 1, 8, false, true, 0, 0, false, 3000 );
-    DBG_PRINTF( "TX on freq %d Hz at DR %d\n\r", Channels[txConfig->Channel].Frequency, txConfig->Datarate );
+	DBG_PRINTF( "TX on freq %d Hz at DR %d\n\r", Channels[txConfig->Channel].Frequency, txConfig->Datarate );
+    //DBG_PRINTF( "TX on freq %d Hz at DR %d\n\r", real_freq, txConfig->Datarate );
 
     // Setup maximum payload lenght of the radio driver
     Radio.SetMaxPayloadLength( MODEM_LORA, txConfig->PktLen );
@@ -577,10 +651,10 @@ uint8_t RegionCN470LinkAdrReq( LinkAdrReqParams_t* linkAdrReq, int8_t* drOut, in
         }
         else
         {
-            for( uint8_t i = 0; i < 16; i++ )
+            for( uint8_t i = 0; i < 8; i++ )
             {
                 if( ( ( linkAdrParams.ChMask & ( 1 << i ) ) != 0 ) &&
-                    ( Channels[linkAdrParams.ChMaskCtrl * 16 + i].Frequency == 0 ) )
+                    ( Channels[linkAdrParams.ChMaskCtrl * 8 + i].Frequency == 0 ) )
                 {// Trying to enable an undefined channel
                     status &= 0xFE; // Channel mask KO
                 }
@@ -812,3 +886,8 @@ uint8_t RegionCN470ApplyDrOffset( uint8_t downlinkDwellTime, int8_t dr, int8_t d
     }
     return datarate;
 }
+void RegionCN470SetFrq(uint8_t ChannelNumber, uint32_t ChannelFreg)
+{
+	Channels[ChannelNumber].Frequency = ChannelFreg;
+}
+
