@@ -706,6 +706,11 @@ uint8_t *lora_config_deveui_get(void)
     return lora_config.DevEui;
 }
 
+void lora_config_deveui_set(uint8_t deveui[8])
+{
+    memcpy1(lora_config.DevEui, deveui, sizeof(lora_config.DevEui));
+}
+
 uint8_t *lora_config_appeui_get(void)
 {
     return lora_config.AppEui;
@@ -715,6 +720,7 @@ void lora_config_appeui_set(uint8_t appeui[8])
 {
     memcpy1(lora_config.AppEui, appeui, sizeof(lora_config.AppEui));
 }
+
 
 uint8_t *lora_config_appkey_get(void)
 {

@@ -125,7 +125,7 @@ void HW_Init( void )
   {
 #if defined( USE_BOOTLOADER )
     /* Set the Vector Table base location at 0x3000 */
-    SCB->VTOR = FLASH_BASE | 0x3000;
+    SCB->VTOR = FLASH_BASE | 0x2000;
 #endif
 
     HW_AdcInit( );

@@ -170,6 +170,7 @@ ATEerror_t at_reset(const char *param);
  * @retval AT_OK
  */
 ATEerror_t at_DevEUI_get(const char *param);
+ATEerror_t at_DevEUI_set(const char *param);
 
 /**
  * @brief  Print Application EUI

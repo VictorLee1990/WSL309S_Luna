@@ -197,6 +197,19 @@ ATEerror_t at_DevEUI_get(const char *param)
   print_8_02x(lora_config_deveui_get());
   return AT_OK;
 }
+ATEerror_t at_DevEUI_set(const char *param)
+{
+  uint8_t DevEui[8];
+  if (tiny_sscanf(param, "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx:%hhx:%hhx",
+                  &DevEui[0], &DevEui[1], &DevEui[2], &DevEui[3],
+                  &DevEui[4], &DevEui[5], &DevEui[6], &DevEui[7]) != 8)
+  {
+    return AT_PARAM_ERROR;
+  }
+  
+  lora_config_deveui_set(DevEui);
+  return AT_OK;
+}
 
 ATEerror_t at_AppEUI_get(const char *param)
 {

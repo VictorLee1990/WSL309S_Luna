@@ -305,6 +305,7 @@ LoraState_t lora_config_duty_cycle_get(void);
   * @retval DevEUI
   */
 uint8_t *lora_config_deveui_get(void);
+void lora_config_deveui_set(uint8_t deveui[8]);
 
 /**
   * @brief  Get Application EUI
