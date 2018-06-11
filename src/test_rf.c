@@ -368,7 +368,6 @@ ATEerror_t TST_stop( void )
 }
 
 
-
 ATEerror_t TST_TX_LoraStart(const char *buf, unsigned bufSize)
 {
   
@@ -384,9 +383,10 @@ ATEerror_t TST_TX_LoraStart(const char *buf, unsigned bufSize)
     Radio.SetModem( MODEM_LORA );
   
     Radio.SetChannel( loraParam.freqMHz * 1000000 );
+	//PRINTF("TST_TX_LoraStart @ %d\n\r",loraParam.freqMHz * 1000000);	  
   // test only
     Radio.SetTxConfig( MODEM_LORA, loraParam.power, 0, loraParam.bandwidth,
-                                 loraParam.sf, loraParam.sf,
+                                 loraParam.sf, 1,
                                  LORA_PREAMBLE_LENGTH, LORA_FIX_LENGTH_PAYLOAD_ON,
                                  true, 0, 0, LORA_IQ_INVERSION_ON, 3000 ); 
   
@@ -409,10 +409,10 @@ ATEerror_t TST_RX_LoraStart( void )
     
     Radio.SetModem( MODEM_LORA );
   
-    Radio.SetChannel( loraParam.freqMHz );
-
+    Radio.SetChannel( loraParam.freqMHz * 1000000  );
+	//PRINTF("TST_RX_LoraStart @ %d\n\r",loraParam.freqMHz * 1000000);
     Radio.SetRxConfig( MODEM_LORA, loraParam.bandwidth, loraParam.sf,
-                               loraParam.sf, 0, LORA_PREAMBLE_LENGTH,
+                               1, 0, LORA_PREAMBLE_LENGTH,
                                LORA_SYMBOL_TIMEOUT, LORA_FIX_LENGTH_PAYLOAD_ON,
                                0, true, 0, 0, LORA_IQ_INVERSION_ON, true );
   

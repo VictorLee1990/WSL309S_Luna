@@ -132,17 +132,32 @@ static LoRaParam_t LoRaParamInit = {LORAWAN_ADR_ON,
 TimerEvent_t SensorTimer;
 TimerEvent_t RxWaitTimer;
 									
-									
+uint32_t tx_counter;
+uint32_t rx_counter;
 void OnSensorTimerEvent( void )
 {
-	char SendData[64]={0};
-	sprintf(SendData,"AT+SEND=2:1234\r\n");
-	PRINTF(SendData);
-	//parse_cmd(SendData);
-	//TimerSetValue( &SensorTimer,  600000);
+	TST_stop( );
+	if(tx_counter)
+	{
+		PRINTF("Send lora frame: %d\n\r",tx_counter);
+		tx_counter++;
+	}
+	TST_TX_LoraStart( "TEST", strlen("TEST") );
 	TimerStart(&SensorTimer);	
 }
 
+void OnLoRaRxEvent( void *p_event_data, uint16_t event_size )
+{
+	TST_stop( );
+	if(rx_counter>1)
+	{
+		PRINTF("Recv lora frame: %d\n\r",rx_counter - 1);
+		//rx_counter++;
+	}
+	TST_RX_LoraStart( );
+}
+
+	
 void OnRxWaitTimerEvent( void )
 {
 	vcom_rxcheck();
@@ -154,7 +169,7 @@ int main(void)
   /* STM32 HAL library initialization*/
   APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
 	TimerInit( &SensorTimer, OnSensorTimerEvent );
-	TimerSetValue( &SensorTimer,  1000); 
+	TimerSetValue( &SensorTimer,  1300); 
 	TimerInit( &RxWaitTimer, OnRxWaitTimerEvent );
 	TimerSetValue( &RxWaitTimer,  250); 	
 	HAL_Init( );

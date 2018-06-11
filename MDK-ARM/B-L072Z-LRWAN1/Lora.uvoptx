@@ -149,7 +149,24 @@
           <Name></Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint/>
+      <Breakpoint>
+        <Bp>
+          <Number>0</Number>
+          <Type>0</Type>
+          <LineNumber>1640</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134253870</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>..\..\Drivers\BSP\Components\sx1276\sx1276.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\Lora\../../Drivers/BSP/Components/sx1276/sx1276.c\1640</Expression>
+        </Bp>
+      </Breakpoint>
       <WatchWindow1>
         <Ww>
           <count>0</count>

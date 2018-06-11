@@ -515,6 +515,26 @@ static const struct ATCommand_s ATCommand[] =
     .run = at_test_txTone,
   }, 
   {
+    .string = AT_TTLRC,
+    .size_string = sizeof(AT_TTLRC) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_TTLRC ": Starts RF Tx LORA continuous test\r\n",
+#endif
+    .get = at_return_error,
+    .set = at_return_error,
+    .run = at_test_txclora,
+  }, 
+  {
+    .string = AT_TRLRC,
+    .size_string = sizeof(AT_TRLRC) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_TRLRC ": Starts RF Rx LORA continuous test\r\n",
+#endif
+    .get = at_return_error,
+    .set = at_return_error,
+    .run = at_test_rxclora,
+  },   
+  {
     .string = AT_TTLRA,
     .size_string = sizeof(AT_TTLRA) - 1,
 #ifndef NO_HELP

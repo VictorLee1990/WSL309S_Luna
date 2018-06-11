@@ -59,6 +59,8 @@
 #include "hw_msp.h"
 #include "test_rf.h"
 
+#include "timeServer.h"
+
 /* External variables --------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -1210,15 +1212,38 @@ ATEerror_t at_test_rxTone(const char *param)
   return TST_RxTone(param, strlen(param));
 }
 
+extern TimerEvent_t SensorTimer;
+extern uint32_t tx_counter;
+extern uint32_t rx_counter;
+extern void OnLoRaRxEvent( void *p_event_data, uint16_t event_size );
 ATEerror_t at_test_txlora(const char *param)
 {
-  TST_TX_LoraStart( param, strlen(param) );
+	TimerSetValue( &SensorTimer,  300); 
+	tx_counter = 0;
+	TimerStart(&SensorTimer);
+//  TST_TX_LoraStart( param, strlen(param) );
   return AT_OK;
 }
 
 ATEerror_t at_test_rxlora(const char *param)
 {
   TST_RX_LoraStart( );
+  return AT_OK;
+}
+
+ATEerror_t at_test_txclora(const char *param)
+{
+	TimerSetValue( &SensorTimer,  500); 
+	tx_counter = 1;
+	TimerStart(&SensorTimer);
+  return AT_OK;
+}
+
+ATEerror_t at_test_rxclora(const char *param)
+{
+	rx_counter =1;
+	app_sched_event_put(NULL, NULL, OnLoRaRxEvent);
+  //TST_RX_LoraStart( );
   return AT_OK;
 }
 
@@ -1234,6 +1259,8 @@ ATEerror_t at_test_set_lora_config(const char *param)
 
 ATEerror_t at_test_stop(const char *param)
 {
+	rx_counter =0;
+	TimerStop(&SensorTimer);
   return TST_stop( );
 }
 
@@ -1313,19 +1340,19 @@ static void print_16_02x(uint8_t *pt)
 static int sscanf_uint32_as_hhx(const char *from, uint32_t *value)
 {
   return tiny_sscanf(from, "%hhx:%hhx:%hhx:%hhx",
-                     &((unsigned char *)(value))[0],
-                     &((unsigned char *)(value))[1],
+                     &((unsigned char *)(value))[3],
                      &((unsigned char *)(value))[2],
-                     &((unsigned char *)(value))[3]);
+                     &((unsigned char *)(value))[1],
+                     &((unsigned char *)(value))[0]);
 }
 
 void print_uint32_as_02x(uint32_t value)
 {
   AT_PRINTF("%02x:%02x:%02x:%02x\r\n",
-            (unsigned)((unsigned char *)(&value))[0],
-            (unsigned)((unsigned char *)(&value))[1],
+            (unsigned)((unsigned char *)(&value))[3],
             (unsigned)((unsigned char *)(&value))[2],
-            (unsigned)((unsigned char *)(&value))[3]);
+            (unsigned)((unsigned char *)(&value))[1],
+            (unsigned)((unsigned char *)(&value))[0]);
 }
 
 static void print_8_02x(uint8_t *pt)
