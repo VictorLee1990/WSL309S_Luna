@@ -152,6 +152,20 @@ ATEerror_t TST_TxTone(const char *buf, unsigned bufSize)
         PRINTF("force PA boost Output\n\r");
         break;
       }
+      case 19:
+      {
+        Radio.Write( REG_PACONFIG, 0xFE );                             // PA_Boost 18 dBm
+        Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_ON );  // Enable 20dBm boost
+        PRINTF("force PA boost Output\n\r");
+        break;
+      }	  
+      case 18:
+      {
+        Radio.Write( REG_PACONFIG, 0xFD );                             // PA_Boost 17 dBm
+        Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_ON );  // Enable 20dBm boost
+        PRINTF("force PA boost Output\n\r");
+        break;
+      }	  
       case 17:
       {
         Radio.Write( REG_PACONFIG, 0xFF );                           // PA_Boost 17 dBm
@@ -159,46 +173,57 @@ ATEerror_t TST_TxTone(const char *buf, unsigned bufSize)
         PRINTF("force PA boost Output\n\r");
         break;
       }
+      case 16:
+      {
+        Radio.Write( REG_PACONFIG, 0xFE );                           // PA_Boost 16 dBm
+        Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_OFF );  // Disable 20dBm boost
+        PRINTF("force PA boost Output\n\r");
+        break;
+      }	  
+      case 15:
+      {
+        Radio.Write( REG_PACONFIG, 0xFD );                           // PA_Boost 15 dBm
+        Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_OFF );  // Disable 20dBm boost
+        PRINTF("force PA boost Output\n\r");
+        break;
+      }	  
       case 14 :
       {
-        if ( paboost == 1 )
-        {
-          Radio.Write( REG_PACONFIG, 0xFB );                           // PA_Boost 14 dBm
+          Radio.Write( REG_PACONFIG, 0xFC );                           // PA_Boost 14 dBm
           Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_OFF );  // Disable 20dBm boost  
-        }
-        else
-        {
-        //selects RFO
-          Radio.Write( REG_PACONFIG, 0x7F );                           // RFO 14 dBm
-        }
+
         break;
       }
+      case 13 :
+      {
+          Radio.Write( REG_PACONFIG, 0xFB );                           // PA_Boost 13 dBm
+          Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_OFF );  // Disable 20dBm boost  
+
+        break;
+      }
+      case 12 :
+      {
+          Radio.Write( REG_PACONFIG, 0xFA );                           // PA_Boost 12 dBm
+          Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_OFF );  // Disable 20dBm boost  
+
+        break;
+      }
+      case 11 :
+      {
+          Radio.Write( REG_PACONFIG, 0xF9 );                           // PA_Boost 11 dBm
+          Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_OFF );  // Disable 20dBm boost  
+
+        break;
+      }
+
       case 10:
       {
-        if ( paboost == 1 )
-        {
-            Radio.Write( REG_PACONFIG, 0xF7 );                        // PA_Boost 10 dBm
+            Radio.Write( REG_PACONFIG, 0xF8 );                        // PA_Boost 10 dBm
             Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_OFF );  // Disable 20dBm boost 
-        }
-        else
-        {
-            Radio.Write( REG_PACONFIG, 0x7A );                        // RFO 10 dBm
-        }
+
         break;
       }
-      case 7 :
-      {
-        if ( paboost == 1 )
-        {
-            Radio.Write( REG_PACONFIG, 0xF5 );                                // PA_Boost 7 dBm
-            Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_OFF );  // Disable 20dBm boost 
-        }
-        else
-        {
-            Radio.Write( REG_PACONFIG, 0x78 );                                // RFO 7 dBm
-        }
-        break;
-      }
+
       default:
         break;
     }  
