@@ -1233,7 +1233,7 @@ ATEerror_t at_test_rxlora(const char *param)
 
 ATEerror_t at_test_txclora(const char *param)
 {
-	TimerSetValue( &SensorTimer,  500); 
+	TimerSetValue( &SensorTimer,  800); 
 	tx_counter = 1;
 	TimerStart(&SensorTimer);
   return AT_OK;

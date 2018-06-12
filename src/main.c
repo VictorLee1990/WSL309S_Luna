@@ -1,10 +1,10 @@
- /*
- / _____)             _              | |
+/*
+/ _____)             _              | |
 ( (____  _____ ____ _| |_ _____  ____| |__
- \____ \| ___ |    (_   _) ___ |/ ___)  _ \
- _____) ) ____| | | || |_| ____( (___| | | |
+\____ \| ___ |    (_   _) ___ |/ ___)  _ \
+_____) ) ____| | | || |_| ____( (___| | | |
 (______/|_____)_|_|_| \__)_____)\____)_| |_|
-    (C)2013 Semtech
+   (C)2013 Semtech
 
 Description: Generic lora driver implementation
 
@@ -107,8 +107,9 @@ static LoRaMainCallback_t LoRaMainCallbacks = { HW_GetBatteryLevel,
                                                 HW_GetUniqueId,
                                                 HW_GetRandomSeed,
                                                 LoraRxData,
-                                               LORA_HasJoined,
-                                               LORA_ConfirmClass};
+                                                LORA_HasJoined,
+                                                LORA_ConfirmClass
+                                              };
 
 /**
  * Initialises the Lora Parameters
@@ -116,10 +117,11 @@ static LoRaMainCallback_t LoRaMainCallbacks = { HW_GetBatteryLevel,
 static LoRaParam_t LoRaParamInit = {LORAWAN_ADR_ON,
                                     DR_0,
                                     LORAWAN_PUBLIC_NETWORK,
-                                    JOINREQ_NBTRIALS};
+                                    JOINREQ_NBTRIALS
+                                   };
 
-                                    
-                                    
+
+
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -131,140 +133,140 @@ static LoRaParam_t LoRaParamInit = {LORAWAN_ADR_ON,
 
 TimerEvent_t SensorTimer;
 TimerEvent_t RxWaitTimer;
-									
+
 uint32_t tx_counter;
 uint32_t rx_counter;
 void OnSensorTimerEvent( void )
 {
-	TST_stop( );
-	if(tx_counter)
-	{
-		PRINTF("Send lora frame: %d\n\r",tx_counter);
-		tx_counter++;
-	}
-	TST_TX_LoraStart( "TEST", strlen("TEST") );
-	TimerStart(&SensorTimer);	
+    TST_stop( );
+    if(tx_counter)
+    {
+        PRINTF("Send lora frame: %d\n\r",tx_counter);
+        tx_counter++;
+    }
+    TST_TX_LoraStart( "TEST", strlen("TEST") );
+    TimerStart(&SensorTimer);
 }
 
 void OnLoRaRxEvent( void *p_event_data, uint16_t event_size )
 {
-	TST_stop( );
-	if(rx_counter>1)
-	{
-		PRINTF("Recv lora frame: %d\n\r",rx_counter - 1);
-		//rx_counter++;
-	}
-	TST_RX_LoraStart( );
+    TST_stop( );
+    if(rx_counter>1)
+    {
+        PRINTF("Recv lora frame: %d\n\r",rx_counter - 1);
+        //rx_counter++;
+    }
+    TST_RX_LoraStart( );
 }
 
-	
+
 void OnRxWaitTimerEvent( void )
 {
-	vcom_rxcheck();
-	LPM_SetStopMode(LPM_UART_RX_Id , LPM_Enable );
+    vcom_rxcheck();
+    LPM_SetStopMode(LPM_UART_RX_Id, LPM_Enable );
 }
 
 int main(void)
 {
-  /* STM32 HAL library initialization*/
-  APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
-	TimerInit( &SensorTimer, OnSensorTimerEvent );
-	TimerSetValue( &SensorTimer,  1300); 
-	TimerInit( &RxWaitTimer, OnRxWaitTimerEvent );
-	TimerSetValue( &RxWaitTimer,  250); 	
-	HAL_Init( );
-  /* Configure the system clock*/
-  SystemClock_Config();
+    /* STM32 HAL library initialization*/
+    APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
+    TimerInit( &SensorTimer, OnSensorTimerEvent );
+    TimerSetValue( &SensorTimer,  1300);
+    TimerInit( &RxWaitTimer, OnRxWaitTimerEvent );
+    TimerSetValue( &RxWaitTimer,  250);
+    HAL_Init( );
+    /* Configure the system clock*/
+    SystemClock_Config();
 
-  /* Configure the hardware*/
-  HW_Init();
-	
+    /* Configure the hardware*/
+    HW_Init();
+
 #ifndef USE_BOOTLOADER
-	HAL_Delay(3000);
+    HAL_Delay(3000);
 #endif
-	
-  /* Configure Debug mode */
-  DBG_Init();
 
-  /* USER CODE BEGIN 1 */
-  CMD_Init();
+    /* Configure Debug mode */
+    DBG_Init();
 
-  /*Disable standby mode*/
-  LPM_SetOffMode(LPM_APPLI_Id, LPM_Disable);
+    /* USER CODE BEGIN 1 */
+    CMD_Init();
 
-  PRINTF("ATtention command interface\n\r");
-	volatile uint8_t readdata;
-	PRINTF("Version: ");
-	PRINTF(AT_VERSION_STRING);
-	PRINTF("\n\r");
-	readdata = 0;
-	readdata = SX1276Read( 0x42 );
-	PRINTF("lora test1: %X\n\r",readdata);
-	readdata = 0;
-	readdata = SX1276Read( 0x4d );
-	PRINTF("lora test2: %X\n\r",readdata);
-	//PRINTF("ATtention command interface\n\r");	
-  /* USER CODE END 1 */
+    /*Disable standby mode*/
+    LPM_SetOffMode(LPM_APPLI_Id, LPM_Disable);
 
-  /* Configure the Lora Stack*/
-	LORA_Init(&LoRaMainCallbacks, &LoRaParamInit);
+    PRINTF("ATtention command interface\n\r");
+    volatile uint8_t readdata;
+    PRINTF("Version: ");
+    PRINTF(AT_VERSION_STRING);
+    PRINTF("\n\r");
+    readdata = 0;
+    readdata = SX1276Read( 0x42 );
+    PRINTF("lora test1: %X\n\r",readdata);
+    readdata = 0;
+    readdata = SX1276Read( 0x4d );
+    PRINTF("lora test2: %X\n\r",readdata);
+    //PRINTF("ATtention command interface\n\r");
+    /* USER CODE END 1 */
+
+    /* Configure the Lora Stack*/
+    LORA_Init(&LoRaMainCallbacks, &LoRaParamInit);
 
 //	LORA_Join();
-	
-	//TimerStart(&SensorTimer);
-  /* main loop*/
-	while (1)
-	{
-		app_sched_execute();
-    /* Handle UART commands */
-   // CMD_Process();
-    /*
-     * low power section
-     */
-    DISABLE_IRQ();
-    /*
-     * if an interrupt has occurred after DISABLE_IRQ, it is kept pending
-     * and cortex will not enter low power anyway
-     * don't go in low power mode if we just received a char
-     */
-	//if(!isTxBusy)
-	//if ( (IsNewCharReceived() == RESET))
+
+    //TimerStart(&SensorTimer);
+    /* main loop*/
+    while (1)
     {
+        app_sched_execute();
+        /* Handle UART commands */
+        // CMD_Process();
+        /*
+         * low power section
+         */
+        DISABLE_IRQ();
+        /*
+         * if an interrupt has occurred after DISABLE_IRQ, it is kept pending
+         * and cortex will not enter low power anyway
+         * don't go in low power mode if we just received a char
+         */
+        //if(!isTxBusy)
+        //if ( (IsNewCharReceived() == RESET))
+        {
 #ifndef LOW_POWER_DISABLE
-      LPM_EnterLowPower();
+            LPM_EnterLowPower();
 #endif
+        }
+
+        ENABLE_IRQ();
+
+        /* USER CODE BEGIN 2 */
+        /* USER CODE END 2 */
     }
-
-    ENABLE_IRQ();
-
-    /* USER CODE BEGIN 2 */
-    /* USER CODE END 2 */
-  }
 }
 
 
 static void LoraRxData(lora_AppData_t *AppData)
 {
-   set_at_receive(AppData->Port, AppData->Buff, AppData->BuffSize);
+    set_at_receive(AppData->Port, AppData->Buff, AppData->BuffSize);
 }
 
 #ifdef  USE_FULL_ASSERT
 void assert_failed(uint8_t *file, uint32_t line)
 {
-  Error_Handler();
+    Error_Handler();
 }
 #endif
 
 static void LORA_HasJoined( void )
 {
 //#if( OVER_THE_AIR_ACTIVATION != 0 )
-  PRINTF("JOINED\n\r");
+    PRINTF("JOINED\n\r");
 //#endif
 }
 
 static void LORA_ConfirmClass ( DeviceClass_t Class )
 {
-  DBG_PRINTF("switch to class %c done\n\r","ABC"[Class] );
+    DBG_PRINTF("switch to class %c done\n\r","ABC"[Class] );
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
