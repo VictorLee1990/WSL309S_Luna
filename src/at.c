@@ -368,6 +368,9 @@ ATEerror_t at_ADR_set(const char *param)
 
   mib.Type = MIB_ADR;
 
+	if(strlen(param) > 1)
+		return AT_PARAM_ERROR;
+		
   switch (param[0])
   {
     case '0':
@@ -401,7 +404,8 @@ ATEerror_t at_TransmitPower_set(const char *param)
 {
   MibRequestConfirm_t mib;
   LoRaMacStatus_t status;
-
+	if(strlen(param) > 1)
+		return AT_PARAM_ERROR;
   mib.Type = MIB_CHANNELS_TX_POWER;
   if (tiny_sscanf(param, "%hhu", &mib.Param.ChannelsTxPower) != 1)
   {
@@ -424,11 +428,14 @@ ATEerror_t at_DataRate_get(const char *param)
 ATEerror_t at_DataRate_set(const char *param)
 {
   int8_t datarate;
-
+	if(strlen(param) > 1)
+		return AT_PARAM_ERROR;
   if (tiny_sscanf(param, "%hhu", &datarate) != 1)
   {
     return AT_PARAM_ERROR;
   }
+  if(datarate > 7)
+	  return AT_PARAM_ERROR;
   
   lora_config_tx_datarate_set(datarate) ;
 
@@ -980,6 +987,7 @@ ATEerror_t at_DeviceClass_set(const char *param)
 
 ATEerror_t at_Join(const char *param)
 {
+	//AT_PRINTF("Join Network\r\n");
   LORA_Join();
 
   return AT_OK;
@@ -1041,6 +1049,28 @@ ATEerror_t at_SendBinary(const char *param)
   {
     hex[0] = buf[size*2];
     hex[1] = buf[size*2+1];
+	  if((hex[0]>'9') || (hex[0]<'0'))
+	  {
+		  if((hex[0]>'F') || (hex[0]<'A'))
+		  {
+			  if((hex[0]>'f') || (hex[0]<'a'))
+			  {
+				  return AT_PARAM_ERROR;
+			  }			  
+		  }
+
+	  }
+	  if((hex[1]>'9') || (hex[1]<'0'))
+	  {
+		  if((hex[1]>'F') || (hex[1]<'A'))
+		  {
+			  if((hex[1]>'f') || (hex[1]<'a'))
+			  {
+				  return AT_PARAM_ERROR;
+			  }			  
+		  }
+
+	  }	  
     if (tiny_sscanf(hex, "%hhx", &AppData.Buff[size]) != 1)
     {
       return AT_PARAM_ERROR;
@@ -1157,6 +1187,8 @@ ATEerror_t at_version_get(const char *param)
 
 ATEerror_t at_ack_set(const char *param)
 {
+	if(strlen(param) > 1)
+		return AT_PARAM_ERROR;
   switch (param[0])
   {
     case '0':

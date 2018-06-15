@@ -31,7 +31,7 @@ Maintainer: Miguel Luis ( Semtech ), Gregory Cristian ( Semtech ) and Daniel Jae
 #include "debug.h"
 #include "LoRaMacTest.h"
 
-
+#include "AT.h"
 
 /*!
  * Maximum PHY layer payload size
@@ -1283,7 +1283,7 @@ static void OnMacStateCheckTimerEvent( void )
                         {
                             UpLinkCounter++;
                         }
-
+						AT_PRINTF("Send OK\r\n");
                         LoRaMacState &= ~LORAMAC_TX_RUNNING;
                     }
                     else
@@ -1306,6 +1306,7 @@ static void OnMacStateCheckTimerEvent( void )
                 {
                     UpLinkCounter++;
                 }
+				AT_PRINTF("Send OK\r\n");
                 McpsConfirm.NbRetries = AckTimeoutRetriesCounter;
 
                 LoRaMacState &= ~LORAMAC_TX_RUNNING;
@@ -1347,6 +1348,7 @@ static void OnMacStateCheckTimerEvent( void )
                     {
                         UpLinkCounter++;
                     }
+					AT_PRINTF("Send OK\r\n");
                 }
             }
             else
@@ -1354,7 +1356,7 @@ static void OnMacStateCheckTimerEvent( void )
                 RegionInitDefaults( LoRaMacRegion, INIT_TYPE_RESTORE );
 
                 LoRaMacState &= ~LORAMAC_TX_RUNNING;
-
+				
                 MacCommandsBufferIndex = 0;
                 NodeAckRequested = false;
                 McpsConfirm.AckReceived = false;
@@ -1363,6 +1365,7 @@ static void OnMacStateCheckTimerEvent( void )
                 {
                     UpLinkCounter++;
                 }
+				AT_PRINTF("Send OK\r\n");
             }
         }
     }

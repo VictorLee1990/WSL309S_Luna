@@ -93,12 +93,13 @@ void vcom_Init(void)
   UartHandle.Init.HwFlowCtl  = UART_HWCONTROL_NONE;
   UartHandle.Init.Mode       = UART_MODE_TX_RX;
   
+ // if(HAL_MultiProcessor_Init(&UartHandle, 0, UART_WAKEUPMETHOD_IDLELINE) != HAL_OK)
   if(HAL_UART_Init(&UartHandle) != HAL_OK)
   {
     /* Initialization Error */
     Error_Handler(); 
   }
-  
+
   HAL_NVIC_SetPriority(USARTX_IRQn, 0x1, 0);
   HAL_NVIC_EnableIRQ(USARTX_IRQn);
   
@@ -218,12 +219,13 @@ void vcom_IoInit(void)
   GPIO_InitStruct.Alternate = USARTX_RX_AF;
 
 	HAL_GPIO_Init(USARTX_RX_GPIO_PORT, &GPIO_InitStruct);
- // while(i--);
+
 	HAL_UART_RxCpltCallback(&UartHandle);
 }
 
 void vcom_RxInt( void )
 {
+
 	HAL_NVIC_DisableIRQ(EXTI2_3_IRQn);
 	LPM_SetStopMode(LPM_UART_RX_Id , LPM_Disable );
 	TimerStop(&RxWaitTimer);

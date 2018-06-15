@@ -52,7 +52,7 @@
 #include "lora-test.h"
 #include "tiny_sscanf.h"
 
-
+#include "at.h"
 /**
   * Lora Configuration
   */
@@ -339,8 +339,9 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
         }
         else
         {
+			AT_PRINTF("Join Fail\r\n");
             // Join was not successful. Try to join again
-            LORA_Join();
+         //   LORA_Join();
         }
         break;
     }

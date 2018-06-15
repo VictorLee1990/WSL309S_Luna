@@ -163,12 +163,13 @@ void HW_DeInit( void )
   */
 static void HW_IoInit( void )
 {
+	
   HW_SPI_IoInit( );
   
   Radio.IoInit( );
  // CMD_Init();
 	vcom_Init();
-  vcom_IoInit( );
+	vcom_IoInit( );
 }
 
 /**
