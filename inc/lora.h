@@ -430,6 +430,8 @@ uint8_t *lora_config_nwkskey_get(void);
 void lora_config_nwkskey_set(uint8_t nwkskey[16]);
 void lora_config_adr_set(uint8_t value);
 void lora_config_txp_set(uint8_t value);
+void lora_config_txo_set(uint8_t value);
+uint8_t lora_config_txo_get( void);
 void lora_config_public_network_set(uint8_t value);
 void lora_config_class_set(uint8_t value);
 void lora_config_join_delay1_set(uint32_t value);

@@ -88,6 +88,7 @@ typedef enum eATEerror
 #define AT_APPEUI     "+APPEUI"
 #define AT_ADR        "+ADR"
 #define AT_TXP        "+TXP"
+#define AT_TXO        "+TXO"
 #define AT_DR         "+DR"
 #define AT_DCS        "+DCS"
 #define AT_PNM        "+PNM"
@@ -661,6 +662,10 @@ ATEerror_t at_Tx7Frequency_get(const char *param);
 ATEerror_t at_Tx7Frequency_set(const char *param);
 ATEerror_t at_Tx8Frequency_get(const char *param);
 ATEerror_t at_Tx8Frequency_set(const char *param);
+
+
+ATEerror_t at_OutputPower_get(const char *param);
+ATEerror_t at_OutputPower_set(const char *param);
 
 ATEerror_t at_Save(const char *param);
 #ifdef __cplusplus

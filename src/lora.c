@@ -92,6 +92,7 @@ typedef struct
     uint32_t Rx1Dleay;
     uint32_t Rx2Dleay;
     int8_t RxDatarate;
+	uint8_t OutputPower;
     uint32_t Flag;
 } lora_configuration_t;
 
@@ -135,6 +136,7 @@ static lora_configuration_t lora_config =
     .Rx1Dleay = 1000,
     .Rx2Dleay = 2000,
     .RxDatarate = 0,
+	.OutputPower = 0,
     .Flag = FLAG_VALUE
 };
 /*
@@ -921,6 +923,16 @@ void lora_config_adr_set(uint8_t value)
 void lora_config_txp_set(uint8_t value)
 {
     lora_config.TxPower = value;
+}
+
+void lora_config_txo_set(uint8_t value)
+{
+    lora_config.OutputPower = value;
+}
+
+uint8_t lora_config_txo_Get(void)
+{
+    return lora_config.OutputPower;
 }
 
 void lora_config_rx2_dr(uint8_t value)

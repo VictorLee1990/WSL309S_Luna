@@ -163,13 +163,13 @@ void HW_DeInit( void )
   */
 static void HW_IoInit( void )
 {
-	
+	vcom_Init();
+	vcom_IoInit( );	
   HW_SPI_IoInit( );
   
   Radio.IoInit( );
  // CMD_Init();
-	vcom_Init();
-	vcom_IoInit( );
+
 }
 
 /**
@@ -213,7 +213,7 @@ void SystemClock_Config( void )
 {
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-
+RCC_PeriphCLKInitTypeDef PeriphClkInit;
   /* Enable HSE Oscillator and Activate PLL with HSE as source */
   RCC_OscInitStruct.OscillatorType      = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSEState            = RCC_HSE_OFF;
@@ -247,6 +247,17 @@ void SystemClock_Config( void )
   {
     Error_Handler();
   }
+  
+    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART2;
+    PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_HSI;
+
+
+
+    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+    {
+        Error_Handler();
+    }
+	
 }
 /**
   * @brief This function return a random seed

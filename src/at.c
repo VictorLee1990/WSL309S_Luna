@@ -386,7 +386,28 @@ ATEerror_t at_ADR_set(const char *param)
 
   return AT_OK;
 }
+ATEerror_t at_OutputPower_get(const char *param)
+{
+  print_d(lora_config_txo_Get());
 
+  return AT_OK;
+}
+
+ATEerror_t at_OutputPower_set(const char *param)
+{
+  uint8_t power;
+	if(strlen(param) > 2)
+		return AT_PARAM_ERROR;
+
+  if (tiny_sscanf(param, "%hhu", &power) != 1)
+  {
+    return AT_PARAM_ERROR;
+  }
+	if((power > 20)||(power<0))
+		return AT_PARAM_ERROR;
+	lora_config_txo_set(power);
+  return AT_OK;
+}
 ATEerror_t at_TransmitPower_get(const char *param)
 {
   MibRequestConfirm_t mib;
@@ -1250,10 +1271,10 @@ extern uint32_t rx_counter;
 extern void OnLoRaRxEvent( void *p_event_data, uint16_t event_size );
 ATEerror_t at_test_txlora(const char *param)
 {
-	TimerSetValue( &SensorTimer,  300); 
-	tx_counter = 0;
-	TimerStart(&SensorTimer);
-//  TST_TX_LoraStart( param, strlen(param) );
+	//TimerSetValue( &SensorTimer,  300); 
+	//tx_counter = 0;
+	//TimerStart(&SensorTimer);
+  TST_TX_LoraStart( param, strlen(param) );
   return AT_OK;
 }
 

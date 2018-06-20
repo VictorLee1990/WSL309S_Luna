@@ -205,7 +205,16 @@ static const struct ATCommand_s ATCommand[] =
     .set = at_TransmitPower_set,
     .run = at_return_error,
   },
-
+  {
+    .string = AT_TXO,
+    .size_string = sizeof(AT_TXO) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_TXO ": Get or Set the Transmit Power dBm\r\n",
+#endif
+    .get = at_OutputPower_get,
+    .set = at_OutputPower_set,
+    .run = at_return_error,
+  },
   {
     .string = AT_DR,
     .size_string = sizeof(AT_DR) - 1,

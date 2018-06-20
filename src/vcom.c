@@ -306,8 +306,14 @@ void uart2_event_handle_schedule(void *p_event_data, uint16_t event_size)
 	
 	if(psu_event_rx_rec_size )
 	{
+		uint32_t i;
 		psu_event_rx_buff[psu_event_rx_rec_size] = 0;
-		PRINTF((char*)psu_event_rx_buff);
+		for(i=0;i<psu_event_rx_rec_size;i++)
+		{
+			PRINTF("%02X ",psu_event_rx_buff[i]);
+//			PRINTF("%02X %c",psu_event_rx_buff[i],psu_event_rx_buff[i]);
+		}
+		PRINTF("\r\n");
 	}
 */
 }
@@ -337,6 +343,16 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		__HAL_UART_ENABLE_IT(huart, UART_IT_IDLE);
 		
 	}		
+}
+
+void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
+{
+	if(huart == &UartHandle)
+	{
+//		HAL_UART_RxCpltCallback(&UartHandle);
+	//	PRINTF("Uart Error\r\n");
+		
+	}	
 }
 
 void start_uart2_uart(void)

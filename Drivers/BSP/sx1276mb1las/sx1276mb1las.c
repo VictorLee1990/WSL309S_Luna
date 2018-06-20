@@ -178,9 +178,13 @@ void SX1276SetRfTxPower( int8_t power )
     uint8_t paConfig = 0;
     uint8_t paDac = 0;
 
+	
+	if(lora_config_txo_Get() !=0)
+		power = lora_config_txo_Get();
     paConfig = SX1276Read( REG_PACONFIG );
     paDac = SX1276Read( REG_PADAC );
 
+	SX1276Write(REG_OCP, 0x0);
     paConfig = ( paConfig & RF_PACONFIG_PASELECT_MASK ) | SX1276GetPaSelect( SX1276.Settings.Channel );
     paConfig = ( paConfig & RF_PACONFIG_MAX_POWER_MASK ) | 0x70;
 
