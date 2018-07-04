@@ -165,9 +165,9 @@ static void HW_IoInit( void )
 {
 	vcom_Init();
 	vcom_IoInit( );	
-  HW_SPI_IoInit( );
+	HW_SPI_IoInit( );
   
-  Radio.IoInit( );
+	Radio.IoInit( );
  // CMD_Init();
 
 }

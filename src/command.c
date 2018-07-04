@@ -741,13 +741,12 @@ void CMD_Process(void)
   {
     command[i] = GetNewChar();
 
-   // PRINTF("%c", command[i]);
-
 	if(!isHead) 
 		if(command[i] == 'A')
 			isHead = 1;
 	if(isHead)
 	{
+	//	PRINTF("%c", command[i]);
     if (command[i] == AT_ERROR_RX_CHAR)
     {
       i = 0;
