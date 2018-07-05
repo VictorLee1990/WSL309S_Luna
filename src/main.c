@@ -68,6 +68,8 @@ Maintainer: Miguel Luis, Gregory Cristian and Wael Guibene
 #include "at.h"
 #include "lora.h"
 #include "app_scheduler.h"
+
+#include "test_rf.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 

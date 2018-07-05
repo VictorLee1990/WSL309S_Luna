@@ -65,7 +65,7 @@ app_fifo_t uart_rxFifo;
 uint8_t uart_tx_fifo_buff[TX_BUFFER];
 app_fifo_t uart_txFifo;
 static uint8_t isTxBusy = false;
-static uint8_t isWake = false;
+//static uint8_t isWake = false;
 uint8_t TxBuffer[BUFSIZE];
 uint8_t RxBuffer[BUFSIZE];
 /* Uart Handle */
@@ -152,7 +152,6 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 
 void vcom_Send( char *format, ... )
 {
-
     va_list args;
     va_start(args, format);
     uint32_t len= 0;
@@ -236,7 +235,6 @@ void vcom_IoDeInit(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure= {0};
 
-// HAL_NVIC_DisableIRQ(USARTX_IRQn);
     USARTX_TX_GPIO_CLK_ENABLE();
     USARTX_RX_GPIO_CLK_ENABLE();
 
@@ -245,9 +243,6 @@ void vcom_IoDeInit(void)
 
     GPIO_InitStructure.Pin =  USARTX_TX_PIN ;
     HAL_GPIO_Init(  USARTX_TX_GPIO_PORT, &GPIO_InitStructure );
-
-    //GPIO_InitStructure.Pin =  USARTX_RX_PIN ;
-// HAL_GPIO_Init(  USARTX_RX_GPIO_PORT, &GPIO_InitStructure );
 
     GPIO_InitTypeDef GPIO_InitStructure2= {0};
     GPIO_InitStructure2.Mode = GPIO_MODE_IT_RISING;
@@ -277,16 +272,14 @@ uint8_t IsNewCharReceived(void)
 
 char GetNewChar(void)
 {
-    char tempdata;
+    uint8_t tempdata;
     if(app_fifo_get(&uart_rxFifo, &tempdata) == NRF_SUCCESS)
     {
-        return tempdata;
+        return (char)tempdata;
     }
     else
         return 0;
 }
-
-
 
 void uart2_event_handle_schedule(void *p_event_data, uint16_t event_size)
 {

@@ -124,7 +124,7 @@ void HW_Init( void )
   if( McuInitialized == false )
   {
 #if defined( USE_BOOTLOADER )
-    /* Set the Vector Table base location at 0x3000 */
+    /* Set the Vector Table base location at 0x2000 */
     SCB->VTOR = FLASH_BASE | 0x2000;
 #endif
 

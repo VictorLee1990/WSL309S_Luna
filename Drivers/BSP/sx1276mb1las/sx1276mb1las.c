@@ -55,7 +55,7 @@ Maintainer: Miguel Luis and Gregory Cristian
 #include "sx1276.h"
 #include "sx1276mb1las.h"
 
-
+#include "lora.h"
 #define IRQ_HIGH_PRIORITY  0
 
 

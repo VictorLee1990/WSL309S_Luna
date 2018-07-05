@@ -125,7 +125,7 @@ static bool is_in_list( uint32_t in, uint32_t* list, uint32_t list_len);
 
 ATEerror_t TST_TxTone(const char *buf, unsigned bufSize)
 {
-    uint8_t paboost = loraParam.paBoost;
+//    uint8_t paboost = loraParam.paBoost;
 
     if ( (TestState & TX_TEST_TONE) != TX_TEST_TONE )
     {
