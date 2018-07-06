@@ -193,6 +193,7 @@ int main(void)
     /* USER CODE BEGIN 1 */
     CMD_Init();
 
+
     /*Disable standby mode*/
     LPM_SetOffMode(LPM_APPLI_Id, LPM_Disable);
 

@@ -51,7 +51,7 @@
 #ifdef __cplusplus
  extern "C" {
 #endif
-
+ 
 /* Includes ------------------------------------------------------------------*/
 
 #ifdef USE_STM32F0XX_NUCLEO
