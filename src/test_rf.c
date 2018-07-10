@@ -98,7 +98,7 @@ typedef enum
 } e_SpreadingFactors_t;
 
 /* Private define ------------------------------------------------------------*/
-#define F_868MHz 868
+#define F_868MHz 473
 
 #define P_14dBm 14
 
@@ -114,7 +114,7 @@ typedef enum
 /* Private variables ---------------------------------------------------------*/
 static uint8_t TestState =0;
 
-static s_loraParameter_t loraParam= { F_868MHz, P_14dBm, BW_125kHz, SF_12, 4, 0, 0};
+static s_loraParameter_t loraParam= { F_868MHz, P_14dBm, BW_500kHz, SF_9, CR_4o5, 0, 1};
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -378,6 +378,14 @@ ATEerror_t TST_get_lora_config(const char *buf, unsigned bufSize)
     return AT_OK;
 }
 
+void TST_SNR(int8_t SnrValue, int16_t RssiValue)
+{
+	if ( (TestState & RX_TEST_LORA) == RX_TEST_LORA )
+	{
+		AT_PRINTF("SNR=%d, RSSI=%d\r\n", SnrValue, RssiValue);
+	}
+}
+
 
 ATEerror_t TST_stop( void )
 {
@@ -414,12 +422,13 @@ ATEerror_t TST_TX_LoraStart(const char *buf, unsigned bufSize)
         Radio.SetModem( MODEM_LORA );
 
         Radio.SetChannel( loraParam.freqMHz * 1000000 );
-        //PRINTF("TST_TX_LoraStart @ %d\n\r",loraParam.freqMHz * 1000000);
+    //    PRINTF("TST_TX_LoraStart @ %d\n\r",loraParam.freqMHz * 1000000);
         // test only
+
         Radio.SetTxConfig( MODEM_LORA, loraParam.power, 0, loraParam.bandwidth,
-                           loraParam.sf, 1,
+                           loraParam.sf, loraParam.codingRate,
                            LORA_PREAMBLE_LENGTH, LORA_FIX_LENGTH_PAYLOAD_ON,
-                           true, 0, 0, LORA_IQ_INVERSION_ON, 3000 );
+                           true, 0, 0, LORA_IQ_INVERSION_ON, 3000000 );
 
         Radio.Send( bufTx, sizeof(bufTx) );
 
@@ -430,7 +439,6 @@ ATEerror_t TST_TX_LoraStart(const char *buf, unsigned bufSize)
         return AT_BUSY_ERROR;
     }
 }
-
 
 ATEerror_t TST_RX_LoraStart( void )
 {
@@ -443,7 +451,7 @@ ATEerror_t TST_RX_LoraStart( void )
         Radio.SetChannel( loraParam.freqMHz * 1000000  );
         //PRINTF("TST_RX_LoraStart @ %d\n\r",loraParam.freqMHz * 1000000);
         Radio.SetRxConfig( MODEM_LORA, loraParam.bandwidth, loraParam.sf,
-                           1, 0, LORA_PREAMBLE_LENGTH,
+                           loraParam.codingRate, 0, LORA_PREAMBLE_LENGTH,
                            LORA_SYMBOL_TIMEOUT, LORA_FIX_LENGTH_PAYLOAD_ON,
                            0, true, 0, 0, LORA_IQ_INVERSION_ON, true );
 
