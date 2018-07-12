@@ -203,7 +203,7 @@ static lora_configuration_flash_t lora_config_flash =
 
 static MlmeReqJoin_t JoinParameters;
 
-static uint8_t joinning = 0;
+uint8_t joinning = 0;
 
 static uint32_t DevAddr = LORAWAN_DEVICE_ADDRESS;
 

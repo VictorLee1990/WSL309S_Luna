@@ -167,6 +167,7 @@ static void print_d(int value);
  */
 static void print_u(unsigned int value);
 
+extern uint8_t joinning; 
 /* Exported functions ------------------------------------------------------- */
 
 void set_at_receive(uint8_t AppPort, uint8_t* Buff, uint8_t BuffSize)
@@ -868,6 +869,8 @@ ATEerror_t at_NetworkJoinMode_get(const char *param)
 ATEerror_t at_NetworkJoinMode_set(const char *param)
 {
     LoraState_t status;
+	  if(joinning)
+			 return AT_BUSY_ERROR;
     if(strlen(param) > 1)
         return AT_PARAM_ERROR;
     switch (param[0])
