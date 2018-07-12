@@ -1014,9 +1014,10 @@ ATEerror_t at_DeviceClass_set(const char *param)
 ATEerror_t at_Join(const char *param)
 {
     //AT_PRINTF("Join Network\r\n");
-    LORA_Join();
-
-    return AT_OK;
+    if(LORA_Join())
+		return AT_OK;
+	else
+		return AT_BUSY_ERROR;
 }
 
 ATEerror_t at_NetworkJoinStatus(const char *param)
