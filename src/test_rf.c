@@ -115,7 +115,7 @@ typedef enum
 static uint8_t TestState =0;
 
 static s_loraParameter_t loraParam= { F_868MHz, P_14dBm, BW_500kHz, SF_9, CR_4o5, 0, 1};
-
+uint32_t g_sf = SF_9;
 /* Private function prototypes -----------------------------------------------*/
 
 static bool is_in_list( uint32_t in, uint32_t* list, uint32_t list_len);
@@ -361,6 +361,7 @@ ATEerror_t TST_SET_lora_config(const char *buf, unsigned bufSize)
     loraParam.lna =loraParamTmp.lna;
     loraParam.paBoost = loraParamTmp.paBoost;
 
+	g_sf = loraParam.sf;
     return AT_OK;
 }
 
@@ -422,7 +423,6 @@ ATEerror_t TST_TX_LoraStart(const char *buf, unsigned bufSize)
         Radio.SetModem( MODEM_LORA );
 
         Radio.SetChannel( loraParam.freqMHz * 1000000 );
-    //    PRINTF("TST_TX_LoraStart @ %d\n\r",loraParam.freqMHz * 1000000);
         // test only
 
         Radio.SetTxConfig( MODEM_LORA, loraParam.power, 0, loraParam.bandwidth,

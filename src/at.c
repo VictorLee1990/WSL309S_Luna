@@ -1274,6 +1274,7 @@ ATEerror_t at_test_rxTone(const char *param)
     return TST_RxTone(param, strlen(param));
 }
 
+extern void OnSensorTimerEvent( void );
 extern TimerEvent_t SensorTimer;
 extern uint32_t tx_counter;
 extern uint32_t rx_counter;
@@ -1295,8 +1296,9 @@ ATEerror_t at_test_rxlora(const char *param)
 
 ATEerror_t at_test_txclora(const char *param)
 {
-    TimerSetValue( &SensorTimer,  800);
+    TimerSetValue( &SensorTimer,  100);
     tx_counter = 1;
+	//app_sched_event_put(NULL, NULL, OnSensorTimerEvent);
     TimerStart(&SensorTimer);
     return AT_OK;
 }
@@ -1321,8 +1323,9 @@ ATEerror_t at_test_set_lora_config(const char *param)
 
 ATEerror_t at_test_stop(const char *param)
 {
-    rx_counter =0;
-    TimerStop(&SensorTimer);
+	tx_counter = 0; 
+    rx_counter = 0;
+//    TimerStop(&SensorTimer);
     return TST_stop( );
 }
 

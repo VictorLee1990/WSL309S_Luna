@@ -638,7 +638,7 @@ static const struct ATCommand_s ATCommand[] =
     .string = AT_TX3FQ,
     .size_string = sizeof(AT_TX3FQ) - 1,
 #ifndef NO_HELP
-    .help_string = "AT"AT_TX3FQ ": Get or Set the Tx31 frequency\r\n",
+    .help_string = "AT"AT_TX3FQ ": Get or Set the Tx3 frequency\r\n",
 #endif
     .get = at_Tx3Frequency_get,
     .set = at_Tx3Frequency_set,
@@ -678,7 +678,7 @@ static const struct ATCommand_s ATCommand[] =
     .string = AT_TX7FQ,
     .size_string = sizeof(AT_TX7FQ) - 1,
 #ifndef NO_HELP
-    .help_string = "AT"AT_TX7FQ ": Get or Set the Tx71 frequency\r\n",
+    .help_string = "AT"AT_TX7FQ ": Get or Set the Tx7 frequency\r\n",
 #endif
     .get = at_Tx7Frequency_get,
     .set = at_Tx7Frequency_set,

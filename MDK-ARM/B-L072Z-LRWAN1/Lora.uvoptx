@@ -154,98 +154,34 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>1640</LineNumber>
+          <LineNumber>1382</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134253530</Address>
+          <Address>134243534</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\Drivers\BSP\Components\sx1276\sx1276.c</Filename>
+          <Filename>..\..\Middlewares\Third_Party\Lora\Mac\LoRaMac.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Lora\../../Drivers/BSP/Components/sx1276/sx1276.c\1640</Expression>
+          <Expression>\\Lora\../../Middlewares/Third_Party/Lora/Mac/LoRaMac.c\1382</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>2283</LineNumber>
+          <LineNumber>334</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134258416</Address>
+          <Address>134242736</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\Middlewares\Third_Party\Lora\Mac\LoRaMac.c</Filename>
+          <Filename>..\..\src\lora.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Lora\../../Middlewares/Third_Party/Lora/Mac/LoRaMac.c\2283</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>2296</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134258474</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\Middlewares\Third_Party\Lora\Mac\LoRaMac.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\Lora\../../Middlewares/Third_Party/Lora/Mac/LoRaMac.c\2296</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>1643</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\Drivers\BSP\Components\sx1276\sx1276.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>4</Number>
-          <Type>0</Type>
-          <LineNumber>2284</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\Middlewares\Third_Party\Lora\Mac\LoRaMac.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>5</Number>
-          <Type>0</Type>
-          <LineNumber>2297</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\Middlewares\Third_Party\Lora\Mac\LoRaMac.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
+          <Expression>\\Lora\../../src/lora.c\334</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -258,6 +194,16 @@
           <count>1</count>
           <WinNumber>1</WinNumber>
           <ItemText>loraParam</ItemText>
+        </Ww>
+        <Ww>
+          <count>2</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>lora_config</ItemText>
+        </Ww>
+        <Ww>
+          <count>3</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>McpsConfirm</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>

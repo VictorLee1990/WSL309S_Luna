@@ -201,7 +201,10 @@ const FskBandwidth_t FskBandwidths[] =
 /*
  * Private global variables
  */
-
+extern void OnSensorTimerEvent( void );
+extern TimerEvent_t SensorTimer;
+extern uint32_t tx_counter;
+extern uint32_t rx_counter;	
 /*!
  * Radio callbacks variable
  */
@@ -1584,7 +1587,12 @@ void SX1276OnDio0Irq( void )
 
                         if( ( RadioEvents != NULL ) && ( RadioEvents->RxError != NULL ) )
                         {
+						
                             RadioEvents->RxError( );
+							if(rx_counter)
+							{
+								app_sched_event_put(NULL, NULL, OnLoRaRxEvent);
+							}								
                         }
                         break;
                     }
@@ -1670,7 +1678,10 @@ void SX1276OnDio0Irq( void )
                 if( ( RadioEvents != NULL ) && ( RadioEvents->TxDone != NULL ) )
                 {
                     RadioEvents->TxDone( );
-                   // PRINTF( "txDone\n\r" );
+					if(tx_counter)
+						TimerStart(&SensorTimer);
+						//app_sched_event_put(NULL, NULL, OnSensorTimerEvent);
+          //          PRINTF( "txDone\n\r" );
                 }
                 break;
             }
@@ -1682,7 +1693,7 @@ void SX1276OnDio0Irq( void )
 
 void SX1276OnDio1Irq( void )
 {
-	//PRINTF("SX1276OnDio1Irq\n\r");
+//	PRINTF("SX1276OnDio1Irq\n\r");
     switch( SX1276.Settings.State )
     {
         case RF_RX_RUNNING:

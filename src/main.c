@@ -147,7 +147,7 @@ void OnSensorTimerEvent( void )
         tx_counter++;
     }
     TST_TX_LoraStart( "TEST", strlen("TEST") );
-    TimerStart(&SensorTimer);
+  //  TimerStart(&SensorTimer);
 }
 
 void OnLoRaRxEvent( void *p_event_data, uint16_t event_size )
@@ -156,7 +156,6 @@ void OnLoRaRxEvent( void *p_event_data, uint16_t event_size )
     if(rx_counter>1)
     {
         PRINTF("Recv lora frame: %d\n\r",rx_counter - 1);
-        //rx_counter++;
     }
     TST_RX_LoraStart( );
 }
