@@ -194,7 +194,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
     vcom_IoInit( );
 }
 
-extern TimerEvent_t SensorTimer;
 void vcom_IoInit(void)
 {
 //	uint32_t i=1000;

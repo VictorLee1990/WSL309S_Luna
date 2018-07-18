@@ -869,7 +869,7 @@ ATEerror_t at_NetworkJoinMode_get(const char *param)
 ATEerror_t at_NetworkJoinMode_set(const char *param)
 {
     LoraState_t status;
-	  if(joinning)
+	  if(joinning == 1)
 			 return AT_BUSY_ERROR;
     if(strlen(param) > 1)
         return AT_PARAM_ERROR;
@@ -1274,16 +1274,13 @@ ATEerror_t at_test_rxTone(const char *param)
     return TST_RxTone(param, strlen(param));
 }
 
-extern void OnSensorTimerEvent( void );
-extern TimerEvent_t SensorTimer;
+extern void OnTestTimerEvent( void );
+extern TimerEvent_t TestTimer;
 extern uint32_t tx_counter;
 extern uint32_t rx_counter;
 extern void OnLoRaRxEvent( void *p_event_data, uint16_t event_size );
 ATEerror_t at_test_txlora(const char *param)
 {
-    //TimerSetValue( &SensorTimer,  300);
-    //tx_counter = 0;
-    //TimerStart(&SensorTimer);
     TST_TX_LoraStart( param, strlen(param) );
     return AT_OK;
 }
@@ -1296,10 +1293,9 @@ ATEerror_t at_test_rxlora(const char *param)
 
 ATEerror_t at_test_txclora(const char *param)
 {
-    TimerSetValue( &SensorTimer,  100);
+    TimerSetValue( &TestTimer,  100);
     tx_counter = 1;
-	//app_sched_event_put(NULL, NULL, OnSensorTimerEvent);
-    TimerStart(&SensorTimer);
+    TimerStart(&TestTimer);
     return AT_OK;
 }
 
@@ -1325,7 +1321,6 @@ ATEerror_t at_test_stop(const char *param)
 {
 	tx_counter = 0; 
     rx_counter = 0;
-//    TimerStop(&SensorTimer);
     return TST_stop( );
 }
 

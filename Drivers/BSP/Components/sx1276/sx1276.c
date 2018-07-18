@@ -201,8 +201,8 @@ const FskBandwidth_t FskBandwidths[] =
 /*
  * Private global variables
  */
-extern void OnSensorTimerEvent( void );
-extern TimerEvent_t SensorTimer;
+extern void OnTestTimerEvent( void );
+extern TimerEvent_t TestTimer;
 extern uint32_t tx_counter;
 extern uint32_t rx_counter;	
 /*!
@@ -1679,8 +1679,7 @@ void SX1276OnDio0Irq( void )
                 {
                     RadioEvents->TxDone( );
 					if(tx_counter)
-						TimerStart(&SensorTimer);
-						//app_sched_event_put(NULL, NULL, OnSensorTimerEvent);
+						TimerStart(&TestTimer);
           //          PRINTF( "txDone\n\r" );
                 }
                 break;

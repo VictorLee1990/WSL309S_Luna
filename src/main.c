@@ -70,6 +70,8 @@ Maintainer: Miguel Luis, Gregory Cristian and Wael Guibene
 #include "app_scheduler.h"
 
 #include "test_rf.h"
+
+#include "i2c.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 
@@ -131,14 +133,47 @@ static LoRaParam_t LoRaParamInit = {LORAWAN_ADR_ON,
  * @param  None
  * @retval None
  */
+void gsensor_init(void)
+{
+	uint8_t data = 0x3F;
+	HAL_I2C_Mem_Write(&hi2c1, 0x30, 0x20, 1, &data, 1, 100);
+	HAL_I2C_Mem_Read(&hi2c1, 0x30, 0x0f, 1, &data, 1, 100);
+	PRINTF("g: %02X\r\n", data);
+}
 
-
-TimerEvent_t SensorTimer;
+TimerEvent_t TestTimer;
 TimerEvent_t RxWaitTimer;
-
+TimerEvent_t SensorTimer;
 uint32_t tx_counter;
 uint32_t rx_counter;
+extern uint8_t joinning;
+
+char SendData[64]={0};
+void OnSensorEvent( void )
+{
+	int8_t data[6];
+	HAL_I2C_Mem_Read(&hi2c1, 0x30, 0x28, 1, data+0, 1, 100);
+	HAL_I2C_Mem_Read(&hi2c1, 0x30, 0x29, 1, data+1, 1, 100);
+	HAL_I2C_Mem_Read(&hi2c1, 0x30, 0x2A, 1, data+2, 1, 100);
+	HAL_I2C_Mem_Read(&hi2c1, 0x30, 0x2B, 1, data+3, 1, 100);
+	HAL_I2C_Mem_Read(&hi2c1, 0x30, 0x2C, 1, data+4, 1, 100);
+	HAL_I2C_Mem_Read(&hi2c1, 0x30, 0x2D, 1, data+5, 1, 100);
+	sprintf(SendData, "AT+SEND=2:G=%d,%d,%d\r\n",data[1],data[3],data[5]);
+	//PRINTF(SendData);
+	parse_cmd(SendData);
+}
+
 void OnSensorTimerEvent( void )
+{
+	if(joinning == 2)
+	{
+		TimerSetValue( &SensorTimer,  60000);
+		app_sched_event_put(NULL, NULL, OnSensorEvent);
+	}
+	TimerStart(&SensorTimer);
+}
+
+void OnTestTimerEvent( void )
 {
     TST_stop( );
     if(tx_counter)
@@ -147,7 +182,7 @@ void OnSensorTimerEvent( void )
         tx_counter++;
     }
     TST_TX_LoraStart( "TEST", strlen("TEST") );
-  //  TimerStart(&SensorTimer);
+
 }
 
 void OnLoRaRxEvent( void *p_event_data, uint16_t event_size )
@@ -167,14 +202,18 @@ void OnRxWaitTimerEvent( void )
     LPM_SetStopMode(LPM_UART_RX_Id, LPM_Enable );
 }
 
+
 int main(void)
 {
     /* STM32 HAL library initialization*/
     APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
-    TimerInit( &SensorTimer, OnSensorTimerEvent );
-    TimerSetValue( &SensorTimer,  1300);
+    TimerInit( &TestTimer, OnTestTimerEvent );
+    TimerSetValue( &TestTimer,  1300);
     TimerInit( &RxWaitTimer, OnRxWaitTimerEvent );
     TimerSetValue( &RxWaitTimer,  250);
+    TimerInit( &SensorTimer, OnSensorTimerEvent );
+    TimerSetValue( &SensorTimer,  10000);	
+	
     HAL_Init( );
     /* Configure the system clock*/
     SystemClock_Config();
@@ -192,6 +231,7 @@ int main(void)
     /* USER CODE BEGIN 1 */
     CMD_Init();
 
+	gsensor_init();
     /*Disable standby mode*/
     LPM_SetOffMode(LPM_APPLI_Id, LPM_Disable);
 
@@ -212,9 +252,9 @@ int main(void)
     /* Configure the Lora Stack*/
     LORA_Init(&LoRaMainCallbacks, &LoRaParamInit);
 
-//	LORA_Join();
+	LORA_Join();
 
-    //TimerStart(&SensorTimer);
+    TimerStart(&SensorTimer);
     /* main loop*/
     while (1)
     {

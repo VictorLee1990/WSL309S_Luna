@@ -338,7 +338,7 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
         if( mlmeConfirm->Status == LORAMAC_EVENT_INFO_STATUS_OK )
         {
             // Status is OK, node has joined the network
-			joinning = 0;
+			joinning = 2;
             LoRaMainCallbacks->LORA_HasJoined();
         }
         else
@@ -346,7 +346,7 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
 			AT_PRINTF("Join Fail\r\n");
 			joinning = 0;
             // Join was not successful. Try to join again
-         //   LORA_Join();
+            LORA_Join();
         }
         break;
     }
@@ -509,7 +509,7 @@ void LORA_Init (LoRaMainCallback_t *callbacks, LoRaParam_t* LoRaParam )
 
 uint8_t LORA_Join( void)
 {
-	if(joinning) return 0;
+	if(joinning == 1) return 0;
     if (lora_config.otaa == LORA_ENABLE)
     {
         MlmeReq_t mlmeReq;
@@ -558,7 +558,7 @@ uint8_t LORA_Join( void)
         mibReq.Param.IsNetworkJoined = true;
         LoRaMacMibSetRequestConfirm( &mibReq );
 
-		joinning = 0;
+		joinning = 2;
         LoRaMainCallbacks->LORA_HasJoined();
     }
 	return 1;
