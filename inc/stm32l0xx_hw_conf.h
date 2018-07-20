@@ -91,11 +91,11 @@ Maintainer: Miguel Luis and Gregory Cristian
 #define RADIO_NSS_PORT                            GPIOA
 #define RADIO_NSS_PIN                             GPIO_PIN_4
 
-#define RADIO_DIO_0_PORT                          GPIOA
-#define RADIO_DIO_0_PIN                           GPIO_PIN_15
+#define RADIO_DIO_0_PORT                          GPIOB//GPIOA
+#define RADIO_DIO_0_PIN                           GPIO_PIN_0//GPIO_PIN_15
 
-#define RADIO_DIO_1_PORT                          GPIOA //GPIOB GPIOA
-#define RADIO_DIO_1_PIN                           GPIO_PIN_12//GPIO_PIN_3 GPIO_PIN_12
+#define RADIO_DIO_1_PORT                          GPIOB //GPIOB GPIOA
+#define RADIO_DIO_1_PIN                           GPIO_PIN_1//GPIO_PIN_3 GPIO_PIN_12
 
 #define RADIO_DIO_2_PORT                          GPIOB
 #define RADIO_DIO_2_PIN                           GPIO_PIN_5

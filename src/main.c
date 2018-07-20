@@ -252,9 +252,9 @@ int main(void)
     /* Configure the Lora Stack*/
     LORA_Init(&LoRaMainCallbacks, &LoRaParamInit);
 
-	LORA_Join();
+//	LORA_Join();
 
-    TimerStart(&SensorTimer);
+  //  TimerStart(&SensorTimer);
     /* main loop*/
     while (1)
     {

@@ -56,30 +56,6 @@
 void DBG_Init( void )
 {
 #ifdef DEBUG
-#if 0
-    GPIO_InitTypeDef  gpioinitstruct = {0};
-
-    /* Enable the GPIO_B Clock */
-    __HAL_RCC_GPIOB_CLK_ENABLE();
-
-    /* Configure the GPIO pin */
-    gpioinitstruct.Mode   = GPIO_MODE_OUTPUT_PP;
-    gpioinitstruct.Pull   = GPIO_PULLUP;
-    gpioinitstruct.Speed  = GPIO_SPEED_HIGH;
-
-    gpioinitstruct.Pin    = (GPIO_PIN_12 | GPIO_PIN_13| GPIO_PIN_14 | GPIO_PIN_15);
-    HAL_GPIO_Init(GPIOB, &gpioinitstruct);
-
-    /* Reset debug Pins */
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, GPIO_PIN_RESET);
-#endif
-#if 0
-    HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_SYSCLK, RCC_MCODIV_1);
-#endif
-
     __HAL_RCC_DBGMCU_CLK_ENABLE( );
 
     HAL_DBGMCU_EnableDBGSleepMode( );

@@ -13,16 +13,16 @@
       <pCCUsed>5060183::V5.06 update 2 (build 183)::ARMCC</pCCUsed>
       <TargetOption>
         <TargetCommonOption>
-          <Device>STM32L051K8Ux</Device>
+          <Device>STM32L071KBUx</Device>
           <Vendor>STMicroelectronics</Vendor>
           <PackID>Keil.STM32L0xx_DFP.2.0.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
-          <Cpu>IRAM(0x20000000,0x00002000) IROM(0x08000000,0x00010000) CPUTYPE("Cortex-M0+") CLOCK(12000000) ELITTLE</Cpu>
+          <Cpu>IRAM(0x20000000,0x00005000) IROM(0x08000000,0x00020000) CPUTYPE("Cortex-M0+") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
-          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32L0xx_64 -FS08000000 -FL010000 -FP0($$Device:STM32L051K8Ux$Flash\STM32L0xx_64.FLM))</FlashDriverDll>
+          <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32L0xx_128 -FS08000000 -FL020000 -FP0($$Device:STM32L071KBUx$CMSIS\Flash\STM32L0xx_128.FLM))</FlashDriverDll>
           <DeviceId>0</DeviceId>
-          <RegisterFile>$$Device:STM32L051K8Ux$Device\Include\stm32l0xx.h</RegisterFile>
+          <RegisterFile>$$Device:STM32L071KBUx$Drivers\CMSIS\Device\ST\STM32L0xx\Include\stm32l0xx.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -32,7 +32,7 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>$$Device:STM32L051K8Ux$SVD\STM32L051x.svd</SFDFile>
+          <SFDFile>$$Device:STM32L071KBUx$CMSIS\SVD\STM32L0x1.svd</SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
@@ -109,11 +109,11 @@
         </CommonProperty>
         <DllOption>
           <SimDllName>SARMCM3.DLL</SimDllName>
-          <SimDllArguments> -REMAP </SimDllArguments>
+          <SimDllArguments> -REMAP-MPU </SimDllArguments>
           <SimDlgDll>DARMCM1.DLL</SimDlgDll>
           <SimDlgDllArguments>-pCM0+</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
-          <TargetDllArguments> </TargetDllArguments>
+          <TargetDllArguments>-MPU </TargetDllArguments>
           <TargetDlgDll>TARMCM1.DLL</TargetDlgDll>
           <TargetDlgDllArguments>-pCM0+</TargetDlgDllArguments>
         </DllOption>
@@ -243,12 +243,12 @@
               <IRAM>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x2000</Size>
+                <Size>0x5000</Size>
               </IRAM>
               <IROM>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x10000</Size>
+                <Size>0x20000</Size>
               </IROM>
               <XRAM>
                 <Type>0</Type>
@@ -272,8 +272,8 @@
               </OCR_RVCT3>
               <OCR_RVCT4>
                 <Type>1</Type>
-                <StartAddress>0x8002000</StartAddress>
-                <Size>0xf800</Size>
+                <StartAddress>0x8000000</StartAddress>
+                <Size>0x20000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -298,7 +298,7 @@
               <OCR_RVCT9>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x2000</Size>
+                <Size>0x5000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
@@ -310,7 +310,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>3</Optim>
+            <Optim>4</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -332,7 +332,7 @@
             <v6WtE>0</v6WtE>
             <VariousControls>
               <MiscControls>--C99</MiscControls>
-              <Define>STM32L051xx, USE_STM32L0XX_NUCLEO, USE_FULL_LL_DRIVER, REGION_CN470, USE_BOOTLOADER</Define>
+              <Define>STM32L071xx, USE_STM32L0XX_NUCLEO, USE_FULL_LL_DRIVER, REGION_CN470, xUSE_BOOTLOADER</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\inc;..\..\Drivers\BSP\STM32L0xx_Nucleo;..\..\Drivers\STM32L0xx_HAL_Driver\Inc;..\..\Drivers\CMSIS\Device\ST\STM32L0xx\Include;..\..\Drivers\CMSIS\Include;..\..\Middlewares\Third_Party\Lora\Crypto;..\..\Middlewares\Third_Party\Lora\Mac;..\..\Middlewares\Third_Party\Lora\Phy;..\..\Middlewares\Third_Party\Lora\Utilities;..\..\Drivers\BSP\X_NUCLEO_IKS01A1;..\..\Middlewares\Third_Party\Lora\Core;..\..\Drivers\BSP\Components\Common;..\..\Drivers\BSP\Components\hts221;..\..\Drivers\BSP\Components\lps22hb;..\..\Drivers\BSP\Components\lps25hb;..\..\Drivers\BSP\Components\sx1276;..\..\Drivers\BSP\sx1276mb1las</IncludePath>
             </VariousControls>
