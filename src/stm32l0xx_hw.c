@@ -136,8 +136,8 @@ void HW_Init( void )
 
         HW_RTC_Init( );
 
-        HAL_I2C_MspInit(&hi2c1);
-        MX_I2C1_Init();
+ //       HAL_I2C_MspInit(&hi2c1);
+//        MX_I2C1_Init();
         McuInitialized = true;
     }
 }

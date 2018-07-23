@@ -71,7 +71,7 @@ Maintainer: Miguel Luis, Gregory Cristian and Wael Guibene
 
 #include "test_rf.h"
 
-#include "i2c.h"
+//#include "i2c.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 
@@ -135,10 +135,10 @@ static LoRaParam_t LoRaParamInit = {LORAWAN_ADR_ON,
  */
 void gsensor_init(void)
 {
-	uint8_t data = 0x3F;
+/*	uint8_t data = 0x3F;
 	HAL_I2C_Mem_Write(&hi2c1, 0x30, 0x20, 1, &data, 1, 100);
 	HAL_I2C_Mem_Read(&hi2c1, 0x30, 0x0f, 1, &data, 1, 100);
-	PRINTF("g: %02X\r\n", data);
+	PRINTF("g: %02X\r\n", data);*/
 }
 
 TimerEvent_t TestTimer;
@@ -151,7 +151,7 @@ extern uint8_t joinning;
 char SendData[64]={0};
 void OnSensorEvent( void )
 {
-	int8_t data[6];
+	/*int8_t data[6];
 	HAL_I2C_Mem_Read(&hi2c1, 0x30, 0x28, 1, data+0, 1, 100);
 	HAL_I2C_Mem_Read(&hi2c1, 0x30, 0x29, 1, data+1, 1, 100);
 	HAL_I2C_Mem_Read(&hi2c1, 0x30, 0x2A, 1, data+2, 1, 100);
@@ -160,17 +160,17 @@ void OnSensorEvent( void )
 	HAL_I2C_Mem_Read(&hi2c1, 0x30, 0x2D, 1, data+5, 1, 100);
 	sprintf(SendData, "AT+SEND=2:G=%d,%d,%d\r\n",data[1],data[3],data[5]);
 	//PRINTF(SendData);
-	parse_cmd(SendData);
+	parse_cmd(SendData);*/
 }
 
 void OnSensorTimerEvent( void )
 {
-	if(joinning == 2)
+/*	if(joinning == 2)
 	{
 		TimerSetValue( &SensorTimer,  60000);
 		app_sched_event_put(NULL, NULL, OnSensorEvent);
 	}
-	TimerStart(&SensorTimer);
+	TimerStart(&SensorTimer);*/
 }
 
 void OnTestTimerEvent( void )
@@ -231,7 +231,7 @@ int main(void)
     /* USER CODE BEGIN 1 */
     CMD_Init();
 
-	gsensor_init();
+	//gsensor_init();
     /*Disable standby mode*/
     LPM_SetOffMode(LPM_APPLI_Id, LPM_Disable);
 

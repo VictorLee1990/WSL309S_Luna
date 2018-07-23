@@ -1032,8 +1032,8 @@ void lora_wan_certif( void )
 
 
 //#define DATA_ADDRESS 0x0800F800
-#define FLASH_USER_START_ADDR   0x0800F800   /* flash???? */
-#define FLASH_USER_END_ADDR     0x0800FC00   /* flash???? */
+#define FLASH_USER_START_ADDR   0x0801F800   /* flash???? */
+#define FLASH_USER_END_ADDR     0x0801FC00   /* flash???? */
 
 #define BLOCK_SIZE (FLASH_USER_END_ADDR - FLASH_USER_START_ADDR)
 uint8_t getFlashData(uint8_t *data, uint32_t data_size)
