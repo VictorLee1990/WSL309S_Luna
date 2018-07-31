@@ -144,9 +144,9 @@ ATEerror_t TST_TxTone(const char *buf, unsigned bufSize)
         // SX1276 in continuous mode FSK
         Radio.Write( REG_PACKETCONFIG2, ( Radio.Read( REG_PACKETCONFIG2 ) & RF_PACKETCONFIG2_DATAMODE_MASK ) );
         Radio.Write( REG_OCP, 0x00 );
-  //      Radio.Write( REG_PACONFIG, 0xFF-(20- loraParam.power));                             // PA_Boost 17 dBm
- //       Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_ON );  // Enable 20dBm boost
-        
+        Radio.Write( REG_PACONFIG, 0xFF-(20- loraParam.power));                             // PA_Boost 17 dBm
+        Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_ON );  // Enable 20dBm boost
+    /*    
             switch (loraParam.power)
             {
               case 20:
@@ -231,6 +231,7 @@ ATEerror_t TST_TxTone(const char *buf, unsigned bufSize)
               default:
                 break;
             }  
+			*/
         SX1276SetOpMode( RF_OPMODE_TRANSMITTER );
         return AT_OK;
     }
