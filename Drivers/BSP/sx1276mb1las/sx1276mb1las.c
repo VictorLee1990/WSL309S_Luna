@@ -183,7 +183,7 @@ void SX1276SetRfTxPower( int8_t power )
 		power = lora_config_txo_Get();
     paConfig = SX1276Read( REG_PACONFIG );
     paDac = SX1276Read( REG_PADAC );
-	PRINTF("POWER:%d \r\n",power);
+//	PRINTF("POWER:%d \r\n",power);
 	SX1276Write(REG_OCP, 0x0);
     paConfig = ( paConfig & RF_PACONFIG_PASELECT_MASK ) | SX1276GetPaSelect( SX1276.Settings.Channel );
     paConfig = ( paConfig & RF_PACONFIG_MAX_POWER_MASK ) | 0x70;
@@ -310,7 +310,7 @@ void SX1276SetAntSw( uint8_t opMode )
     {
     case RFLR_OPMODE_TRANSMITTER:
         HW_GPIO_Write( RADIO_ANT_SWITCH1_PORT, RADIO_ANT_SWITCH1_PIN, RADIO_ANT_SWITCH_SET_TX);
-        HW_GPIO_Write( RADIO_ANT_SWITCH2_PORT, RADIO_ANT_SWITCH2_PIN, RADIO_ANT_SWITCH_SET_TX);
+        HW_GPIO_Write( RADIO_ANT_SWITCH2_PORT, RADIO_ANT_SWITCH2_PIN, RADIO_ANT_SWITCH_SET_RX);
     //    HW_GPIO_Write( RADIO_ANT_SWITCH2_PORT, RADIO_ANT_SWITCH2_PIN, RADIO_ANT_SWITCH_SET_RX);
         break;
     case RFLR_OPMODE_RECEIVER:
