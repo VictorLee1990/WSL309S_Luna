@@ -240,6 +240,10 @@ int main(void)
     PRINTF("Version: ");
     PRINTF(AT_VERSION_STRING);
     PRINTF("\n\r");
+		PRINTF("Zone: ");
+    PRINTF(AT_ZONE_STRING);
+    PRINTF("\n\r");
+		
     readdata = 0;
     readdata = SX1276Read( 0x42 );
     PRINTF("lora test1: %X\n\r",readdata);

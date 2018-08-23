@@ -129,7 +129,8 @@ ATEerror_t TST_TxTone(const char *buf, unsigned bufSize)
 
     if ( (TestState & TX_TEST_TONE) != TX_TEST_TONE )
     {
-		HAL_NVIC_DisableIRQ( EXTI4_15_IRQn );
+			HAL_NVIC_DisableIRQ(EXTI0_1_IRQn);
+		  HAL_NVIC_DisableIRQ( EXTI4_15_IRQn );
         TestState |= TX_TEST_TONE;
 
         PRINTF("Tx Test\n\r");
@@ -249,7 +250,8 @@ ATEerror_t TST_RxTone(const char *buf, unsigned bufSize)
     /* check that test is not already started*/
     if ( (TestState & RX_TEST_RSSI) != RX_TEST_RSSI )
     {
-		HAL_NVIC_DisableIRQ( EXTI4_15_IRQn );
+			HAL_NVIC_DisableIRQ( EXTI0_1_IRQn );
+	  	HAL_NVIC_DisableIRQ( EXTI4_15_IRQn );
         TestState |= RX_TEST_RSSI;
         PRINTF("Rx Test\n\r");
 
@@ -391,6 +393,7 @@ void TST_SNR(int8_t SnrValue, int16_t RssiValue)
 
 ATEerror_t TST_stop( void )
 {
+	HAL_NVIC_EnableIRQ( EXTI0_1_IRQn );
 	HAL_NVIC_EnableIRQ( EXTI4_15_IRQn );
     if ( (TestState & RX_TEST_RSSI) == RX_TEST_RSSI )
     {
