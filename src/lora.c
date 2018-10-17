@@ -92,7 +92,7 @@ typedef struct
     uint32_t Rx1Dleay;
     uint32_t Rx2Dleay;
     int8_t RxDatarate;
-	uint8_t OutputPower;
+    uint8_t OutputPower;
     uint32_t Flag;
 } lora_configuration_t;
 
@@ -136,7 +136,7 @@ static lora_configuration_t lora_config =
     .Rx1Dleay = 1000,
     .Rx2Dleay = 2000,
     .RxDatarate = 0,
-	.OutputPower = 0,
+    .OutputPower = 0,
     .Flag = FLAG_VALUE
 };
 /*
@@ -228,26 +228,26 @@ static void McpsConfirm( McpsConfirm_t *mcpsConfirm )
     {
         switch( mcpsConfirm->McpsRequest )
         {
-        case MCPS_UNCONFIRMED:
-        {
-            // Check Datarate
-            // Check TxPower
-            break;
-        }
-        case MCPS_CONFIRMED:
-        {
-            // Check Datarate
-            // Check TxPower
-            // Check AckReceived
-            // Check NbTrials
-            break;
-        }
-        case MCPS_PROPRIETARY:
-        {
-            break;
-        }
-        default:
-            break;
+            case MCPS_UNCONFIRMED:
+            {
+                // Check Datarate
+                // Check TxPower
+                break;
+            }
+            case MCPS_CONFIRMED:
+            {
+                // Check Datarate
+                // Check TxPower
+                // Check AckReceived
+                // Check NbTrials
+                break;
+            }
+            case MCPS_PROPRIETARY:
+            {
+                break;
+            }
+            default:
+                break;
         }
     }
 }
@@ -269,24 +269,24 @@ static void McpsIndication( McpsIndication_t *mcpsIndication )
 
     switch( mcpsIndication->McpsIndication )
     {
-    case MCPS_UNCONFIRMED:
-    {
-        break;
-    }
-    case MCPS_CONFIRMED:
-    {
-        break;
-    }
-    case MCPS_PROPRIETARY:
-    {
-        break;
-    }
-    case MCPS_MULTICAST:
-    {
-        break;
-    }
-    default:
-        break;
+        case MCPS_UNCONFIRMED:
+        {
+            break;
+        }
+        case MCPS_CONFIRMED:
+        {
+            break;
+        }
+        case MCPS_PROPRIETARY:
+        {
+            break;
+        }
+        case MCPS_MULTICAST:
+        {
+            break;
+        }
+        default:
+            break;
     }
 
     // Check Multicast
@@ -307,18 +307,18 @@ static void McpsIndication( McpsIndication_t *mcpsIndication )
     {
         switch( mcpsIndication->Port )
         {
-        case CERTIF_PORT:
-            certif_rx( mcpsIndication, &JoinParameters );
-            break;
-        default:
+            case CERTIF_PORT:
+                certif_rx( mcpsIndication, &JoinParameters );
+                break;
+            default:
 
-            AppData.Port = mcpsIndication->Port;
-            AppData.BuffSize = mcpsIndication->BufferSize;
-            AppData.Buff = mcpsIndication->Buffer;
-            lora_config.Rssi = mcpsIndication->Rssi;
-            lora_config.Snr  = mcpsIndication->Snr;
-            LoRaMainCallbacks->LORA_RxData( &AppData );
-            break;
+                AppData.Port = mcpsIndication->Port;
+                AppData.BuffSize = mcpsIndication->BufferSize;
+                AppData.Buff = mcpsIndication->Buffer;
+                lora_config.Rssi = mcpsIndication->Rssi;
+                lora_config.Snr  = mcpsIndication->Snr;
+                LoRaMainCallbacks->LORA_RxData( &AppData );
+                break;
         }
     }
 }
@@ -333,38 +333,38 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
 {
     switch( mlmeConfirm->MlmeRequest )
     {
-    case MLME_JOIN:
-    {
-        if( mlmeConfirm->Status == LORAMAC_EVENT_INFO_STATUS_OK )
+        case MLME_JOIN:
         {
-            // Status is OK, node has joined the network
-			joinning = 2;
-            LoRaMainCallbacks->LORA_HasJoined();
-        }
-        else
-        {
-			AT_PRINTF("Join Fail\r\n");
-			joinning = 0;
-            // Join was not successful. Try to join again
-            LORA_Join();
-        }
-        break;
-    }
-    case MLME_LINK_CHECK:
-    {
-        if( mlmeConfirm->Status == LORAMAC_EVENT_INFO_STATUS_OK )
-        {
-            // Check DemodMargin
-            // Check NbGateways
-            if (certif_running() == true )
+            if( mlmeConfirm->Status == LORAMAC_EVENT_INFO_STATUS_OK )
             {
-                certif_linkCheck( mlmeConfirm);
+                // Status is OK, node has joined the network
+                joinning = 2;
+                LoRaMainCallbacks->LORA_HasJoined();
             }
+            else
+            {
+                AT_PRINTF("Join Fail\r\n");
+                joinning = 0;
+                // Join was not successful. Try to join again
+                LORA_Join();
+            }
+            break;
         }
-        break;
-    }
-    default:
-        break;
+        case MLME_LINK_CHECK:
+        {
+            if( mlmeConfirm->Status == LORAMAC_EVENT_INFO_STATUS_OK )
+            {
+                // Check DemodMargin
+                // Check NbGateways
+                if (certif_running() == true )
+                {
+                    certif_linkCheck( mlmeConfirm);
+                }
+            }
+            break;
+        }
+        default:
+            break;
     }
 }
 /**
@@ -398,17 +398,20 @@ void LORA_Init (LoRaMainCallback_t *callbacks, LoRaParam_t* LoRaParam )
 
     PRINTF("If OTAA enabled\n\r");
     PRINTF("DevEui= %02X", lora_config.DevEui[0]) ;
-    for(int i=1; i<8 ; i++) {
+    for(int i=1; i<8 ; i++)
+    {
         PRINTF("-%02X", lora_config.DevEui[i]);
     };
     PRINTF("\n\r");
     PRINTF("AppEui= %02X", lora_config.AppEui[0]) ;
-    for(int i=1; i<8 ; i++) {
+    for(int i=1; i<8 ; i++)
+    {
         PRINTF("-%02X", lora_config.AppEui[i]);
     };
     PRINTF("\n\r");
     PRINTF("AppKey= %02X", lora_config.AppKey[0]) ;
-    for(int i=1; i<16; i++) {
+    for(int i=1; i<16; i++)
+    {
         PRINTF(" %02X", lora_config.AppKey[i]);
     };
     PRINTF("\n\n\r");
@@ -416,18 +419,21 @@ void LORA_Init (LoRaMainCallback_t *callbacks, LoRaParam_t* LoRaParam )
 
     PRINTF("If ABP enabled\n\r");
     PRINTF("DevEui= %02X", lora_config.DevEui[0]) ;
-    for(int i=1; i<8 ; i++) {
+    for(int i=1; i<8 ; i++)
+    {
         PRINTF("-%02X", lora_config.DevEui[i]);
     };
     PRINTF("\n\r");
     PRINTF("DevAdd=  %08X\n\r", lora_config.DevAddr) ;
     PRINTF("NwkSKey= %02X", lora_config.NwkSKey[0]) ;
-    for(int i=1; i<16 ; i++) {
+    for(int i=1; i<16 ; i++)
+    {
         PRINTF(" %02X", lora_config.NwkSKey[i]);
     };
     PRINTF("\n\r");
     PRINTF("AppSKey= %02X", lora_config.AppSKey[0]) ;
-    for(int i=1; i<16 ; i++) {
+    for(int i=1; i<16 ; i++)
+    {
         PRINTF(" %02X", lora_config.AppSKey[i]);
     };
     PRINTF("\n\r");
@@ -509,7 +515,7 @@ void LORA_Init (LoRaMainCallback_t *callbacks, LoRaParam_t* LoRaParam )
 
 uint8_t LORA_Join( void)
 {
-	if(joinning == 1) return 0;
+    if(joinning == 1) return 0;
     if (lora_config.otaa == LORA_ENABLE)
     {
         MlmeReq_t mlmeReq;
@@ -522,9 +528,9 @@ uint8_t LORA_Join( void)
 
         JoinParameters = mlmeReq.Req.Join;
 
-		joinning = 1;
+        joinning = 1;
         LoRaMacMlmeRequest( &mlmeReq );
-		
+
     }
     else
     {
@@ -558,10 +564,10 @@ uint8_t LORA_Join( void)
         mibReq.Param.IsNetworkJoined = true;
         LoRaMacMibSetRequestConfirm( &mibReq );
 
-		joinning = 2;
+        joinning = 2;
         LoRaMainCallbacks->LORA_HasJoined();
     }
-	return 1;
+    return 1;
 }
 
 LoraFlagStatus LORA_JoinStatus( void)
@@ -643,43 +649,43 @@ LoraErrorStatus LORA_RequestClass( DeviceClass_t newClass )
     {
         switch (newClass)
         {
-        case CLASS_A:
-        {
-            if (currentClass == CLASS_A)
+            case CLASS_A:
             {
-                mibReq.Param.Class = CLASS_A;
+                if (currentClass == CLASS_A)
+                {
+                    mibReq.Param.Class = CLASS_A;
+                    if( LoRaMacMibSetRequestConfirm( &mibReq ) == LORAMAC_STATUS_OK )
+                    {
+                        /*switch is instantanuous*/
+                        LoRaMainCallbacks->LORA_ConfirmClass(CLASS_A);
+                    }
+                    else
+                    {
+                        Errorstatus = LORA_ERROR;
+                    }
+                }
+                break;
+            }
+            case CLASS_C:
+            {
+                if (currentClass != CLASS_A)
+                {
+                    Errorstatus = LORA_ERROR;
+                }
+                /*switch is instantanuous*/
+                mibReq.Param.Class = CLASS_C;
                 if( LoRaMacMibSetRequestConfirm( &mibReq ) == LORAMAC_STATUS_OK )
                 {
-                    /*switch is instantanuous*/
-                    LoRaMainCallbacks->LORA_ConfirmClass(CLASS_A);
+                    LoRaMainCallbacks->LORA_ConfirmClass(CLASS_C);
                 }
                 else
                 {
                     Errorstatus = LORA_ERROR;
                 }
+                break;
             }
-            break;
-        }
-        case CLASS_C:
-        {
-            if (currentClass != CLASS_A)
-            {
-                Errorstatus = LORA_ERROR;
-            }
-            /*switch is instantanuous*/
-            mibReq.Param.Class = CLASS_C;
-            if( LoRaMacMibSetRequestConfirm( &mibReq ) == LORAMAC_STATUS_OK )
-            {
-                LoRaMainCallbacks->LORA_ConfirmClass(CLASS_C);
-            }
-            else
-            {
-                Errorstatus = LORA_ERROR;
-            }
-            break;
-        }
-        default:
-            break;
+            default:
+                break;
         }
     }
     return Errorstatus;
