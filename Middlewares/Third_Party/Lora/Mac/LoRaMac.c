@@ -3356,3 +3356,8 @@ void LoRaMacTestSetChannel( uint8_t channel )
 {
     Channel = channel;
 }
+
+McpsConfirm_t* McpsConfirmGet(void)
+{
+	return &McpsConfirm;
+}
