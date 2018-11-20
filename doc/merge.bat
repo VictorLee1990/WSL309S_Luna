@@ -1,0 +1,1 @@
+mergehex -m l051_bl.hex ..\MDK-ARM\B-L072Z-LRWAN1\mlm32l07x01\Lora.hex -o output.hex

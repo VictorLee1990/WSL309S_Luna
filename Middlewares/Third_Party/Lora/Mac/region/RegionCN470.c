@@ -300,30 +300,39 @@ void RegionCN470InitDefaults( InitType_t type )
             switch(i)
             {
             case 0:
+							if(lora_config_tx1_get()!=0)
                 Channels[i].Frequency = lora_config_tx1_get();
                 break;
             case 1:
+							if(lora_config_tx2_get()!=0)
                 Channels[i].Frequency = lora_config_tx2_get();
                 break;
             case 2:
+							if(lora_config_tx3_get()!=0)
                 Channels[i].Frequency = lora_config_tx3_get();
                 break;
             case 3:
+							if(lora_config_tx4_get()!=0)
                 Channels[i].Frequency = lora_config_tx4_get();
                 break;
             case 4:
+							if(lora_config_tx5_get()!=0)
                 Channels[i].Frequency = lora_config_tx5_get();
                 break;
             case 5:
+							if(lora_config_tx6_get()!=0)
                 Channels[i].Frequency = lora_config_tx6_get();
                 break;
             case 6:
+							if(lora_config_tx6_get()!=0)
                 Channels[i].Frequency = lora_config_tx7_get();
                 break;
             case 7:
+							if(lora_config_tx8_get()!=0)
                 Channels[i].Frequency = lora_config_tx8_get();
                 break;
             default:
+							if(lora_config_tx1_get()!=0)
                 Channels[i].Frequency = lora_config_tx1_get();
                 break;
             }
@@ -524,6 +533,7 @@ bool RegionCN470RxConfig( RxConfigParams_t* rxConfig, int8_t* datarate )
     else if( rxConfig->Window == 1 )
     {
         // Apply window 2 frequency
+			if(lora_config_rx2_get()!=0)
         frequency = lora_config_rx2_get();
     }
     // Read the physical datarate from the datarates table
@@ -560,38 +570,7 @@ bool RegionCN470TxConfig( TxConfigParams_t* txConfig, int8_t* txPower, TimerTime
     phyTxPower = RegionCommonComputeTxPower( txPowerLimited, txConfig->MaxEirp, txConfig->AntennaGain );
 
     // Setup the radio frequency
-    /*	switch(txConfig->Channel)
-    	{
-    		case 0:
-    			real_freq = lora_config_tx1_get();
-    			break;
-    		case 1:
-    			real_freq = lora_config_tx2_get();
-    			break;
-    		case 2:
-    			real_freq = lora_config_tx3_get();
-    			break;
-    		case 3:
-    			real_freq = lora_config_tx4_get();
-    			break;
-    		case 4:
-    			real_freq = lora_config_tx5_get();
-    			break;
-    		case 5:
-    			real_freq = lora_config_tx6_get();
-    			break;
-    		case 6:
-    			real_freq = lora_config_tx7_get();
-    			break;
-    		case 7:
-    			real_freq = lora_config_tx8_get();
-    			break;
-    		default:
-    			real_freq = lora_config_tx1_get();
-    			break;
-    	}
-    	Radio.SetChannel( real_freq );
-    	*/
+  
     Radio.SetChannel( Channels[txConfig->Channel].Frequency );
 
 
