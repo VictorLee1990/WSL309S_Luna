@@ -72,7 +72,11 @@ extern "C" {
 #define TEST_VERSION (uint32_t) 0x00000000  /*1 lsb is always 0 in releases   */
 #define LRWAN_VERSION  (uint32_t) 0x00001140  /*3 next hex is i_cube release*/
 #define VERSION   (uint32_t) (LORA_MAC_VERSION | LRWAN_VERSION | TEST_VERSION)
+<<<<<<< HEAD
 #define AT_VERSION_STRING	"F-ICM-08-1811191"
+=======
+#define AT_VERSION_STRING	"F-ICM-08-1811151"
+>>>>>>> origin/WSL-309S
 #define AT_ZONE_STRING "CN470"
 
 /* Exported types ------------------------------------------------------------*/
