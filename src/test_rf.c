@@ -98,7 +98,7 @@ typedef enum
 } e_SpreadingFactors_t;
 
 /* Private define ------------------------------------------------------------*/
-#define F_868MHz 473
+#define F_868MHz 923
 
 #define P_14dBm 14
 
@@ -129,15 +129,18 @@ ATEerror_t TST_TxTone(const char *buf, unsigned bufSize)
 
     if ( (TestState & TX_TEST_TONE) != TX_TEST_TONE )
     {
-			HAL_NVIC_DisableIRQ(EXTI0_1_IRQn);
-		  HAL_NVIC_DisableIRQ( EXTI4_15_IRQn );
+        HAL_NVIC_DisableIRQ(EXTI0_1_IRQn);
+        HAL_NVIC_DisableIRQ( EXTI4_15_IRQn );
         TestState |= TX_TEST_TONE;
 
         PRINTF("Tx Test\n\r");
 
         SX1276SetModem( MODEM_FSK );
 
-        Radio.SetChannel( loraParam.freqMHz * 1000000 );
+        if(loraParam.freqMHz > 1000)
+            Radio.SetChannel( loraParam.freqMHz * 100000 );
+        else
+            Radio.SetChannel( loraParam.freqMHz * 1000000 );
 
         Radio.Write( REG_FDEVMSB, 0x00 );                           // FdevMsb = 0
         Radio.Write( REG_FDEVLSB, 0x00 );                           // FdevLsb = 0
@@ -147,92 +150,7 @@ ATEerror_t TST_TxTone(const char *buf, unsigned bufSize)
         Radio.Write( REG_OCP, 0x00 );
         Radio.Write( REG_PACONFIG, 0xFF-(20- loraParam.power));                             // PA_Boost 17 dBm
         Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_ON );  // Enable 20dBm boost
-    /*    
-            switch (loraParam.power)
-            {
-              case 20:
-              {
-                Radio.Write( REG_PACONFIG, 0xFF );                             // PA_Boost 17 dBm
-                Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_ON );  // Enable 20dBm boost
-                PRINTF("force PA boost Output\n\r");
-                break;
-              }
-              case 19:
-              {
-                Radio.Write( REG_PACONFIG, 0xFE );                             // PA_Boost 18 dBm
-                Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_ON );  // Enable 20dBm boost
-                PRINTF("force PA boost Output\n\r");
-                break;
-              }
-              case 18:
-              {
-                Radio.Write( REG_PACONFIG, 0xFD );                             // PA_Boost 17 dBm
-                Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_ON );  // Enable 20dBm boost
-                PRINTF("force PA boost Output\n\r");
-                break;
-              }
-              case 17:
-              {
-                Radio.Write( REG_PACONFIG, 0xFF );                           // PA_Boost 17 dBm
-                Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_OFF );  // Disable 20dBm boost
-                PRINTF("force PA boost Output\n\r");
-                break;
-              }
-              case 16:
-              {
-                Radio.Write( REG_PACONFIG, 0xFE );                           // PA_Boost 16 dBm
-                Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_OFF );  // Disable 20dBm boost
-                PRINTF("force PA boost Output\n\r");
-                break;
-              }
-              case 15:
-              {
-                Radio.Write( REG_PACONFIG, 0xFD );                           // PA_Boost 15 dBm
-                Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_OFF );  // Disable 20dBm boost
-                PRINTF("force PA boost Output\n\r");
-                break;
-              }
-              case 14 :
-              {
-                  Radio.Write( REG_PACONFIG, 0xFC );                           // PA_Boost 14 dBm
-                  Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_OFF );  // Disable 20dBm boost
 
-                break;
-              }
-              case 13 :
-              {
-                  Radio.Write( REG_PACONFIG, 0xFB );                           // PA_Boost 13 dBm
-                  Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_OFF );  // Disable 20dBm boost
-
-                break;
-              }
-              case 12 :
-              {
-                  Radio.Write( REG_PACONFIG, 0xFA );                           // PA_Boost 12 dBm
-                  Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_OFF );  // Disable 20dBm boost
-
-                break;
-              }
-              case 11 :
-              {
-                  Radio.Write( REG_PACONFIG, 0xF9 );                           // PA_Boost 11 dBm
-                  Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_OFF );  // Disable 20dBm boost
-
-                break;
-              }
-
-              case 10:
-              {
-                    Radio.Write( REG_PACONFIG, 0xF8 );                        // PA_Boost 10 dBm
-                    Radio.Write( REG_PADAC, ( Radio.Read( REG_PADAC ) & RF_PADAC_20DBM_MASK ) | RF_PADAC_20DBM_OFF );  // Disable 20dBm boost
-
-                break;
-              }
-
-              default:
-                break;
-            }  
-			*/
         SX1276SetOpMode( RF_OPMODE_TRANSMITTER );
         return AT_OK;
     }
@@ -250,14 +168,17 @@ ATEerror_t TST_RxTone(const char *buf, unsigned bufSize)
     /* check that test is not already started*/
     if ( (TestState & RX_TEST_RSSI) != RX_TEST_RSSI )
     {
-			HAL_NVIC_DisableIRQ( EXTI0_1_IRQn );
-	  	HAL_NVIC_DisableIRQ( EXTI4_15_IRQn );
+        HAL_NVIC_DisableIRQ( EXTI0_1_IRQn );
+        HAL_NVIC_DisableIRQ( EXTI4_15_IRQn );
         TestState |= RX_TEST_RSSI;
         PRINTF("Rx Test\n\r");
 
         SX1276SetModem( MODEM_FSK );
 
-        Radio.SetChannel( loraParam.freqMHz * 1000000 );
+        if(loraParam.freqMHz > 1000)
+            Radio.SetChannel( loraParam.freqMHz * 100000 );
+        else
+            Radio.SetChannel( loraParam.freqMHz * 1000000 );
 
         Radio.Write( REG_BITRATEMSB, 0x1A );           // bitrate =  4800 bps
         Radio.Write( REG_BITRATELSB, 0x0B );           //
@@ -364,14 +285,18 @@ ATEerror_t TST_SET_lora_config(const char *buf, unsigned bufSize)
     loraParam.lna =loraParamTmp.lna;
     loraParam.paBoost = loraParamTmp.paBoost;
 
-	g_sf = loraParam.sf;
+    g_sf = loraParam.sf;
     return AT_OK;
 }
 
 ATEerror_t TST_get_lora_config(const char *buf, unsigned bufSize)
 {
     uint32_t bwSet[]= {125, 250, 500};
-    AT_PRINTF("Freq= %d MHz\r\n", loraParam.freqMHz);
+    if(loraParam.freqMHz > 1000)
+        AT_PRINTF("Freq= %d00 KHz\r\n", loraParam.freqMHz);
+    else
+        AT_PRINTF("Freq= %d MHz\r\n", loraParam.freqMHz);
+		
     AT_PRINTF("Power= %d dBm\r\n", loraParam.power);
     AT_PRINTF("Bandwidth= %d kHz\r\n", bwSet[loraParam.bandwidth] );
     AT_PRINTF("SF= %d \r\n", loraParam.sf);
@@ -384,17 +309,17 @@ ATEerror_t TST_get_lora_config(const char *buf, unsigned bufSize)
 
 void TST_SNR(int8_t SnrValue, int16_t RssiValue)
 {
-	if ( (TestState & RX_TEST_LORA) == RX_TEST_LORA )
-	{
-		AT_PRINTF("SNR=%d, RSSI=%d\r\n", SnrValue, RssiValue);
-	}
+    if ( (TestState & RX_TEST_LORA) == RX_TEST_LORA )
+    {
+        AT_PRINTF("SNR=%d, RSSI=%d\r\n", SnrValue, RssiValue);
+    }
 }
 
 
 ATEerror_t TST_stop( void )
 {
-	HAL_NVIC_EnableIRQ( EXTI0_1_IRQn );
-	HAL_NVIC_EnableIRQ( EXTI4_15_IRQn );
+    HAL_NVIC_EnableIRQ( EXTI0_1_IRQn );
+    HAL_NVIC_EnableIRQ( EXTI4_15_IRQn );
     if ( (TestState & RX_TEST_RSSI) == RX_TEST_RSSI )
     {
         uint8_t rssiReg =  Radio.Read( REG_RSSIVALUE );
@@ -426,7 +351,10 @@ ATEerror_t TST_TX_LoraStart(const char *buf, unsigned bufSize)
 
         Radio.SetModem( MODEM_LORA );
 
-        Radio.SetChannel( loraParam.freqMHz * 1000000 );
+        if(loraParam.freqMHz > 1000)
+            Radio.SetChannel( loraParam.freqMHz * 100000 );
+        else
+            Radio.SetChannel( loraParam.freqMHz * 1000000 );
         // test only
 
         Radio.SetTxConfig( MODEM_LORA, loraParam.power, 0, loraParam.bandwidth,
@@ -452,7 +380,10 @@ ATEerror_t TST_RX_LoraStart( void )
 
         Radio.SetModem( MODEM_LORA );
 
-        Radio.SetChannel( loraParam.freqMHz * 1000000  );
+        if(loraParam.freqMHz > 1000)
+            Radio.SetChannel( loraParam.freqMHz * 100000 );
+        else
+            Radio.SetChannel( loraParam.freqMHz * 1000000 );
         //PRINTF("TST_RX_LoraStart @ %d\n\r",loraParam.freqMHz * 1000000);
         Radio.SetRxConfig( MODEM_LORA, loraParam.bandwidth, loraParam.sf,
                            loraParam.codingRate, 0, LORA_PREAMBLE_LENGTH,
