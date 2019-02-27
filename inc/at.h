@@ -120,6 +120,7 @@ typedef enum eATEerror
 #define AT_TTLRA      "+TTLRA"
 #define AT_TRLRA      "+TRLRA"
 #define AT_TTLRC      "+TTLRC"
+#define AT_TTLRS      "+TTLRS"
 #define AT_TRLRC      "+TRLRC"
 #define AT_TCONF      "+TCONF"
 #define AT_TOFF       "+TOFF"
@@ -615,7 +616,7 @@ ATEerror_t at_test_rxlora(const char *param);
  * @retval AT_OK
  */
 ATEerror_t at_test_txclora(const char *param);
-
+ATEerror_t at_test_txslora(const char *param);
 /**
  * @brief  Start Rx LoRa test
  * @param  String parameter

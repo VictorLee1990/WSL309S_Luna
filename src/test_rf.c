@@ -113,7 +113,7 @@ typedef enum
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 static uint8_t TestState =0;
-
+uint8_t tx_test;
 static s_loraParameter_t loraParam= { F_868MHz, P_14dBm, BW_500kHz, SF_9, CR_4o5, 0, 1};
 uint32_t g_sf = SF_9;
 /* Private function prototypes -----------------------------------------------*/
@@ -338,7 +338,7 @@ ATEerror_t TST_stop( void )
 
 ATEerror_t TST_TX_LoraStart(const char *buf, unsigned bufSize)
 {
-
+	int16_t rnd_seed;
     uint8_t bufTx[]= {0x00, 0x11, 0x22, 0x33,
                       0x44, 0x55, 0x66, 0x77,
                       0x88, 0x99, 0xAA, 0xBB,
@@ -350,11 +350,19 @@ ATEerror_t TST_TX_LoraStart(const char *buf, unsigned bufSize)
         TestState |= TX_TEST_LORA;
 
         Radio.SetModem( MODEM_LORA );
-
+			if(tx_test == 2)
+			{
+				rnd_seed = randr(0,100);
+				 Radio.SetChannel( (9205 + ((rnd_seed%11)*4)) * 100000 );
+				PRINTF("TST_TX_LoraStart @ %d\n\r",(9205 + ((rnd_seed%11)*4)) * 100000);
+			}
+			else
+			{
         if(loraParam.freqMHz > 1000)
             Radio.SetChannel( loraParam.freqMHz * 100000 );
         else
             Radio.SetChannel( loraParam.freqMHz * 1000000 );
+			}
         // test only
 
         Radio.SetTxConfig( MODEM_LORA, loraParam.power, 0, loraParam.bandwidth,

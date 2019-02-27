@@ -1274,6 +1274,7 @@ ATEerror_t at_test_rxTone(const char *param)
     return TST_RxTone(param, strlen(param));
 }
 
+extern uint8_t tx_test;
 extern void OnTestTimerEvent( void );
 extern TimerEvent_t TestTimer;
 extern uint32_t tx_counter;
@@ -1281,6 +1282,8 @@ extern uint32_t rx_counter;
 extern void OnLoRaRxEvent( void *p_event_data, uint16_t event_size );
 ATEerror_t at_test_txlora(const char *param)
 {
+	tx_counter = 0;
+		tx_test = 1;
     TST_TX_LoraStart( param, strlen(param) );
     return AT_OK;
 }
@@ -1294,7 +1297,17 @@ ATEerror_t at_test_rxlora(const char *param)
 ATEerror_t at_test_txclora(const char *param)
 {
     TimerSetValue( &TestTimer,  100);
+		tx_test = 1;
     tx_counter = 1;
+    TimerStart(&TestTimer);
+    return AT_OK;
+}
+
+ATEerror_t at_test_txslora(const char *param)
+{
+    TimerSetValue( &TestTimer,  100);
+    tx_counter = 1;
+		tx_test = 2;
     TimerStart(&TestTimer);
     return AT_OK;
 }

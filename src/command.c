@@ -524,6 +524,16 @@ static const struct ATCommand_s ATCommand[] =
     .run = at_test_txTone,
   }, 
   {
+    .string = AT_TTLRS,
+    .size_string = sizeof(AT_TTLRS) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_TTLRS ": Starts RF Tx LORA hopping test\r\n",
+#endif
+    .get = at_return_error,
+    .set = at_return_error,
+    .run = at_test_txslora,
+  }, 		
+  {
     .string = AT_TTLRC,
     .size_string = sizeof(AT_TTLRC) - 1,
 #ifndef NO_HELP
