@@ -352,9 +352,22 @@ ATEerror_t TST_TX_LoraStart(const char *buf, unsigned bufSize)
         Radio.SetModem( MODEM_LORA );
 			if(tx_test == 2)
 			{
-				rnd_seed = randr(0,100);
-				 Radio.SetChannel( (9205 + ((rnd_seed%11)*4)) * 100000 );
-				PRINTF("TST_TX_LoraStart @ %d\n\r",(9205 + ((rnd_seed%11)*4)) * 100000);
+            rnd_seed = randr(0,1000);
+            if(loraParam.bandwidth == BW_125kHz)
+            {
+                Radio.SetChannel( (9202 + ((rnd_seed%24)*2)) * 100000 );
+                PRINTF("TST_TX_LoraStart @ %d\n\r",(9202 + ((rnd_seed%24)*2)) * 100000);							
+            }
+            else if(loraParam.bandwidth == BW_250kHz)
+            {
+                Radio.SetChannel( (9205 + ((rnd_seed%11)*4)) * 100000 );
+                PRINTF("TST_TX_LoraStart @ %d\n\r",(9205 + ((rnd_seed%11)*4)) * 100000);
+            }
+            else if(loraParam.bandwidth == BW_500kHz)
+            {
+                Radio.SetChannel( (9206 + ((rnd_seed%6)*6)) * 100000 );
+                PRINTF("TST_TX_LoraStart @ %d\n\r",(9206 + ((rnd_seed%6)*6)) * 100000);							
+            }
 			}
 			else
 			{
