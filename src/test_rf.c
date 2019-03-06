@@ -365,8 +365,8 @@ ATEerror_t TST_TX_LoraStart(const char *buf, unsigned bufSize)
             }
             else if(loraParam.bandwidth == BW_500kHz)
             {
-                Radio.SetChannel( (9206 + ((rnd_seed%6)*6)) * 100000 );
-                PRINTF("TST_TX_LoraStart @ %d\n\r",(9206 + ((rnd_seed%6)*6)) * 100000);							
+                Radio.SetChannel( (9206 + ((rnd_seed%7)*7)) * 100000 );
+                PRINTF("TST_TX_LoraStart @ %d\n\r",(9206 + ((rnd_seed%7)*7)) * 100000);							
             }
 			}
 			else
