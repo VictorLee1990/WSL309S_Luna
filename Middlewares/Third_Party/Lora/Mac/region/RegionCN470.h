@@ -38,7 +38,7 @@
 /*!
  * LoRaMac maximum number of channels
  */
-#define CN470_MAX_NB_CHANNELS                        8//8//96
+#define CN470_MAX_NB_CHANNELS                        96//8//96
 
 /*!
  * Minimal datarate that can be used by the node
@@ -435,7 +435,7 @@ void RegionCN470SetContinuousWave( ContinuousWaveParams_t* continuousWave );
  * \retval newDr Computed datarate.
  */
 uint8_t RegionCN470ApplyDrOffset( uint8_t downlinkDwellTime, int8_t dr, int8_t drOffset );
-void RegionCN470SetFrq(uint8_t ChannelNumber, uint32_t ChannelFreg);
+void RegionSetFrq(uint8_t ChannelNumber, uint32_t ChannelFreg);
 /*! \} defgroup REGIONCN470 */
 
 #endif // __REGION_CN470_H__

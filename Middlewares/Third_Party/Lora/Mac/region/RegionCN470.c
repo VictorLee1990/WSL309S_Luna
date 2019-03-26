@@ -105,9 +105,9 @@ static uint8_t CountNbOfEnabledChannels( uint8_t datarate, uint16_t* channelsMas
     uint8_t nbEnabledChannels = 0;
     uint8_t delayTransmission = 0;
 
-    for( uint8_t i = 0, k = 0; i < CN470_MAX_NB_CHANNELS; i += 8, k++ )
+    for( uint8_t i = 0, k = 0; i < CN470_MAX_NB_CHANNELS; i += 16, k++ )
     {
-        for( uint8_t j = 0; j < 8; j++ )
+        for( uint8_t j = 0; j < 16; j++ )
         {
             if( ( channelsMask[k] & ( 1 << j ) ) != 0 )
             {
@@ -270,7 +270,7 @@ PhyParam_t RegionCN470GetPhyParam( GetPhyParams_t* getPhy )
     case PHY_DEF_NB_JOIN_TRIALS:
     {
          phyParam.Value = 8;
-//       phyParam.Value = 48;
+     //  phyParam.Value = 48;
         break;
     }
     default:
@@ -297,6 +297,7 @@ void RegionCN470InitDefaults( InitType_t type )
         // 125 kHz channels
         for( uint8_t i = 0; i < CN470_MAX_NB_CHANNELS; i++ )
         {
+					   Channels[i].Frequency = 470300000 + i * 200000;
             switch(i)
             {
             case 0:
@@ -324,7 +325,7 @@ void RegionCN470InitDefaults( InitType_t type )
                 Channels[i].Frequency = lora_config_tx6_get();
                 break;
             case 6:
-							if(lora_config_tx6_get()!=0)
+							if(lora_config_tx7_get()!=0)
                 Channels[i].Frequency = lora_config_tx7_get();
                 break;
             case 7:
@@ -336,18 +337,18 @@ void RegionCN470InitDefaults( InitType_t type )
                 Channels[i].Frequency = lora_config_tx1_get();
                 break;
             }
-            //   Channels[i].Frequency = 470300000 + i * 200000;
+            
             Channels[i].DrRange.Value = ( DR_5 << 4 ) | DR_0;
             Channels[i].Band = 0;
         }
 
         // Initialize the channels default mask
-        ChannelsDefaultMask[0] = 0xFFFF;
-        ChannelsDefaultMask[1] = 0xFFFF;
-        ChannelsDefaultMask[2] = 0xFFFF;
-        ChannelsDefaultMask[3] = 0xFFFF;
-        ChannelsDefaultMask[4] = 0xFFFF;
-        ChannelsDefaultMask[5] = 0xFFFF;
+        ChannelsDefaultMask[0] = 0x00FF;
+        ChannelsDefaultMask[1] = 0x0000;
+        ChannelsDefaultMask[2] = 0x0000;
+        ChannelsDefaultMask[3] = 0x0000;
+        ChannelsDefaultMask[4] = 0x0000;
+        ChannelsDefaultMask[5] = 0x0000;
 
         // Update the channels mask
         RegionCommonChanMaskCopy( ChannelsMask, ChannelsDefaultMask, 6 );
@@ -475,12 +476,12 @@ bool RegionCN470AdrNext( AdrNextParams_t* adrNext, int8_t* drOut, int8_t* txPowO
                         if( adrNext->UpdateChanMask == true )
                         {
                             // Re-enable default channels
-                            ChannelsMask[0] = 0xFFFF;
-                            ChannelsMask[1] = 0xFFFF;
-                            ChannelsMask[2] = 0xFFFF;
-                            ChannelsMask[3] = 0xFFFF;
-                            ChannelsMask[4] = 0xFFFF;
-                            ChannelsMask[5] = 0xFFFF;
+                            ChannelsMask[0] = 0x00FF;
+                            ChannelsMask[1] = 0x0000;
+                            ChannelsMask[2] = 0x0000;
+                            ChannelsMask[3] = 0x0000;
+                            ChannelsMask[4] = 0x0000;
+                            ChannelsMask[5] = 0x0000;
                         }
                     }
                 }
@@ -533,8 +534,8 @@ bool RegionCN470RxConfig( RxConfigParams_t* rxConfig, int8_t* datarate )
     else if( rxConfig->Window == 1 )
     {
         // Apply window 2 frequency
-			if(lora_config_rx2_get()!=0)
-        frequency = lora_config_rx2_get();
+				if(lora_config_rx2_get()!=0)
+					frequency = lora_config_rx2_get();
     }
     // Read the physical datarate from the datarates table
     phyDr = DataratesCN470[dr];
@@ -570,7 +571,7 @@ bool RegionCN470TxConfig( TxConfigParams_t* txConfig, int8_t* txPower, TimerTime
     phyTxPower = RegionCommonComputeTxPower( txPowerLimited, txConfig->MaxEirp, txConfig->AntennaGain );
 
     // Setup the radio frequency
-  
+    
     Radio.SetChannel( Channels[txConfig->Channel].Frequency );
 
 
@@ -631,10 +632,10 @@ uint8_t RegionCN470LinkAdrReq( LinkAdrReqParams_t* linkAdrReq, int8_t* drOut, in
         }
         else
         {
-            for( uint8_t i = 0; i < 8; i++ )
+            for( uint8_t i = 0; i < 16; i++ )
             {
                 if( ( ( linkAdrParams.ChMask & ( 1 << i ) ) != 0 ) &&
-                        ( Channels[linkAdrParams.ChMaskCtrl * 8 + i].Frequency == 0 ) )
+                        ( Channels[linkAdrParams.ChMaskCtrl * 16 + i].Frequency == 0 ) )
                 {   // Trying to enable an undefined channel
                     status &= 0xFE; // Channel mask KO
                 }
@@ -785,12 +786,12 @@ bool RegionCN470NextChannel( NextChanParams_t* nextChanParams, uint8_t* channel,
     // Count 125kHz channels
     if( RegionCommonCountChannels( ChannelsMask, 0, 6 ) == 0 )
     {   // Reactivate default channels
-        ChannelsMask[0] = 0xFFFF;
-        ChannelsMask[1] = 0xFFFF;
-        ChannelsMask[2] = 0xFFFF;
-        ChannelsMask[3] = 0xFFFF;
-        ChannelsMask[4] = 0xFFFF;
-        ChannelsMask[5] = 0xFFFF;
+        ChannelsMask[0] = 0x00FF;
+        ChannelsMask[1] = 0x0000;
+        ChannelsMask[2] = 0x0000;
+        ChannelsMask[3] = 0x0000;
+        ChannelsMask[4] = 0x0000;
+        ChannelsMask[5] = 0x0000;
     }
 
     if( nextChanParams->AggrTimeOff <= TimerGetElapsedTime( nextChanParams->LastAggrTx ) )
@@ -866,8 +867,10 @@ uint8_t RegionCN470ApplyDrOffset( uint8_t downlinkDwellTime, int8_t dr, int8_t d
     }
     return datarate;
 }
-void RegionCN470SetFrq(uint8_t ChannelNumber, uint32_t ChannelFreg)
+
+#ifdef REGION_CN470 
+void RegionSetFrq(uint8_t ChannelNumber, uint32_t ChannelFreg)
 {
     Channels[ChannelNumber].Frequency = ChannelFreg;
 }
-
+#endif

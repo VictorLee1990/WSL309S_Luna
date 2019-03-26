@@ -292,6 +292,7 @@ int main(void)
 
 static void LoraRxData(lora_AppData_t *AppData)
 {
+	PRINTF("RxData\n\r");
     set_at_receive(AppData->Port, AppData->Buff, AppData->BuffSize);
 }
 

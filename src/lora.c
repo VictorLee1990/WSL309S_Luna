@@ -851,7 +851,7 @@ uint32_t lora_config_rx2_get(void)
 void lora_config_tx1_set(uint32_t txfreq)
 {
     lora_config.TXF1 = txfreq;
-    RegionCN470SetFrq(0, txfreq);
+    RegionSetFrq(0, txfreq);
 }
 
 uint32_t lora_config_tx1_get(void)
@@ -862,7 +862,7 @@ uint32_t lora_config_tx1_get(void)
 void lora_config_tx2_set(uint32_t txfreq)
 {
     lora_config.TXF2 = txfreq;
-    RegionCN470SetFrq(1, txfreq);
+    RegionSetFrq(1, txfreq);
 }
 
 uint32_t lora_config_tx2_get(void)
@@ -872,7 +872,7 @@ uint32_t lora_config_tx2_get(void)
 void lora_config_tx3_set(uint32_t txfreq)
 {
     lora_config.TXF3 = txfreq;
-    RegionCN470SetFrq(2, txfreq);
+    RegionSetFrq(2, txfreq);
 }
 
 uint32_t lora_config_tx3_get(void)
@@ -882,7 +882,7 @@ uint32_t lora_config_tx3_get(void)
 void lora_config_tx4_set(uint32_t txfreq)
 {
     lora_config.TXF4 = txfreq;
-    RegionCN470SetFrq(3, txfreq);
+    RegionSetFrq(3, txfreq);
 }
 
 uint32_t lora_config_tx4_get(void)
@@ -892,7 +892,7 @@ uint32_t lora_config_tx4_get(void)
 void lora_config_tx5_set(uint32_t txfreq)
 {
     lora_config.TXF5 = txfreq;
-    RegionCN470SetFrq(4, txfreq);
+    RegionSetFrq(4, txfreq);
 }
 
 uint32_t lora_config_tx5_get(void)
@@ -902,7 +902,7 @@ uint32_t lora_config_tx5_get(void)
 void lora_config_tx6_set(uint32_t txfreq)
 {
     lora_config.TXF6 = txfreq;
-    RegionCN470SetFrq(5, txfreq);
+    RegionSetFrq(5, txfreq);
 }
 
 uint32_t lora_config_tx6_get(void)
@@ -912,7 +912,7 @@ uint32_t lora_config_tx6_get(void)
 void lora_config_tx7_set(uint32_t txfreq)
 {
     lora_config.TXF7 = txfreq;
-    RegionCN470SetFrq(6, txfreq);
+    RegionSetFrq(6, txfreq);
 }
 
 uint32_t lora_config_tx7_get(void)
@@ -922,7 +922,7 @@ uint32_t lora_config_tx7_get(void)
 void lora_config_tx8_set(uint32_t txfreq)
 {
     lora_config.TXF8 = txfreq;
-    RegionCN470SetFrq(7, txfreq);
+    RegionSetFrq(7, txfreq);
 }
 
 uint32_t lora_config_tx8_get(void)
