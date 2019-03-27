@@ -347,7 +347,22 @@ void RegionEU868InitDefaults( InitType_t type )
             Channels[0] = ( ChannelParams_t ) EU868_LC1;
             Channels[1] = ( ChannelParams_t ) EU868_LC2;
             Channels[2] = ( ChannelParams_t ) EU868_LC3;
-
+		if(lora_config_tx1_get()!=0)
+			Channels[0].Frequency = lora_config_tx1_get();
+		if(lora_config_tx2_get()!=0)
+			Channels[1].Frequency = lora_config_tx2_get();
+		if(lora_config_tx3_get()!=0)
+			Channels[2].Frequency = lora_config_tx3_get();
+		if(lora_config_tx4_get()!=0)
+			Channels[3].Frequency = lora_config_tx4_get();
+		if(lora_config_tx5_get()!=0)
+			Channels[4].Frequency = lora_config_tx5_get();
+		if(lora_config_tx6_get()!=0)
+			Channels[5].Frequency = lora_config_tx6_get();
+		if(lora_config_tx7_get()!=0)
+			Channels[6].Frequency = lora_config_tx7_get();
+		if(lora_config_tx8_get()!=0)
+			Channels[7].Frequency = lora_config_tx8_get();
             // Initialize the channels default mask
             ChannelsDefaultMask[0] = LC( 1 ) + LC( 2 ) + LC( 3 );
             // Update the channels mask
@@ -585,7 +600,17 @@ bool RegionEU868RxConfig( RxConfigParams_t* rxConfig, int8_t* datarate )
             frequency = Channels[rxConfig->Channel].Rx1Frequency;
         }
     }
-
+    if( rxConfig->Window == 0 )
+    {
+        if(lora_config_rx1_get()!=0)
+            frequency = lora_config_rx1_get();
+    }
+    else if( rxConfig->Window == 1 )
+    {
+        // Apply window 2 frequency
+				if(lora_config_rx2_get()!=0)
+					frequency = lora_config_rx2_get();
+    }
     // Read the physical datarate from the datarates table
     phyDr = DataratesEU868[dr];
 
@@ -1080,3 +1105,10 @@ uint8_t RegionEU868ApplyDrOffset( uint8_t downlinkDwellTime, int8_t dr, int8_t d
     }
     return datarate;
 }
+
+#ifdef REGION_EU868 
+void RegionSetFrq(uint8_t ChannelNumber, uint32_t ChannelFreg)
+{
+    Channels[ChannelNumber].Frequency = ChannelFreg;
+}
+#endif
