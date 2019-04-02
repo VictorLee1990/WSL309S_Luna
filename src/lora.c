@@ -346,7 +346,7 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
             AT_PRINTF("Join Fail\r\n");
             joinning = 0;
             // Join was not successful. Try to join again
-            LORA_Join();
+//            LORA_Join();
         }
         break;
     }
