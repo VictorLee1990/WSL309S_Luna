@@ -1099,3 +1099,10 @@ uint8_t RegionAS923ApplyDrOffset( uint8_t downlinkDwellTime, int8_t dr, int8_t d
     // Apply offset formula
     return MIN( DR_5, MAX( minDr, dr - EffectiveRx1DrOffsetAS923[drOffset] ) );
 }
+
+#ifdef REGION_AS923 
+void RegionSetFrq(uint8_t ChannelNumber, uint32_t ChannelFreg)
+{
+    Channels[ChannelNumber].Frequency = ChannelFreg;
+}
+#endif

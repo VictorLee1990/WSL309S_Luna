@@ -107,6 +107,13 @@ void vcom_IoDeInit(void);
  */
 void vcom_IRQHandler(void);
 
+  /**
+ * @brief  vcom2 IRQ Handler
+ * @param  None
+ * @retval None
+ */
+void vcom2_IRQHandler(void);
+
 /** 
 * @brief  Records string on circular Buffer and set SW interrupt
 * @note   Set NVIC to call vcom_Send

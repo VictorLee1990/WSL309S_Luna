@@ -57,7 +57,7 @@
 /* Private define ------------------------------------------------------------*/
 #define BUFSIZE 256
 #define TX_BUFFER 512
-#define USARTX_IRQn USART2_IRQn
+//#define USARTX_IRQn USART2_IRQn
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 uint8_t uart_rx_fifo_buff[BUFSIZE];
@@ -70,6 +70,7 @@ uint8_t TxBuffer[BUFSIZE];
 uint8_t RxBuffer[BUFSIZE];
 /* Uart Handle */
 static UART_HandleTypeDef UartHandle;
+static UART_HandleTypeDef Uart2Handle;
 extern TimerEvent_t RxWaitTimer;
 /* Private function prototypes -----------------------------------------------*/
 /* Functions Definition ------------------------------------------------------*/
@@ -102,6 +103,30 @@ void vcom_Init(void)
 
     HAL_NVIC_SetPriority(USARTX_IRQn, 0x1, 0);
     HAL_NVIC_EnableIRQ(USARTX_IRQn);
+		
+		 Uart2Handle.Instance        = USARTX2;
+
+    Uart2Handle.Init.BaudRate   = 9600;
+    Uart2Handle.Init.WordLength = UART_WORDLENGTH_8B;
+    Uart2Handle.Init.StopBits   = UART_STOPBITS_1;
+    Uart2Handle.Init.Parity     = UART_PARITY_NONE;
+    Uart2Handle.Init.HwFlowCtl  = UART_HWCONTROL_NONE;
+    Uart2Handle.Init.Mode       = UART_MODE_TX_RX;
+
+    Uart2Handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+    Uart2Handle.Init.OverSampling = UART_OVERSAMPLING_16;
+    Uart2Handle.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+    Uart2Handle.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+
+// if(HAL_MultiProcessor_Init(&UartHandle, 0, UART_WAKEUPMETHOD_IDLELINE) != HAL_OK)
+    if(HAL_UART_Init(&Uart2Handle) != HAL_OK)
+    {  
+        /* Initialization Error */
+        Error_Handler(); 
+    }
+
+    HAL_NVIC_SetPriority(USARTX2_IRQn, 0x1, 0);
+    HAL_NVIC_EnableIRQ(USARTX2_IRQn);
 
 }
 
@@ -122,9 +147,16 @@ void vcom_IRQHandler(void)
     MOLTRES_UART_IRQHandler(&UartHandle);
 }
 
+void vcom2_IRQHandler(void)
+{
+    HAL_UART_IRQHandler(&Uart2Handle);
+    MOLTRES_UART_IRQHandler(&Uart2Handle);
+}
+
 void vcom_DeInit(void)
 {
     HAL_UART_DeInit(&UartHandle);
+	HAL_UART_DeInit(&Uart2Handle);
 }
 
 void OnUartTxStartEvent( void *p_event_data, uint16_t event_size )
@@ -139,7 +171,11 @@ void OnUartTxStartEvent( void *p_event_data, uint16_t event_size )
             LPM_SetStopMode(LPM_UART_TX_Id, LPM_Disable );
             isTxBusy = 1;
             HAL_UART_Transmit_IT(&UartHandle, (uint8_t *)TxBuffer, tx_size);
+            HAL_GPIO_WritePin(USART2_DE_GPIO_Port, USART2_DE_Pin, GPIO_PIN_SET);
+            HAL_UART_Transmit_IT(&Uart2Handle, (uint8_t *)TxBuffer, tx_size);
         }
+        else
+            HAL_GPIO_WritePin(USART2_DE_GPIO_Port, USART2_DE_Pin, GPIO_PIN_RESET);
     }
 }
 
@@ -189,7 +225,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 
     /* Enable USART1 clock */
     USARTX_CLK_ENABLE();
-
+    USARTX2_CLK_ENABLE();
     /*##-2- Configure peripheral GPIO ##########################################*/
     vcom_IoInit( );
 }
@@ -219,20 +255,56 @@ void vcom_IoInit(void)
     HAL_GPIO_Init(USARTX_RX_GPIO_PORT, &GPIO_InitStruct);
 
     HAL_UART_RxCpltCallback(&UartHandle);
+		
+		
+		GPIO_InitTypeDef  GPIO_InitStruct1= {0};
+
+    /* Enable GPIO TX/RX clock */
+
+    USARTX2_TX_GPIO_CLK_ENABLE();
+    USARTX2_RX_GPIO_CLK_ENABLE();
+    /* UART TX GPIO pin configuration  */
+    GPIO_InitStruct1.Pin       = USARTX2_TX_PIN;
+    GPIO_InitStruct1.Mode      = GPIO_MODE_AF_PP;
+    GPIO_InitStruct1.Pull      = GPIO_PULLUP;
+    GPIO_InitStruct1.Speed     = GPIO_SPEED_HIGH;
+    GPIO_InitStruct1.Alternate = USARTX2_TX_AF;
+
+    HAL_GPIO_Init(USARTX2_TX_GPIO_PORT, &GPIO_InitStruct1);
+
+    /* UART RX GPIO pin configuration  */
+    GPIO_InitStruct1.Pin = USARTX2_RX_PIN;
+    GPIO_InitStruct1.Alternate = USARTX2_RX_AF;
+
+    HAL_GPIO_Init(USARTX2_RX_GPIO_PORT, &GPIO_InitStruct1);
+
+    HAL_UART_RxCpltCallback(&Uart2Handle);
+
+    /*Configure GPIO pin Output Level */
+    HAL_GPIO_WritePin(GPIOA,USART2_DE_Pin,GPIO_PIN_RESET);
+
+    /*Configure GPIO pins : PAPin PAPin PAPin PAPin
+                             PAPin */
+    GPIO_InitStruct1.Pin = USART2_DE_Pin;
+    GPIO_InitStruct1.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct1.Pull = GPIO_NOPULL;
+    GPIO_InitStruct1.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct1);
 }
 
 void vcom_RxInt( void )
 {
 
+    HAL_NVIC_DisableIRQ(EXTI4_15_IRQn);
     HAL_NVIC_DisableIRQ(EXTI2_3_IRQn);
     LPM_SetStopMode(LPM_UART_RX_Id, LPM_Disable );
-    TimerStop(&RxWaitTimer);
-    TimerStart(&RxWaitTimer);
+//    TimerStop(&RxWaitTimer);
+//    TimerStart(&RxWaitTimer);
 }
 
 void vcom_IoDeInit(void)
 {
-    GPIO_InitTypeDef GPIO_InitStructure= {0};
+   GPIO_InitTypeDef GPIO_InitStructure= {0};
 
     USARTX_TX_GPIO_CLK_ENABLE();
     USARTX_RX_GPIO_CLK_ENABLE();
@@ -240,15 +312,18 @@ void vcom_IoDeInit(void)
     GPIO_InitStructure.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStructure.Pull = GPIO_PULLDOWN;
 
-    GPIO_InitStructure.Pin =  USARTX_TX_PIN ;
+    GPIO_InitStructure.Pin =  USARTX_TX_PIN|USARTX2_TX_PIN ;
     HAL_GPIO_Init(  USARTX_TX_GPIO_PORT, &GPIO_InitStructure );
+    HAL_GPIO_Init(  USARTX2_TX_GPIO_PORT, &GPIO_InitStructure );
 
     GPIO_InitTypeDef GPIO_InitStructure2= {0};
     GPIO_InitStructure2.Mode = GPIO_MODE_IT_RISING;
     GPIO_InitStructure2.Pull = GPIO_PULLUP;
-    GPIO_InitStructure2.Pin =  USARTX_RX_PIN ;
+    GPIO_InitStructure2.Pin =  USARTX_RX_PIN|USARTX2_RX_PIN ;
     HAL_GPIO_Init(  USARTX_RX_GPIO_PORT, &GPIO_InitStructure2 );
     HW_GPIO_SetIrq( USARTX_RX_GPIO_PORT, USARTX_RX_PIN, 0, &vcom_RxInt );
+    HAL_GPIO_Init(  USARTX2_RX_GPIO_PORT, &GPIO_InitStructure2 );
+    HW_GPIO_SetIrq( USARTX2_RX_GPIO_PORT, USARTX2_RX_PIN, 0, &vcom_RxInt );
 }
 
 /**
@@ -317,15 +392,15 @@ void vcom_rxcheck(void)
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-    if(huart == &UartHandle)
+    if(huart == &UartHandle || huart == &Uart2Handle)
     {
         uint32_t uart2_rx_rec_size;
 
         uart2_rx_rec_size = huart->RxXferSize - huart->RxXferCount;
         if(uart2_rx_rec_size &&(RxBuffer[0] != 0xff))
         {
-            TimerStop(&RxWaitTimer);
-            TimerStart(&RxWaitTimer);
+//            TimerStop(&RxWaitTimer);
+//            TimerStart(&RxWaitTimer);
             app_fifo_write(&uart_rxFifo,RxBuffer,&uart2_rx_rec_size);
             app_sched_event_put(NULL, NULL, uart2_event_handle_schedule);
         }
@@ -352,5 +427,6 @@ void start_uart2_uart(void)
     app_fifo_init(&uart_rxFifo,uart_rx_fifo_buff,BUFSIZE);
     app_fifo_init(&uart_txFifo,uart_tx_fifo_buff,TX_BUFFER);
     HAL_UART_RxCpltCallback(&UartHandle);
+	  HAL_UART_RxCpltCallback(&Uart2Handle);
 }
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

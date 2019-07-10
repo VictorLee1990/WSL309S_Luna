@@ -147,25 +147,50 @@ Maintainer: Miguel Luis and Gregory Cristian
 /* --------------------------- USART HW definition -------------------------------*/
 
 
-#define USARTX                           USART2
-#define USARTX_CLK_ENABLE()              __USART2_CLK_ENABLE();
+#define USARTX                           USART1
+#define USARTX_CLK_ENABLE()              __USART1_CLK_ENABLE();
 #define USARTX_RX_GPIO_CLK_ENABLE()      __GPIOA_CLK_ENABLE()
 #define USARTX_TX_GPIO_CLK_ENABLE()      __GPIOA_CLK_ENABLE() 
 
-#define USARTX_FORCE_RESET()             __USART2_FORCE_RESET()
-#define USARTX_RELEASE_RESET()           __USART2_RELEASE_RESET()
+#define USARTX_FORCE_RESET()             __USART1_FORCE_RESET()
+#define USARTX_RELEASE_RESET()           __USART1_RELEASE_RESET()
 
 
-#define USARTX_TX_PIN                  GPIO_PIN_2
+#define USARTX_TX_PIN                  GPIO_PIN_9
 #define USARTX_TX_GPIO_PORT            GPIOA  
-#define USARTX_TX_AF                   GPIO_AF4_USART2
-#define USARTX_RX_PIN                  GPIO_PIN_3
+#define USARTX_TX_AF                   GPIO_AF4_USART1
+#define USARTX_RX_PIN                  GPIO_PIN_10
 #define USARTX_RX_GPIO_PORT            GPIOA 
-#define USARTX_RX_AF                   GPIO_AF4_USART2
+#define USARTX_RX_AF                   GPIO_AF4_USART1
 
 /* Definition for USARTx's NVIC */
-#define USARTX_IRQn                      USART2_IRQn
-#define USARTX_IRQHandler                USART2_IRQHandler
+#define USARTX_IRQn                      USART1_IRQn
+#define USARTX_IRQHandler                USART1_IRQHandler
+
+/* Definition for UARTx clock resources */
+/* --------------------------- USART HW definition -------------------------------*/
+
+#define USART2_DE_Pin GPIO_PIN_1
+#define USART2_DE_GPIO_Port GPIOA
+#define USARTX2                           USART2
+#define USARTX2_CLK_ENABLE()              __USART2_CLK_ENABLE();
+#define USARTX2_RX_GPIO_CLK_ENABLE()      __GPIOA_CLK_ENABLE()
+#define USARTX2_TX_GPIO_CLK_ENABLE()      __GPIOA_CLK_ENABLE() 
+
+#define USARTX2_FORCE_RESET()             __USART2_FORCE_RESET()
+#define USARTX2_RELEASE_RESET()           __USART2_RELEASE_RESET()
+
+
+#define USARTX2_TX_PIN                  GPIO_PIN_2
+#define USARTX2_TX_GPIO_PORT            GPIOA  
+#define USARTX2_TX_AF                   GPIO_AF4_USART2
+#define USARTX2_RX_PIN                  GPIO_PIN_3
+#define USARTX2_RX_GPIO_PORT            GPIOA 
+#define USARTX2_RX_AF                   GPIO_AF4_USART2
+
+/* Definition for USARTx's NVIC */
+#define USARTX2_IRQn                      USART2_IRQn
+#define USARTX2_IRQHandler                USART2_IRQHandler
 
 
 #define LED_Toggle( x )

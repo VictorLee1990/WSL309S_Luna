@@ -73,10 +73,38 @@ extern "C" {
 #define LRWAN_VERSION  (uint32_t) 0x00001140  /*3 next hex is i_cube release*/
 #define VERSION   (uint32_t) (LORA_MAC_VERSION | LRWAN_VERSION | TEST_VERSION)
 
-#define AT_VERSION_STRING	"F-ICM-08-1904021"
+#define AT_VERSION_STRING	"F-ICM-14-1907101"
 
+#ifdef REGION_CN470
+#define AT_ZONE_STRING "CN470"
+#endif
+#ifdef REGION_AS923
+#define AT_ZONE_STRING "AS923"
+#endif
+#ifdef REGION_AU915
+#define AT_ZONE_STRING "AU915"
+#endif
+#ifdef REGION_CN779
+#define AT_ZONE_STRING "CN779"
+#endif	
+#ifdef REGION_EU433
+#define AT_ZONE_STRING "EU433"
+#endif	
+#ifdef REGION_EU868
 #define AT_ZONE_STRING "EU868"
-
+#endif	
+#ifdef REGION_IN865
+#define AT_ZONE_STRING "IN865"
+#endif
+#ifdef REGION_KR920
+#define AT_ZONE_STRING "KR920"
+#endif
+#ifdef REGION_US915
+#define AT_ZONE_STRING "US915"
+#endif
+#ifdef REGION_RU864
+#define AT_ZONE_STRING "RU864"
+#endif
 /* Exported types ------------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/

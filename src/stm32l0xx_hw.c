@@ -125,7 +125,7 @@ void HW_Init( void )
     {
 #if defined( USE_BOOTLOADER )
         /* Set the Vector Table base location at 0x2000 */
-        SCB->VTOR = FLASH_BASE | 0x2000;
+        SCB->VTOR = FLASH_BASE | 0x3000;
 #endif
 
         HW_AdcInit( );
@@ -136,8 +136,8 @@ void HW_Init( void )
 
         HW_RTC_Init( );
 
- //       HAL_I2C_MspInit(&hi2c1);
-//        MX_I2C1_Init();
+//      HAL_I2C_MspInit(&hi2c1);
+        MX_I2C1_Init();
         McuInitialized = true;
     }
 }

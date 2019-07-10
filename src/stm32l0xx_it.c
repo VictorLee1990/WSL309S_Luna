@@ -203,10 +203,15 @@ void SysTick_Handler(void)
 {
 }*/
 
-void USART2_IRQHandler(void)
+void USART1_IRQHandler(void)
 {
 //	vcom_Print();
 	vcom_IRQHandler();
+}
+void USART2_IRQHandler(void)
+{
+//	vcom_Print();
+	vcom2_IRQHandler();
 }
 
 void DMA1_Channel4_5_6_7_IRQHandler(void)
