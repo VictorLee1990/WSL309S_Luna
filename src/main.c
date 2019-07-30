@@ -110,6 +110,7 @@ Maintainer: Miguel Luis, Gregory Cristian and Wael Guibene
 #define ACTIVE_MODE                 		(0x80)
 #define BDU_NO_UPDATE               		(0x04)
 #define ODR_1Hz                     		(0x01)
+#define ODR_12Hz                     		(0x11)
 #define AUTO_INCREMENT              		(0x80)
 #define HUMIDITY_OUT_L              		(0x28)
 #define TEMP_OUT_L                  		(0x2A)
@@ -304,7 +305,7 @@ int main(void)
     /* Configure the Lora Stack*/
     LORA_Init(&LoRaMainCallbacks, &LoRaParamInit);
 
-//	LORA_Join();
+  	LORA_Join();
 
   //  TimerStart(&SensorTimer);
     /* main loop*/
@@ -373,12 +374,12 @@ void getTemp_Humi(void)
     float Temp_float=0.0;
     float Humi_float=0.0;
     I2C_Temp_Humi_GetData2(&Temp_float,&Humi_float);
-    sprintf(Temp_Array,"%.0f",Temp_float);
+    sprintf(Temp_Array,"%.1f",Temp_float);
     PRINTF("STM_HTS221_Temp : ");
     PRINTF(Temp_Array);
     PRINTF("\r\n");
 
-    sprintf(Humi_Array,"%.0f",Humi_float);
+    sprintf(Humi_Array,"%.1f",Humi_float);
     PRINTF("STM_HTS221_Humi : ");
     PRINTF(Humi_Array);
     PRINTF("\r\n");
@@ -398,7 +399,7 @@ void getTemp_Humi(void)
     if(LoRaJoined)
     {
         char SendData[64]= {0};
-        sprintf(SendData,"AT+SEND=2:0,0,0,0,0,0,%.0f,0,0,%.0f,0\r\n",Humi_float,Temp_float);
+        sprintf(SendData,"AT+SEND=2:0,0,0,0,0,0,%.1f,0,0,%.1f,0\r\n",Humi_float,Temp_float);
         PRINTF(SendData);
         parse_cmd(SendData);
     }
@@ -533,10 +534,10 @@ uint8_t I2C_Temp_Humi_Config2(void)
 
     if(Temp_Humi_ReadBuff[0] == 0xBC)//Temp_Humi_Who am I check//
     {
-        Temp_Humi_WriteBuff[0] = ACTIVE_MODE | BDU_NO_UPDATE | ODR_1Hz;//setting register//
+        Temp_Humi_WriteBuff[0] = ACTIVE_MODE | BDU_NO_UPDATE | ODR_12Hz;//setting register//
         HAL_I2C_Mem_Write(&hi2c1, STM_HTS221_ADDR, CTRL_REG1, 1, Temp_Humi_WriteBuff, 1, 100);
         HAL_I2C_Mem_Read(&hi2c1, STM_HTS221_ADDR, CTRL_REG1, 1, Temp_Humi_ReadBuff, 1, 100);
-        if(Temp_Humi_ReadBuff[0] == (ACTIVE_MODE | BDU_NO_UPDATE | ODR_1Hz))
+        if(Temp_Humi_ReadBuff[0] == (ACTIVE_MODE | BDU_NO_UPDATE | ODR_12Hz))
         {
             Status = 1;
         }
