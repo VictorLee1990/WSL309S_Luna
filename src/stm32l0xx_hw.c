@@ -225,6 +225,11 @@ void SystemClock_Config( void )
     RCC_OscInitStruct.PLL.PLLSource       = RCC_PLLSOURCE_HSI;
     RCC_OscInitStruct.PLL.PLLMUL          = RCC_PLLMUL_6;
     RCC_OscInitStruct.PLL.PLLDIV          = RCC_PLLDIV_3;
+		
+				/** Configure LSE Drive Capability 
+  */
+  HAL_PWR_EnableBkUpAccess();
+  __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_HIGH);
 
     if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
     {

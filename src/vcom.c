@@ -72,6 +72,7 @@ uint8_t RxBuffer[BUFSIZE];
 static UART_HandleTypeDef UartHandle;
 static UART_HandleTypeDef Uart2Handle;
 extern TimerEvent_t RxWaitTimer;
+uint32_t uart_rx_timer = 0;
 /* Private function prototypes -----------------------------------------------*/
 /* Functions Definition ------------------------------------------------------*/
 
@@ -324,6 +325,7 @@ void vcom_IoDeInit(void)
     HW_GPIO_SetIrq( USARTX_RX_GPIO_PORT, USARTX_RX_PIN, 0, &vcom_RxInt );
     HAL_GPIO_Init(  USARTX2_RX_GPIO_PORT, &GPIO_InitStructure2 );
     HW_GPIO_SetIrq( USARTX2_RX_GPIO_PORT, USARTX2_RX_PIN, 0, &vcom_RxInt );
+//			TimerStop(&RxWaitTimer);
 }
 
 /**
@@ -428,5 +430,10 @@ void start_uart2_uart(void)
     app_fifo_init(&uart_txFifo,uart_tx_fifo_buff,TX_BUFFER);
     HAL_UART_RxCpltCallback(&UartHandle);
 	  HAL_UART_RxCpltCallback(&Uart2Handle);
+}
+
+uint32_t get_rx_number(void)
+{
+	return (UartHandle.RxXferSize - UartHandle.RxXferCount);
 }
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -998,7 +998,7 @@ void lora_config_save(void)
     LoRaMacMibGetRequestConfirm(&mib);
 
     lora_config.DevAddr = mib.Param.DevAddr;
-
+//      PRINTF("setFlashData\r\n");
     setFlashData((uint8_t*)&lora_config, sizeof(lora_config));
 }
 
@@ -1039,51 +1039,85 @@ void lora_wan_certif( void )
 
 
 //#define DATA_ADDRESS 0x0800F800
-#define FLASH_USER_START_ADDR   0x0801F800   /* flash???? */
-#define FLASH_USER_END_ADDR     0x0801FC00   /* flash???? */
-
+#define FLASH_USER_START_ADDR1   0x0801F800   /* flash???? */
+//#define FLASH_USER_END_ADDR1     0x0801FC00   /* flash???? */
+//#define FLASH_USER_START_ADDR   0x0801FC00
+#define FLASH_USER_END_ADDR1     0x08020000
 #define BLOCK_SIZE (FLASH_USER_END_ADDR - FLASH_USER_START_ADDR)
+#define BLOCK_SIZE1 (FLASH_USER_END_ADDR1 - FLASH_USER_START_ADDR1)
 uint8_t getFlashData(uint8_t *data, uint32_t data_size)
 {
-    uint32_t real_size;
+//    uint32_t real_size;
+//    uint8_t u8Return = 0;
+//    uint8_t *u8Data;
+//    uint8_t isValid;
+//    uint32_t j;
+//    real_size = ((data_size + 3) / 4) * 4;
+//    /*  for(i = 0  ; i < BLOCK_SIZE ; i+= real_size)
+//      {
+//          isValid = 0;
+//          for(j =0; j<real_size; j++)
+//          {
+//              u8Data = (uint8_t*)(FLASH_USER_START_ADDR + i + j);
+//              if(*u8Data != 0x00)
+//              {
+//                  u8Data = (uint8_t*)(FLASH_USER_START_ADDR + i );
+//                  memcpy(data, u8Data, data_size);
+//                  isValid = 1;
+//                  u8Return = 1;
+//                  break;
+//              }
+//          }
+//          if(!isValid)
+//          {
+//              //u8Data = (uint8_t*)(DATA_ADDRESS + i );
+//              break;
+//          }
+//      }*/
+//    for(j =0; j<real_size; j++)
+//    {
+//        u8Data = (uint8_t*)(FLASH_USER_START_ADDR  + j);
+//        if(*u8Data != 0x00)
+//        {
+//            u8Data = (uint8_t*)(FLASH_USER_START_ADDR  );
+//            memcpy(data, u8Data, data_size);
+//            isValid = 1;
+//            u8Return = 1;
+//            break;
+//        }
+//    }
+//    u8Return = 1;
+//    return u8Return;
+		
+		 uint32_t real_size;
     uint8_t u8Return = 0;
     uint8_t *u8Data;
     uint8_t isValid;
-    uint32_t j;
+    uint32_t i,j;
     real_size = ((data_size + 3) / 4) * 4;
-    /*  for(i = 0  ; i < BLOCK_SIZE ; i+= real_size)
-      {
-          isValid = 0;
-          for(j =0; j<real_size; j++)
-          {
-              u8Data = (uint8_t*)(FLASH_USER_START_ADDR + i + j);
-              if(*u8Data != 0x00)
-              {
-                  u8Data = (uint8_t*)(FLASH_USER_START_ADDR + i );
-                  memcpy(data, u8Data, data_size);
-                  isValid = 1;
-                  u8Return = 1;
-                  break;
-              }
-          }
-          if(!isValid)
-          {
-              //u8Data = (uint8_t*)(DATA_ADDRESS + i );
-              break;
-          }
-      }*/
-    for(j =0; j<real_size; j++)
+    for(i = 0  ; i < BLOCK_SIZE1- real_size ; i+= real_size)
     {
-        u8Data = (uint8_t*)(FLASH_USER_START_ADDR  + j);
-        if(*u8Data != 0x00)
+
+        isValid = 0;
+        for(j =0; j<real_size; j++)
         {
-            u8Data = (uint8_t*)(FLASH_USER_START_ADDR  );
-            memcpy(data, u8Data, data_size);
-            isValid = 1;
-            u8Return = 1;
+            u8Data = (uint8_t*)(FLASH_USER_START_ADDR1 + i + j);
+            if(*u8Data != 0x00)
+            {
+                u8Data = (uint8_t*)(FLASH_USER_START_ADDR1 + i );
+                memcpy(data, u8Data, data_size);
+                isValid = 1;
+                u8Return = 1;
+                break;
+            }
+        }
+        if(!isValid)
+        {
             break;
         }
+//        PRINTF("r:%08X\r\n",FLASH_USER_START_ADDR1 + i);
     }
+
     u8Return = 1;
     return u8Return;
 }
@@ -1091,57 +1125,148 @@ uint8_t getFlashData(uint8_t *data, uint32_t data_size)
 
 void setFlashData(uint8_t *data, uint32_t data_size)
 {
-    uint32_t real_size;
+//    uint32_t real_size;
+//    uint8_t *u8Data;
+//    uint8_t isValid;
+//    uint32_t i,j;
+//    real_size = ((data_size + 3) / 4) * 4;
+
+//    /* for(i = 0  ; i < BLOCK_SIZE ; i+= real_size)
+//     {
+//         isValid = 1;
+//         for(j =0; j<real_size; j++)
+//         {
+//             u8Data = (uint8_t*)(FLASH_USER_START_ADDR + i + j);
+//             if(*u8Data != 0x00)
+//             {
+//                 isValid = 0;
+//                 break;
+//             }
+//         }
+//         if(isValid)
+//         {
+//             for(j=0; j<real_size; j+=4)
+//             {
+//                 uint32_t *writedata;
+//                 writedata = (uint32_t*)(data+j);
+//                 HAL_FLASH_Unlock();
+//                 HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, FLASH_USER_START_ADDR + i + j,*writedata);
+//                 HAL_FLASH_Lock();
+//             }
+//             break;
+//         }
+//     }
+//     if(!isValid)*/
+//    {
+//        FLASH_EraseInitTypeDef f;
+//        uint32_t PageError = 0;
+//        f.TypeErase = FLASH_TYPEERASE_PAGES;
+//        f.PageAddress = FLASH_USER_START_ADDR;
+//        f.NbPages = (FLASH_USER_END_ADDR - FLASH_USER_START_ADDR + 1) >> 7;
+//        HAL_FLASH_Unlock();
+//        HAL_FLASHEx_Erase(&f, &PageError);
+//        HAL_FLASH_Lock();
+//        for(j=0; j<real_size; j+=4)
+//        {
+//            uint32_t *writedata;
+//            writedata = (uint32_t*)(data+j);
+//            HAL_FLASH_Unlock();
+//            HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, FLASH_USER_START_ADDR + j,*writedata);
+//            HAL_FLASH_Lock();
+//        }
+//    }
+
+		
+		 uint32_t real_size;
     uint8_t *u8Data;
     uint8_t isValid;
     uint32_t i,j;
     real_size = ((data_size + 3) / 4) * 4;
 
-    /* for(i = 0  ; i < BLOCK_SIZE ; i+= real_size)
-     {
-         isValid = 1;
-         for(j =0; j<real_size; j++)
-         {
-             u8Data = (uint8_t*)(FLASH_USER_START_ADDR + i + j);
-             if(*u8Data != 0x00)
-             {
-                 isValid = 0;
-                 break;
-             }
-         }
-         if(isValid)
-         {
-             for(j=0; j<real_size; j+=4)
-             {
-                 uint32_t *writedata;
-                 writedata = (uint32_t*)(data+j);
-                 HAL_FLASH_Unlock();
-                 HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, FLASH_USER_START_ADDR + i + j,*writedata);
-                 HAL_FLASH_Lock();
-             }
-             break;
-         }
-     }
-     if(!isValid)*/
+    for(i = 0  ; i < BLOCK_SIZE1 - real_size ; i+= real_size)
+    {
+        isValid = 1;
+
+        for(j =0; j<real_size; j++)
+        {
+            u8Data = (uint8_t*)(FLASH_USER_START_ADDR1 + i + j);
+
+            if(*u8Data != 0x00)
+            {
+                isValid = 0;
+                break;
+            }
+        }
+        if(isValid)
+        {
+//            PRINTF("w:%08X\r\n",FLASH_USER_START_ADDR1 + i);
+            //	PRINTF("d: ");
+            HAL_FLASH_Unlock();
+            for(j=0; j<real_size; j+=4)
+            {
+                volatile uint32_t *writedata,*readdata;
+                writedata = (uint32_t*)(data+j);
+
+//                PRINTF("%08X ",*(writedata+0));
+
+                do
+                {
+                    HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, FLASH_USER_START_ADDR1 + i + j,*writedata);
+                    readdata = (uint32_t*)(FLASH_USER_START_ADDR1 + i+j);
+                    HAL_Delay(100);
+
+
+                } while(*readdata != *writedata);
+
+
+                //  PRINTF("\r\n");
+
+
+//                PRINTF("%08X ",*(readdata+0));
+            }
+//            PRINTF("\r\n");
+
+            HAL_FLASH_Lock();
+
+            break;
+        }
+    }
+    if(!isValid)
     {
         FLASH_EraseInitTypeDef f;
         uint32_t PageError = 0;
+//        PRINTF("w:%08X\r\n",FLASH_USER_START_ADDR1 );
         f.TypeErase = FLASH_TYPEERASE_PAGES;
-        f.PageAddress = FLASH_USER_START_ADDR;
-        f.NbPages = (FLASH_USER_END_ADDR - FLASH_USER_START_ADDR + 1) >> 7;
+        f.PageAddress = FLASH_USER_START_ADDR1;
+        f.NbPages = (FLASH_USER_END_ADDR1 - FLASH_USER_START_ADDR1 + 1) >> 7;
         HAL_FLASH_Unlock();
         HAL_FLASHEx_Erase(&f, &PageError);
-        HAL_FLASH_Lock();
+        // HAL_FLASH_Lock();
         for(j=0; j<real_size; j+=4)
         {
-            uint32_t *writedata;
-            writedata = (uint32_t*)(data+j);
-            HAL_FLASH_Unlock();
-            HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, FLASH_USER_START_ADDR + j,*writedata);
-            HAL_FLASH_Lock();
-        }
-    }
 
+            volatile uint32_t *writedata,*readdata;
+
+            writedata = (uint32_t*)(data+j);
+
+//            PRINTF("%08X ",*(writedata+0));
+
+
+            do
+
+            {
+                HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, FLASH_USER_START_ADDR1 + i + j,*writedata);
+                readdata = (uint32_t*)(FLASH_USER_START_ADDR1 + i+j);
+                HAL_Delay(100);
+
+            } while(*readdata != *writedata);
+
+//            PRINTF("%08X ",*(readdata+0));
+        }
+//        PRINTF("\r\n");
+
+        HAL_FLASH_Lock();
+    }
 }
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

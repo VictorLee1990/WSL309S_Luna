@@ -187,7 +187,7 @@ TimerEvent_t SensorTimer;
 uint32_t tx_counter;
 uint32_t rx_counter;
 extern uint8_t joinning;
-
+extern uint8_t uart_rx_timer;
 char SendData[64]={0};
 void OnSensorEvent( void )
 {
@@ -244,8 +244,22 @@ void OnLoRaRxEvent( void *p_event_data, uint16_t event_size )
 
 void OnRxWaitTimerEvent( void )
 {
+//     vcom_rxcheck();
+//    LPM_SetStopMode(LPM_UART_RX_Id, LPM_Enable );
+//	
+			if(uart_rx_timer == get_rx_number())		
+	{
+//   app_sched_event_put(NULL, NULL, uart2_event_handle_schedule);
+//		RxFlag = 1;
+		uart_rx_timer = 0;
     vcom_rxcheck();
-    LPM_SetStopMode(LPM_UART_RX_Id, LPM_Enable );
+    LPM_SetStopMode(LPM_UART_RX_Id, LPM_Enable );		
+		return;
+	 
+	}
+	uart_rx_timer = get_rx_number();
+	TimerStart(&RxWaitTimer);
+
 }
 
 
